@@ -45,7 +45,7 @@ while True:
 
                 server = socket.socket()
                 server.connect((serverAddress,serverPort))
-                server.send("|".join([Id, version]))
+                server.send("|".join([Id, version, serverAddress]))
 
                 print "Get settings"
                 print "Get size code"
