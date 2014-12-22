@@ -15,6 +15,8 @@ var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
 var savedSocket = null;
 
+//This is SPARTAAAAAAAAAAAAA!
+
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
