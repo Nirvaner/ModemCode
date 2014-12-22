@@ -12,7 +12,6 @@ while True:
 	if os.path.exists(CurDir + "service.update"):
 		subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "serviceSub.py",CurDir + "baks/serviceSub.py.bak"])
 		subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "service.update",CurDir + "serviceSub.py"]);
-		subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/ServiceVersion.update",CurDir + "data/ServiceVersion"])
 	else:
 		break
 

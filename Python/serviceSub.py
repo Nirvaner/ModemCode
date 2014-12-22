@@ -56,18 +56,18 @@ print "Service started"
 try:
         server = socket.socket()
         server.connect((serverAddress,serverPort))
-        server.sendall("|".join([Id,serviceVersion,manageVersion,skdVersion,serverAddress]))
+        server.send("|".join([Id,serviceVersion,manageVersion,skdVersion,serverAddress]))
 
         print "Get settings"
         print "Get size code"
-        size = server.recv(16).strip('\0')
+        size = server.recv(4).strip('\0')
         print size
-        server.sendall(size)
+        server.send(size)
         
         print "Get code"
         code = server.recv(int(size)).strip('\0')
         SetStrInFile(CurDir + "data/Settings.update",code)
-        server.sendall("0")
+        server.send("0")
 
         print "Rename update files to executeble files"
         subprocess.call(["sudo","-u","root","-p","root","mv","data/Settings.update","data/Settings"])
@@ -75,105 +75,9 @@ try:
 
         response = server.recv(16).strip('\0')
         print response
-        server.sendall("0")
+        server.send("0")
 
-        while True:
-                if response == "run":
-                        server.sendall("0")
-                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
-                        exit()
-
-                elif response == "ipconfig":
-                        print "Get size code"
-                        size = server.recv(16).strip('\0')
-                        print size
-                        server.sendall(size)
-
-                        print "Get code"
-                        code = server.recv(int(size)).strip('\0')
-                        SetStrInFile(CurDir + "/etc/network/interfaces.update",code)
-                        server.sendall("0")
-
-                        print "Rename update files to executeble files"
-                        subprocess.call(["sudo","-u","root","-p","root","mv","/etc/network/interfaces.update","/etc/network/interfaces"])
-                        print "IPConfig update successfull!"
-
-                elif response == "manage":
-                        print "Get size code"
-                        size = server.recv(16).strip('\0')
-                        print size
-                        server.sendall(size)
-
-                        print "Get code"
-                        code = server.recv(int(size)).strip('\0')
-                        SetStrInFile(CurDir + "manage.update",code)
-                        server.sendall("0")
-
-                        print "Get version"
-                        versionUpdate = server.recv(16).strip('\0')
-                        SetStrInFile("data/ManageVersion.update",versionUpdate)
-                        print versionUpdate
-                        server.sendall(versionUpdate)
-                        print "Write update files Ok"
-
-                        print "Rename update files to executeble files"
-                        subprocess.call(["sudo","-u","root","-p","root","mv","manage.update","manage.py"])
-                        subprocess.call(["sudo","-u","root","-p","root","mv","ManageVersion.update","ManageVersion"])
-                        print "Manage update successfull!"
-
-                elif response == "service":
-                        print "Get size code"
-                        size = server.recv(16).strip('\0')
-                        print size
-                        server.sendall(size)
-
-                        print "Get code"
-                        code = server.recv(int(size)).strip('\0')
-                        SetStrInFile(CurDir + "service.update",code)
-                        server.sendall("0")
-
-                        print "Get version"
-                        versionUpdate = server.recv(16).strip('\0')
-                        SetStrInFile("data/ServiceVersion.update",versionUpdate)
-                        print versionUpdate
-                        server.sendall(versionUpdate)
-                        print "Service update successfull!"
-
-                elif response == "serverIp":
-                        ServiceServer = server.recv(16)
-                        SetStrInFile(CurDir + "data/ServiceServer.update",ServiceServer)
-                        subprocess.call(["sudo","-u","root","-p","root","mv",SKDDir + "data/ServiceServer.update",SKDDir + "data/ServiceServer"])
-                        server.sendall(ServiceServer)
-                        print "ServiceServer Address is changen, modem go in reboot"
-                        SystemReboot()
-
-                elif response == "skd":
-                        SKDDir = "/home/pi/skd/"
-                        while True:
-                                print "Get filename"
-                                fileName = server.recv(16).strip("\0")
-                                print fileName
-                                server.sendall(fileName)
-
-                                print "Get size code"
-                                size = server.recv(16).strip('\0')
-                                print size
-                                server.sendall(size)
-
-                                print "Get code"
-                                code = server.recv(int(size)).strip('\0')
-                                SetStrInFile(SKDDir + fileName + ".update",code)
-                                server.sendall("0")
-
-                                print "Rename update files to executeble files"
-                                subprocess.call(["sudo","-u","root","-p","root","mv",SKDDir + fileName + ".update",SKDDir + fileName])
-                                print "SKD update successfull!"
-
-                                version = server.recv(16).strip('\0');
-                                if version == "0":
-                                        SetStrInFile(CurDir + "data/SKDVersion",versionOld)
-                                        break
-                                versionOld = version
+        #Обновляем модем, если надо, или запускаем manage.py
 
         except Exception:
                 pass
