@@ -72,8 +72,6 @@ while True:
                 elif response == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
-                                time.sleep(0)
-
                                 path = server.recv(128).strip('\0')
                                 server.send("0")
                                 print path
