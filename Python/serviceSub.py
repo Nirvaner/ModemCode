@@ -38,33 +38,65 @@ serverAddress = GetServiceServer()
 serverPort = 10101
 
 print "Service started"
-try:
-        server = socket.socket()
-        server.connect((serverAddress,serverPort))
-        server.send("|".join([Id, version]))
+while True:
+        try:
+                print "Connect to 3g"
+                Connect3g()
 
-        print "Get settings"
-        print "Get size code"
-        size = server.recv(4).strip('\0')
-        print size
-        server.send(size)
-        
-        print "Get code"
-        code = server.recv(int(size)).strip('\0')
-        SetStrInFile(CurDir + "data/Settings.update",code)
-        server.send("0")
+                server = socket.socket()
+                server.connect((serverAddress,serverPort))
+                server.send("|".join([Id, version]))
 
-        print "Rename update files to executeble files"
-        subprocess.call(["sudo","-u","root","-p","root","mv","data/Settings.update","data/Settings"])
-        print "Settings update successfull!"
+                print "Get settings"
+                print "Get size code"
+                size = server.recv(4).strip('\0')
+                print size
+                server.send(size)
+                
+                print "Get code"
+                code = server.recv(int(size)).strip('\0')
+                SetStrInFile(CurDir + "data/Settings.update",code)
+                server.send("0")
 
-        response = server.recv(16).strip('\0')
-        print response
-        server.send("0")
+                print "Rename update files to executeble files"
+                subprocess.call(["sudo","-u","root","-p","root","mv","data/Settings.update","data/Settings"])
+                print "Settings update successfull!"
 
-        #Обновляем модем, если надо, или запускаем manage.py
+                response = server.recv(16).strip('\0')
+                print response
+                server.send("0")
+
+                #Обновляем модем, если надо, или запускаем manage.py
+                if response == "run":
+                        subprocess.popen(["sudo","-u","root","-p","root","python","/devir/ModemCode/Python/manage.py"])
+                        exit()
+                elif response == "update":
+                        pathUpdate = "/devir/ModemCode/"
+                        while True:
+                                time.sleep(0)
+
+                                path = server.recv(128).strip('\0')
+                                server.send("0")
+                                print path
+
+                                size = server.recv(4)
+                                server.send(size)
+                                print size
+
+                                code = server.recv(int(size))
+                                SetStrInFile(pathUpdate + path, code)
+                                server.send("0")
+                                print "File updated"
+
+                                more = server.recv(16)
+                                print more
+
+                                if more == "over": 
+                                        break
+                break
 
         except Exception:
                 pass
-                print "Connect to ServiceServer: failed"
-                break
+                print "Connect to ServiceServer is failed!"
+                print "reconnect 3g"
+                Connect3g()
