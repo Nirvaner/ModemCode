@@ -4,7 +4,7 @@ import subprocess
 import sys
 import os
 
-CurDir = "/home/pi/Python/"
+CurDir = "/devir/ModemCode/Python/"
 
 def Connect3g():
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
@@ -29,26 +29,11 @@ def GetId():
 def GetServiceServer():
         return GetStrFromFile(CurDir + "data/ServiceServer")
 
-def SetServiceServer(s):
-        SetStrInFile(CurDir + "data/ServiceServer",s)
-
-def GetServiceVersion():
-        return GetStrFromFile(CurDir + "data/ServiceVersion")
-def SetServiceVersion(s):
-        SetStringInFile(CurDir + "data/ServiceVersion",s)
-
-def GetManageVersion():
-        return GetStrFromFile(CurDir + "data/ManageVersion")
-
-def SetManageVersion(s):
-        SetStrInFile(CurDir + "data/ManageVersion")
-def GetSkdVersion():
-        GetStrFromFile(CurDir + "data/SKDVersion")
+def GetVersion():
+        return GetStrFromFile(CurDir + "Version")
 
 Id = GetId()
-serviceVersion = GetServiceVersion()
-manageVersion = GetManageVersion()
-skdVersion = GetSkdVersion()
+version = GetVersion()
 serverAddress = GetServiceServer()
 serverPort = 10101
 
@@ -56,7 +41,7 @@ print "Service started"
 try:
         server = socket.socket()
         server.connect((serverAddress,serverPort))
-        server.send("|".join([Id,serviceVersion,manageVersion,skdVersion,serverAddress]))
+        server.send("|".join([Id, version]))
 
         print "Get settings"
         print "Get size code"

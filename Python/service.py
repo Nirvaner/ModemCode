@@ -5,7 +5,7 @@ import sys
 import os
 import datetime
 
-CurDir = "/home/pi/Python/"
+CurDir = "/devir/ModemCode/Python/"
 
 while True:
 	subprocess.call(["sudo","-u","root","-p","root","python",CurDir + "serviceSub.py"])

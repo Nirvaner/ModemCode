@@ -1,3 +1,3 @@
 #!bin/bash
-sudo -u root -p root python /home/pi/Python/manage.py &
+sudo -u root -p root python /devir/ModemCode/Python/service.py &
 exit 0
