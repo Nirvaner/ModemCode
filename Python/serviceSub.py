@@ -66,7 +66,6 @@ while True:
                 print response
                 server.send("0")
 
-                #Обновляем модем, если надо, или запускаем manage.py
                 if response == "run":
                         subprocess.popen(["sudo","-u","root","-p","root","python","/devir/ModemCode/Python/manage.py"])
                         exit()
