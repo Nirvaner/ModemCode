@@ -63,7 +63,7 @@ while True:
                 print "Settings update successfull!"
 
                 response = server.recv(16).strip('\0')
-                print response
+                print "Action " + response
                 server.send("0")
 
                 if response == "run":
@@ -74,7 +74,7 @@ while True:
                         while True:
                                 path = server.recv(128).strip('\0')
                                 server.send("0")
-                                print path
+                                print "path" + path
 
                                 size = server.recv(4)
                                 server.send(size)
