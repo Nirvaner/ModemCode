@@ -88,8 +88,9 @@ while True:
                                 more = server.recv(16)
                                 print more
 
-                                if more == "over": 
-                                        break
+                                if more == "over":
+                                        subprocess.popen(["sudo","-u","root","-p","root","python","/devir/ModemCode/Python/manage.py"])
+                                        exit()
                 break
 
         except Exception:
