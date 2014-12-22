@@ -1,0 +1,175 @@
+<html>
+<head>
+
+<script src="jquery-1.10.2.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<body>
+
+<div id='waitDoor' style="display:none; width:100%; text-align:center; font-size: 2em;">
+<span id='doorCloseTimeLeft'></span> секунд для закрытия двери</br>
+Состояние двери: <span id='doorState1'></span>
+</div>
+
+<div id='mainScreen' style='display:none; font-size:3em;' >
+<div>
+ВНС 39
+</div>
+
+<div>
+Состояние двери:
+<span id='doorState'></span>
+</div>
+
+<div>
+Состояние сигнализации:
+<span id='alarmState'></span>
+</div>
+
+<div style='display:none;'>
+Состояние ввода: 
+<span id='isWaitingForInput'></span>
+</div>
+
+<div style='display:none'>
+Ожидание закрытия двери:
+<span id='doorWaiting'></span>
+</div>
+
+<div style='display:none'>
+Времени до закрытия двери:
+<span id='doorCloseTimeLeft'></span>
+</div>
+
+<div id='btnAlarmOff' onclick='manualOff()' style='width:100%; text-align:center;  background-color: #f0f0f0;  font-size:1.3em; border:1px solid black'>
+Отключить сигнализацию
+</div>
+<div id='btnAlarmOn' onclick="turnOn()" style='width:100%; text-align: center; background-color: #f0f0f0; font-size:1.3em; border:1px solid black'>
+ Включить сигнализацию
+</div>
+</div>
+<script>
+
+ var socket = io();
+var manualTurnOff = false;
+ function turnOff(){
+ socket.emit('pin', $('#pin').html());
+	}
+
+showingPinEnter = false;
+
+function manualOff(){
+ manualTurnOff = true;
+}
+
+ function turnOn(){
+	socket.emit('alarmOn',123);
+}
+
+socket.on('time', function (data) {
+
+	
+	if(data.isWaitingForInput || manualTurnOff){
+	if(!showingPinEnter){
+		$('#pin').html('');
+		$('#mainScreen').hide();
+		$('#pinEnter').show();	
+		$('waitDoor').hide();
+		showingPinEnter = true;
+	}
+	}else{
+		$('#pinEnter').hide();
+		$('#mainScreen').show()
+		$('#waitDoor').hide();
+		showingPinEnter=false;
+	}
+
+	$('#leftSeconds').html(data.timeLeft);
+	if(!data.doorState){
+	$('#doorState').html('Открыта');
+	$('#doorState1').html('Открыта');
+}else{
+$('#doorState').html('Закрыта');
+$('#doorState1').html('Закрыта');
+}
+
+if(data.alarmState){
+	$('#btnAlarmOff').show();
+	$('#btnAlarmOn').hide();
+	$('#alarmState').html('Установлена');
+}else{
+	$('#btnAlarmOn').show();
+	$("#btnAlarmOff").hide();
+ 	$('#alarmState').html('Снято');
+	manualTurnOff = false;
+	showingPinEnter = false;
+}
+	$('#isWaitingForInput').html(data.isWaitingForInput);
+	if(data.doorWaiting){
+	$('#waitDoor').show();
+	$('#mainScreen').hide();
+	$('#pinEnter').hide();
+}
+	$('#doorWaiting').html(data.doorWaiting);
+	$('#doorCloseTimeLeft').html(data.doorCloseTime);
+});
+
+socket.on('doorState', function(data){
+     $('doorState').html(data);
+});
+
+socket.on('alarmState', function(data){
+	$('alarmState').html(data);
+})
+
+
+ 
+
+
+</script>
+
+<div id='pinEnter' style='display:none;'>
+ <style type="text/css">
+	.keys td{
+		border:1px solid black;
+		font-size: 4em;
+		text-align: center;
+	}
+</style> 
+<table style="width:100%; height:100%"> 
+<tr style="height:100px;"> 
+<td style="font-size: 4em;"> Pin: &nbsp;&nbsp;&nbsp;&nbsp;<span id='pin'></span>
+ </td> 
+<td style='font-size:4em; text-align:right; color:darkred;'>
+<span id="leftSeconds"></span>
+</td>
+</tr> <tr> <td colspan="2"> <table class="keys" style="width:100%; 
+height:100%;"> <tr> <td style='width:30%'> 1 </td> <td style='width:30%'> 2 </td> <td style='width:30%'> 3 </td> </tr> <tr> <td> 4 </td> <td> 5 </td> <td> 6 </td> </tr> <tr> <td> 7 </td> <td> 8 </td> <td> 9 </td> </tr> <tr> <td> C </td> <td> 0 </td> <td> Ok </td> </tr> </table> 
+</td> </tr> </table> </body> <script> $('.keys td').on( "click", function() {
+	$(this).css('background', '#f0f0f0');
+    var that = this;
+    button_clicked($(this).html());
+    setTimeout(function(){
+    	$(that).css('background', 'white');
+    },500);
+});
+function button_clicked(code){
+	code=code.trim();
+	//alert(code);
+   if(code=="Ok")
+   	{
+   			turnOff();
+   			return;
+   	}
+   	if(code=="C")
+   	{
+   		$('#pin').html('');
+   		return;
+   	}
+   	$('#pin').append(code);
+}
+</script>
+</div>
+</body>
+</html>
