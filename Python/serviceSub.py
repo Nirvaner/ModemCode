@@ -89,7 +89,7 @@ while True:
                                 print more
 
                                 if more == "over":
-                                        subprocess.popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
+                                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
                                         exit()
                 break
 
