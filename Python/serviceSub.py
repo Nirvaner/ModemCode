@@ -59,7 +59,7 @@ while True:
                 server.send("0")
 
                 print "Rename update files to executeble files"
-                subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update","data/Settings"])
+                subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update",CurDir + "data/Settings"])
                 print "Settings update successfull!"
 
                 response = server.recv(16).strip('\0')
@@ -89,7 +89,7 @@ while True:
                                 print more
 
                                 if more == "over":
-                                        subprocess.popen(["sudo","-u","root","-p","root","python","/devir/ModemCode/Python/manage.py"])
+                                        subprocess.popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
                                         exit()
                 break
 
