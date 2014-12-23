@@ -53,7 +53,7 @@ for it in keyArr:
         bytesToCheck.add(int(it))
 
 print "ServerAddress: " + serverAddress
-print "ServerPort: " + serverPort
+print "ServerPort: " + str(serverPort)
 print "PLC Address: " + plcAddress
 print "DB: " + str(db)
 print "DBSize: " + str(size)
