@@ -65,19 +65,10 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
                         return True
         return False
 
-def readFromQueue(q):
-        while True:
-                if q.qsize()>0:
-                        #print 'Sending packet'
-                        obj = q.get()
-                        if not(sendBufferToServer(obj)):
-                                q.put(obj)
-                        time.sleep(0.01)
-
-def sendBufferToServer(buffer):
+def sendBufferToServer(buf):
         try:
                 server.connect((serverAddress, serverPort))
-                server.send(Id + buffer)
+                server.send(Id + buf)
                 response = server.recv(16)
                 if response == "0":
                         return True
@@ -90,7 +81,16 @@ def sendBufferToServer(buffer):
                 connectTo3G()
         return False
 
-def readFromPLC(q):
+def readFromQueue(q):
+        while True:
+                if q.qsize()>0:
+                        #print 'Sending packet'
+                        obj = q.get()
+                        if not(sendBufferToServer(obj)):
+                                q.put(obj)
+                        time.sleep(0.01)
+
+def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         client = snap7.client.Client()
         currentMillis=0
         lastMillis=0
@@ -133,7 +133,7 @@ print
 print "Connect to 3g"
 ConnectTo3g()
 
-t1 = threading.Thread(target=readFromPLC, args = (q))
+t1 = threading.Thread(target=readFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
 t1.daemon = True
 t1.start()
 
