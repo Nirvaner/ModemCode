@@ -42,8 +42,8 @@ ipAddress = setArr[1]
 plcAddress = setArr[2]
 db = int(setArr[3])
 size = int(setArr[4])
-lightRead = int(setArr[5])
-hardRead = float(setArr[6])
+lightRead = int(setArr[5]) * 1000
+hardRead = float(setArr[6]) / 1000
 keyArr = setArr[7].split(',')
 
 bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
@@ -104,7 +104,6 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC = client.db_read(db, 0, size)
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
-                        print currentMillis
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
