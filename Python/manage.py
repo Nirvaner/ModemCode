@@ -77,7 +77,7 @@ def sendBufferToServer(buf):
         except Exception:
                 pass
                 sys.exc_clear()
-                connectTo3G()
+                ConnectTo3g()
         return False
 
 def readFromQueue(q):
