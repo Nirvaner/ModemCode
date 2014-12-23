@@ -67,7 +67,10 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 def sendBufferToServer(buf):
         try:
                 server.connect((serverAddress, serverPort))
-                server.send(Id + buf)
+                bufToSend = bytearray(size + 2)
+                buf.add(int(Id))
+                buf.add(buf)
+                server.send(bufToSend)
                 response = server.recv(16)
                 if response == "0":
                         return True
