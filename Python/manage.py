@@ -50,7 +50,7 @@ bytesToCheck = {};
 while len(bytesToCheck) > 0:
         bytesToCheck.pop()
 for it in keyArr:
-        bytesToCheck.add(int(it))
+        bytesToCheck.append(int(it))
 
 print "ServerAddress: " + serverAddress
 print "ServerPort: " + serverPort
