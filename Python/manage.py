@@ -82,13 +82,9 @@ def sendBufferToServer(buf):
 
 def readFromQueue(q):
         while True:
-                print "get q size"
                 if q.qsize()>0:
-                        print 'q get'
                         obj = q.get()
-                        print "sendBufferToServer"
                         if not(sendBufferToServer(obj)):
-                                print "q put"
                                 q.put(obj)
                         print "time sleep"
                         time.sleep(0.01)
