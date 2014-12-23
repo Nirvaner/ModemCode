@@ -67,7 +67,8 @@ while True:
                 server.send("0")
 
                 if response == "run":
-                        subprocess.popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
+                        print "Start manage.py and exit"
+                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
                         exit()
                 elif response == "update":
                         pathUpdate = "/devir/ModemCode/"
@@ -89,12 +90,13 @@ while True:
                                 print more
 
                                 if more == "over":
+                                        print "Start manage.py and exit"
                                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
                                         exit()
                 break
 
         except Exception:
                 pass
-                print "Connect to ServiceServer is failed!"
+                print "Failed!"
                 print "reconnect 3g"
                 Connect3g()
