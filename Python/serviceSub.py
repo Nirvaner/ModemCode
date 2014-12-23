@@ -59,7 +59,7 @@ while True:
                 server.send("0")
 
                 print "Rename update files to executeble files"
-                subprocess.call(["sudo","-u","root","-p","root","mv","data/Settings.update","data/Settings"])
+                subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update","data/Settings"])
                 print "Settings update successfull!"
 
                 response = server.recv(16).strip('\0')
@@ -67,7 +67,7 @@ while True:
                 server.send("0")
 
                 if response == "run":
-                        subprocess.popen(["sudo","-u","root","-p","root","python","/devir/ModemCode/Python/manage.py"])
+                        subprocess.popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
                         exit()
                 elif response == "update":
                         pathUpdate = "/devir/ModemCode/"
