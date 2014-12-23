@@ -97,6 +97,7 @@ while True:
 
         except Exception:
                 pass
+                sys.exc_clear()
                 print "Failed!"
                 print "reconnect 3g"
                 Connect3g()

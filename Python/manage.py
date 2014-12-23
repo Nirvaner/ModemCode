@@ -7,24 +7,25 @@ import subprocess
 import sys
 import os
 
-CurDir = "/home/pi/Python/"
+CurDir = "/devir/ModemCode/Python/"
 
-def reconnectTo3g():
+def ConnectTo3g():
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
-
-def SysReboot():
-        subprocess.popen(["sudo","-u","root","-p","root","reboot"])
 
 def GetStrFromFile(path):
         f = open(path,"r")
         res = f.read().strip('\0')
         f.close()
-        return res
+        return res.strip('\n')
 
 def GetId():
         return GetStrFromFile(CurDir + "id")
 
-#sys.exc_clear()
+def SetIp(ipAddress):
+        subprocess.Popen(["sudo","-u","root","-p","root","ifconfig",s,"netmask","255.255.255.0","up"])
+
+def ResetEth():
+        subprocess.Popen(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
 
 Id = GetId()
 
@@ -32,17 +33,20 @@ Id = GetId()
 if os.path.exists(CurDir + "data/Settings") != True:
         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
         exit()
-setArr = GetStrFromFile(CurDir + "data/Settings").split('\n')
+setArr = GetStrFromFile(CurDir + "data/Settings").split('|')
+
+serverPort = 10102
 
 serverAddress = setArr[0]
-serverPort = 10102
-plcAddress = setArr[1]
-db = int(setArr[2])
-size = int(setArr[3])
-lightRead = int(setArr[4]) * 1000
-hardRead = float(setArr[5]) / 1000
+ipAddress = setArr[1]
+plcAddress = setArr[2]
+db = int(setArr[3])
+size = int(setArr[4])
+lightRead = int(setArr[5]) * 1000
+hardRead = float(setArr[6]) / 1000
+keyArr = setArr[7].split(',')
+
 bytesToCheck = {};
-keyArr = setArr[6].split(',')
 while len(bytesToCheck) > 0:
         bytesToCheck.pop()
 for it in keyArr:
@@ -118,7 +122,8 @@ def readFromPLC(q):
                         print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
-                                hardReset()
+                                ResetEth()
+                                SetIp(ipAddress)
                         time.sleep(3)
                 time.sleep(0.01)
 
