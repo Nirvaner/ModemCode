@@ -51,7 +51,7 @@ while True:
                 print "Get size code"
                 size = server.recv(4).strip('\0')
                 print size
-                server.send(size)
+                #server.send(size)
                 
                 print "Get code"
                 code = server.recv(int(size)).strip('\0')
