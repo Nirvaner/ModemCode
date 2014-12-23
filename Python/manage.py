@@ -140,7 +140,7 @@ t1 = threading.Thread(target=readFromPLC, args = (q,firstArrayFromPLC,secondArra
 t1.daemon = True
 t1.start()
 
-t2 = threading.Thread(target=readFromQueue, args = (q))
+t2 = threading.Thread(target=readFromQueue, args = (q,))
 t2.daemon = True
 t2.start()
 
