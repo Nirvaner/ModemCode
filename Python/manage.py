@@ -42,7 +42,7 @@ ipAddress = setArr[1]
 plcAddress = setArr[2]
 db = int(setArr[3])
 size = int(setArr[4])
-lightRead = int(setArr[5]) * 1000
+lightRead = int(setArr[5])
 hardRead = float(setArr[6]) / 1000
 keyArr = setArr[7].split(',')
 
