@@ -131,7 +131,7 @@ print "BufferCheck: " + str(bytesToCheck)
 
 print
 print "Connect to 3g"
-ConnectTo3G()
+ConnectTo3g()
 
 t1 = threading.Thread(target=readFromPLC, args = (q))
 t1.daemon = True
