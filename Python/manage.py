@@ -52,15 +52,6 @@ while len(bytesToCheck) > 0:
 for it in keyArr:
         bytesToCheck.add(int(it))
 
-print "ServerAddress: " + serverAddress
-print "ServerPort: " + str(serverPort)
-print "PLC Address: " + plcAddress
-print "DB: " + str(db)
-print "DBSize: " + str(size)
-print "LightReadInterval (sec): " + str(lightRead)
-print "HardReadInterval (sec): " + str(hardRead)
-print "BufferCheck: " + str(bytesToCheck)
-
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
@@ -128,7 +119,19 @@ def readFromPLC(q):
                 time.sleep(0.01)
 
 print 'Manage started'
-connectTo3G()
+
+print "ServerAddress: " + serverAddress
+print "ServerPort: " + str(serverPort)
+print "PLC Address: " + plcAddress
+print "DB: " + str(db)
+print "DBSize: " + str(size)
+print "LightReadInterval (sec): " + str(lightRead)
+print "HardReadInterval (sec): " + str(hardRead)
+print "BufferCheck: " + str(bytesToCheck)
+
+print
+print "Connect to 3g"
+ConnectTo3G()
 
 t1 = threading.Thread(target=readFromPLC, args = (q))
 t1.daemon = True
