@@ -6,6 +6,7 @@ import socket
 import subprocess
 import sys
 import os
+import struct
 
 CurDir = "/devir/ModemCode/Python/"
 
@@ -67,9 +68,8 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 def sendBufferToServer(buf):
         try:
                 server.connect((serverAddress, serverPort))
-                bufToSend = bytearray(size + 2)
-                buf.add(int(Id))
-                buf.add(buf)
+                bufToSend = bytearray(struct.pack("h",int(Id,16)))
+                bufToSend += buf
                 server.send(bufToSend)
                 response = server.recv(16)
                 if response == "0":
