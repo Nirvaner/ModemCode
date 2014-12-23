@@ -29,7 +29,6 @@ def ResetEth():
 
 Id = GetId()
 
-#Get Settings
 if os.path.exists(CurDir + "data/Settings") != True:
         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
         exit()
@@ -83,11 +82,15 @@ def sendBufferToServer(buf):
 
 def readFromQueue(q):
         while True:
+                print "get q size"
                 if q.qsize()>0:
-                        #print 'Sending packet'
+                        print 'q get'
                         obj = q.get()
+                        print "sendBufferToServer"
                         if not(sendBufferToServer(obj)):
+                                print "q put"
                                 q.put(obj)
+                        print "time sleep"
                         time.sleep(0.01)
 
 def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
