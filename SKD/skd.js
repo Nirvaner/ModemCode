@@ -18,7 +18,9 @@ var startedAlarmOnInterval = false;
 var savedSocket = null;
 var alarmWorking = false;
 
-
+server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+});
 
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
@@ -31,12 +33,12 @@ var alarmWorking = false;
 app.use(express.static(__dirname));
 
 
-var server = net.createServer(function(c) { //'connection' listener
+var tcpserver = net.createServer(function(c) { //'connection' listener
   c.on('data', function(data) {
     console.log(data);
   });
 });
-server.listen(10001, function() { //'listening' listener
+tcpserver.listen(10001, function() { //'listening' listener
   console.log('TCP server');
 });
 
@@ -225,7 +227,7 @@ function unBlinkLight() {
 
 
 function sendToPython(doorState, alarmSet, alarmOn){
-   
+   console.log("Sending to python");
 
     client.connect(10000, '127.0.0.1', function() {
   client.write(""+doorState+""+alermSet+""+alarmOn);
