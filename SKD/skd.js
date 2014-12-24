@@ -10,7 +10,7 @@ var server = require('http').createServer(app);
 var inputWaitingTimer = null;
 //var showWaitingTimer = null;
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
 var savedSocket = null;
@@ -26,6 +26,7 @@ server.listen(port, function () {
 //	}
 //},1000);
 
+//Start static webServer on nodejs, __dirname - currentDir of this file
 app.use(express.static(__dirname));
 
 io.on('connection', function (socket) {
