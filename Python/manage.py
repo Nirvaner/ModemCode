@@ -79,9 +79,12 @@ def sendBufferToServer(buf):
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
-        except Exception:
+        except Exception as error:
                 pass
                 sys.exc_clear()
+                print error
+                print error.args
+                print "Conndect to 3g"
                 ConnectTo3g()
         return False
 
