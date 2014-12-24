@@ -45,7 +45,7 @@
         var socket = io();
         var manualTurnOff = false;
         function turnOff() {
-            socket.emit('pin', $('#pin').html());
+            socket.emit('pin', $('#').html());
         }
 
         showingPinEnter = false;
@@ -59,7 +59,6 @@
         }
 
         socket.on('time', function (data) {
-
 
             if (data.isWaitingForInput || manualTurnOff) {
                 if (!showingPinEnter) {
