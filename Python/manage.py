@@ -55,8 +55,6 @@ for it in keyArr:
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
-server = socket.socket()
-
 q = Queue.Queue()
 
 def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
@@ -67,12 +65,13 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 
 def sendBufferToServer(buf):
         try:
-                if not(server.get_connected()):
-                        server.connect((serverAddress, serverPort))
+                server = socket.socket()
+                server.connect((serverAddress, serverPort))
                 bufToSend = bytearray(struct.pack("h",int(Id,16)))
                 bufToSend += buf
                 server.send(bufToSend)
                 response = server.recv(16)
+                server.close()
                 if response == "0":
                         return True
                 elif response == "service":
