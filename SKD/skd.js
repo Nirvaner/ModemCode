@@ -1,4 +1,5 @@
-var gpio = require("gpio"); var express = require('express');
+var gpio = require("gpio");
+var express = require('express');
 var app = express();
 var doorState = 1;
 var isWaitingForInput = false;
