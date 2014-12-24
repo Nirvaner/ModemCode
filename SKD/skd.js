@@ -1,3 +1,4 @@
+var net = require('net');
 var gpio = require("gpio");
 var express = require('express');
 var app = express();
@@ -15,10 +16,9 @@ var port = process.env.PORT || 80;
 var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
 var savedSocket = null;
+var alarmWorking = false;
 
-server.listen(port, function () {
-    console.log('Server listening at port %d', port);
-});
+
 
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
@@ -29,6 +29,23 @@ server.listen(port, function () {
 
 //Start static webServer on nodejs, __dirname - currentDir of this file
 app.use(express.static(__dirname));
+
+
+var server = net.createServer(function(c) { //'connection' listener
+  c.on('data', function(data) {
+    console.log(data);
+  });
+});
+server.listen(10001, function() { //'listening' listener
+  console.log('TCP server');
+});
+
+
+var client = new net.Socket();
+
+
+
+
 
 io.on('connection', function (socket) {
     console.log('Connected client');
@@ -52,6 +69,7 @@ io.on('connection', function (socket) {
     socket.on('pin', function (data) {
         console.log('Alarm off');
         alarmSet = false;
+         sendToPython(doorState, alarmSet, alarmWorking);
         clearInterval(inputWaitingTimer);
         timeLeft = 60;
         disableSound();
@@ -80,6 +98,7 @@ io.on('connection', function (socket) {
                     enableLight();
                     timeLeft = 60;
                     alarmSet = true;
+                    sendToPython(doorState, alarmSet, alarmWorking);
                     isWaitingForInput = false;
                     clearInterval(waitingForDoorCloseInterval);
                     unBlinkLight();
@@ -123,11 +142,14 @@ var gpio11 = gpio.export(17, {
         gpio11.on("change", function (val) {
             // value will report either 1 or 0 (number) when the value changes
 
-            doorState = val;
 
+
+            doorState = val;
+            sendToPython(doorState, alarmSet, alarmWorking);
 
             if (val == 0) {
                 console.log("Door open");
+
 
                 //gpio22.set(1);
                 //gpio23.set(1)
@@ -156,7 +178,7 @@ setInterval(function () {
                     if (timeLeft < 1) {
                         //gpio22.set(1);				
                         //gpio23.set(1);
-                        enableSound();
+                        enableSound();                        
                     }
                 }
             }, 1000);
@@ -167,10 +189,14 @@ setInterval(function () {
 
 function enableSound() {
     gpio23.set(1);
+    alarmWorking = true;
+    sendToPython(doorState, alarmSet, true);
 }
 
 function disableSound() {
     gpio23.set(0);
+    alarmWorking = false;
+    sendToPython(doorState, alarmSet, false);
 }
 
 function enableLight() {
@@ -195,4 +221,16 @@ function blinkLight() {
 
 function unBlinkLight() {
     clearInterval(blinker);
+}
+
+
+function sendToPython(doorState, alarmSet, alarmOn){
+   
+
+    client.connect(10000, '127.0.0.1', function() {
+  client.write(""+doorState+""+alermSet+""+alarmOn);
+    client.destroy(); 
+    });
+
+    
 }
