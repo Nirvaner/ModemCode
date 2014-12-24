@@ -43,28 +43,28 @@ while True:
                 print "Connect to 3g"
                 Connect3g()
 
-                server = socket.socket()
-                server.connect((serverAddress,serverPort))
-                server.send("|".join([Id, version, serverAddress]))
+                tcpClient = socket.socket()
+                tcpClient.connect((serverAddress,serverPort))
+                tcpClient.send("|".join([Id, version, serverAddress]))
 
                 print "Get settings"
                 print "Get size code"
-                size = server.recv(4).strip('\0')
+                size = tcpClient.recv(4).strip('\0')
                 print size
-                server.send(size)
+                tcpClient.send(size)
                 
                 print "Get code"
-                code = server.recv(int(size)).strip('\0')
+                code = tcpClient.recv(int(size)).strip('\0')
                 SetStrInFile(CurDir + "data/Settings.update",code)
-                server.send("0")
+                tcpClient.send("0")
 
                 print "Rename update files to executeble files"
                 subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update",CurDir + "data/Settings"])
                 print "Settings update successfull!"
 
-                response = server.recv(16).strip('\0')
+                response = tcpClient.recv(16).strip('\0')
                 print "Action " + response
-                server.send("0")
+                tcpClient.send("0")
 
                 if response == "run":
                         print "Start manage.py and exit"
@@ -73,20 +73,20 @@ while True:
                 elif response == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
-                                path = server.recv(128).strip('\0')
-                                server.send("0")
+                                path = tcpClient.recv(128).strip('\0')
+                                tcpClient.send("0")
                                 print "path" + path
 
-                                size = server.recv(4)
-                                server.send(size)
+                                size = tcpClient.recv(4)
+                                tcpClient.send(size)
                                 print size
 
-                                code = server.recv(int(size))
+                                code = tcpClient.recv(int(size))
                                 SetStrInFile(pathUpdate + path, code)
-                                server.send("0")
+                                tcpClient.send("0")
                                 print "File updated"
 
-                                more = server.recv(16)
+                                more = tcpClient.recv(16)
                                 print more
 
                                 if more == "over":

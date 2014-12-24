@@ -57,8 +57,6 @@ secondArrayForCheck = bytearray(size)
 
 q = Queue.Queue()
 
-skdSub = subprocess.Popen()
-
 def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
         for item in bytesToCheck:
                 if(firstArrayFromPLC[int(item)] != secondArrayForCheck[int(item)]):
@@ -67,21 +65,20 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 
 def sendBufferToServer(buf):
         try:
-                server = socket.socket()
-                server.connect((serverAddress, serverPort))
+                tcpClient = socket.socket()
+                tcpClient.connect((serverAddress, serverPort))
                 bufToSend = bytearray(struct.pack("h",int(Id,16)))
                 bufToSend += buf
-                server.send(bufToSend)
+                tcpClient.send(bufToSend)
                 response = server.recv(16)
-                server.close()
+                tcpClient.close()
                 if response == "0":
                         return True
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
-                elif response == "skd":
-                        if not(skdSub.started):
-                                skdSub = subprocess.Popen(["sudo","-u","root","-p","root","ptyhon",CurDir + "skd.py"])
+                #elif response == "skd":
+                        
         except Exception:
                 pass
                 sys.exc_clear()
