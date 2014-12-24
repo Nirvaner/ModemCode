@@ -45,6 +45,7 @@ size = int(setArr[4])
 lightRead = int(setArr[5]) * 1000
 hardRead = float(setArr[6]) / 1000
 keyArr = setArr[7].split(',')
+skdState = 0
 
 bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
 while len(bytesToCheck) > 0:
@@ -67,9 +68,7 @@ def sendBufferToServer(buf):
         try:
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress, serverPort))
-                bufToSend = bytearray(struct.pack("h",int(Id,16)))
-                bufToSend += buf
-                tcpClient.send(bufToSend)
+                tcpClient.send(buf)
                 response = tcpClient.recv(16)
                 tcpClient.close()
                 if response == "0":
@@ -105,6 +104,9 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
                         firstArrayFromPLC = client.db_read(db, 0, size)
+                        firstFullArray = bytearray(struct.pack("h",int(Id,16)))
+                        firstFullArray += bytearray(int(skdState,8))
+                        firstFullArray += buf
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
@@ -122,6 +124,32 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 SetIp(ipAddress)
                         time.sleep(3)
                 time.sleep(0.01)
+
+def readFromSKD():
+        while True:
+                try:
+                        server = socket.socket()
+                        server.bind(("", 10000))
+                        server.listen(1)
+                        while True:
+                                skdSock, addr = sock.accept()
+                                state = skdSock.recv(3)
+                                if state[0] == "0":
+                                        skdState = skdState and 6
+                                else:
+                                        skdState = skdState or 1
+                                if state[1] == "0":
+                                        skdState = skdState and 5
+                                else:
+                                        skdState = skdState or 2
+                                if state[2] == "0":
+                                        skdState = skdState and 3
+                                else:
+                                        skdState = skdState or 4
+                                skdSock.close()
+
+                except Exception:
+                        pass
 
 print 'Manage started'
 
@@ -146,5 +174,10 @@ t2 = threading.Thread(target=readFromQueue, args = (q,))
 t2.daemon = True
 t2.start()
 
+tReadFromSKD = threading.Thread(target=readFromSKD)
+tReadFromSKD.daemon = True
+tReadFromSKD.start()
+
 t1.join()
 t2.join()
+tReadFromSKD.join()
