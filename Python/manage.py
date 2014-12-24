@@ -68,8 +68,10 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 def sendBufferToServer(buf):
         try:
                 server.connect((serverAddress, serverPort))
+                print "server connect success"
                 bufToSend = bytearray(struct.pack("h",int(Id,16)))
                 bufToSend += buf
+                print "buf pack success"
                 server.send(bufToSend)
                 response = server.recv(16)
                 if response == "0":
