@@ -70,7 +70,7 @@ def sendBufferToServer(buf):
                 bufToSend = bytearray(struct.pack("h",int(Id,16)))
                 bufToSend += buf
                 tcpClient.send(bufToSend)
-                response = server.recv(16)
+                response = tcpClient.recv(16)
                 tcpClient.close()
                 if response == "0":
                         return True
