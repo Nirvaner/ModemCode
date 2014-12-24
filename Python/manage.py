@@ -134,6 +134,7 @@ def readFromSKD():
                         while True:
                                 skdSock, addr = sock.accept()
                                 state = skdSock.recv(3)
+                                print state
                                 if state[0] == "0":
                                         skdState = skdState and 6
                                 else:
@@ -150,6 +151,14 @@ def readFromSKD():
 
                 except Exception:
                         pass
+
+def setToSkd(path,content):
+        setSkdFile = open(path,'w')
+        setSkdFile.write(content)
+        setSkdFile.close()
+        skdClient = socket.socket()
+        #skdClient.connect()
+        #10001
 
 print 'Manage started'
 
