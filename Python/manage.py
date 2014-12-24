@@ -23,7 +23,7 @@ def GetId():
         return GetStrFromFile(CurDir + "id")
 
 def SetIp(ipAddress):
-        subprocess.Popen(["sudo","-u","root","-p","root","ifconfig",s,"netmask","255.255.255.0","up"])
+        subprocess.Popen(["sudo","-u","root","-p","root","ifconfig",ipAddress,"netmask","255.255.255.0","up"])
 
 def ResetEth():
         subprocess.Popen(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
