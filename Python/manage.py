@@ -67,11 +67,10 @@ def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
 
 def sendBufferToServer(buf):
         try:
-                server.connect((serverAddress, serverPort))
-                print "server connect success"
+                if not(server.get_connected()):
+                        server.connect((serverAddress, serverPort))
                 bufToSend = bytearray(struct.pack("h",int(Id,16)))
                 bufToSend += buf
-                print "buf pack success"
                 server.send(bufToSend)
                 response = server.recv(16)
                 if response == "0":
@@ -79,11 +78,9 @@ def sendBufferToServer(buf):
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
-        except Exception as error:
+        except Exception:
                 pass
                 sys.exc_clear()
-                print error
-                print error.args
                 print "Conndect to 3g"
                 ConnectTo3g()
         return False
