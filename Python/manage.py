@@ -114,8 +114,10 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 secondArrayForCheck = firstArrayFromPLC
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
-                except Exception:
+                except Exception as error:
                         pass
+                        print error
+                        print error.args
                         sys.exc_clear()
                         print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
