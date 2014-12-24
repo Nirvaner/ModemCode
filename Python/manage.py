@@ -57,6 +57,8 @@ secondArrayForCheck = bytearray(size)
 
 q = Queue.Queue()
 
+skdSub = subprocess.Popen()
+
 def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
         for item in bytesToCheck:
                 if(firstArrayFromPLC[int(item)] != secondArrayForCheck[int(item)]):
@@ -77,6 +79,9 @@ def sendBufferToServer(buf):
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
+                elif response == "skd":
+                        if not(skdSub.started):
+                                skdSub = subprocess.Popen(["sudo","-u","root","-p","root","ptyhon",CurDir + "skd.py"])
         except Exception:
                 pass
                 sys.exc_clear()
