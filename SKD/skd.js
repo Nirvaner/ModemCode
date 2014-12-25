@@ -229,12 +229,12 @@ function unBlinkLight() {
 function sendToPython(doorState, alarmSet, alarmOn){
    console.log("Sending to python");
 
-var client = net.connect({port: 10101, host: "192.168.66.134"},
-    function() { 
+var client = net.connect({port: 10000, host: "localhost"},
+    function(c) { 
   console.log('connected to python!');
-  client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+  c.write(""+doorState+""+alarmSet+""+alarmOn, function(){
     console.log('Sent to python');
-   client.destroy();   
+   c.destroy();   
   });  
 });
 
