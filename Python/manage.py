@@ -149,10 +149,9 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 try:
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
-                        firstArrayFromPLC = client.db_read(db, 0, size)
-                        firstFullArray = bytearray(struct.pack("h",int(Id,16)))
-                        firstFullArray += bytearray(int(skdState,8))
-                        firstFullArray += firstArrayFromPLC
+                        firstArrayFromPLC = bytearray(struct.pack("h",int(Id,16)))
+                        firstArrayFromPLC += bytearray(int(skdState,8))
+                        firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
