@@ -45,7 +45,7 @@ size = int(setArr[4])
 lightRead = int(setArr[5]) * 1000
 hardRead = float(setArr[6]) / 1000
 keyArr = setArr[7].split(',')
-skdState = 0
+skdState = "0"
 
 bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
 while len(bytesToCheck) > 0:
@@ -76,7 +76,8 @@ def sendBufferToServer(buf):
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
-                #elif response == "skd":
+                elif response[0:3] == "skd":
+                        SetToSkd(response)
                         
         except Exception:
                 pass
@@ -94,6 +95,50 @@ def readFromQueue(q):
                         print "time sleep"
                         time.sleep(0.01)
 
+def SKDEventsReceiver():
+        server = socket.socket()
+        server.bind(("", 10000))
+        server.listen(1)
+        while True:
+                try:
+                        skdSock, addr = sock.accept()
+                        state = skdSock.recv(3)
+                        skdSock.close()
+                        print state
+                        if state[0] == "0":
+                                iSkdState = iSkdState and 6
+                        else:
+                                iSkdState = iSkdState or 1
+                        if state[1] == "0":
+                                iSkdState = iSkdState and 5
+                        else:
+                                iSkdState = iSkdState or 2
+                        if state[2] == "0":
+                                iSkdState = iSkdState and 3
+                        else:
+                                iSkdState = iSkdState or 4
+                        skdState = str(iSkdState)
+                        print skdState
+                except Exception:
+                        pass
+                        sys.exc_clear()
+
+def SetToSkd(response):
+        try:
+                arr = response.split('|')
+                path = arr[1]
+                content = arr[2]
+                setSkdFile = open(path,'w')
+                setSkdFile.write(content)
+                setSkdFile.close()
+                skdClient = socket.socket()
+                skdClient.connect(("127.0.0.1",10001))
+                skdClient.send("reloadSettings")
+                skdClient.close()
+        except Exception:
+                pass
+                sys.exc_clear()
+
 def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         client = snap7.client.Client()
         currentMillis=0
@@ -106,7 +151,7 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC = client.db_read(db, 0, size)
                         firstFullArray = bytearray(struct.pack("h",int(Id,16)))
                         firstFullArray += bytearray(int(skdState,8))
-                        firstFullArray += buf
+                        firstFullArray += firstArrayFromPLC
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
@@ -114,10 +159,8 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 secondArrayForCheck = firstArrayFromPLC
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
-                except Exception as error:
+                except Exception:
                         pass
-                        print error
-                        print error.args
                         sys.exc_clear()
                         print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
@@ -126,41 +169,6 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 SetIp(ipAddress)
                         time.sleep(3)
                 time.sleep(0.01)
-
-def readFromSKD():
-        while True:
-                try:
-                        server = socket.socket()
-                        server.bind(("", 10000))
-                        server.listen(1)
-                        while True:
-                                skdSock, addr = sock.accept()
-                                state = skdSock.recv(3)
-                                print state
-                                if state[0] == "0":
-                                        skdState = skdState and 6
-                                else:
-                                        skdState = skdState or 1
-                                if state[1] == "0":
-                                        skdState = skdState and 5
-                                else:
-                                        skdState = skdState or 2
-                                if state[2] == "0":
-                                        skdState = skdState and 3
-                                else:
-                                        skdState = skdState or 4
-                                skdSock.close()
-
-                except Exception:
-                        pass
-
-def setToSkd(path,content):
-        setSkdFile = open(path,'w')
-        setSkdFile.write(content)
-        setSkdFile.close()
-        skdClient = socket.socket()
-        #skdClient.connect()
-        #10001
 
 print 'Manage started'
 
@@ -185,7 +193,7 @@ t2 = threading.Thread(target=readFromQueue, args = (q,))
 t2.daemon = True
 t2.start()
 
-tReadFromSKD = threading.Thread(target=readFromSKD)
+tReadFromSKD = threading.Thread(target=SKDEventsReceiver)
 tReadFromSKD.daemon = True
 tReadFromSKD.start()
 
