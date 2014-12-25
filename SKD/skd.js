@@ -232,8 +232,9 @@ function sendToPython(doorState, alarmSet, alarmOn){
 var client = net.connect({port: 10000, host: "localhost"},
     function() { 
   console.log('connected to python!');
-  client.write(""+doorState+""+alarmSet+""+alarmOn);
-  client.destroy(); 
+  client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+   client.destroy();   
+  });  
 });
 
 
