@@ -233,6 +233,7 @@ var client = net.connect({port: 10000, host: "localhost"},
     function() { 
   console.log('connected to python!');
   client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+    console.log('Sent to python');
    client.destroy();   
   });  
 });
