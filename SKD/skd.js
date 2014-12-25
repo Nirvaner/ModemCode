@@ -232,10 +232,12 @@ function sendToPython(doorState, alarmSet, alarmOn){
 var client = net.connect({port: 10000, host: "localhost"},
     function(c) { 
   console.log('connected to python!');
-  c.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+  setTimeout(function () {
+  cient.write(""+doorState+""+alarmSet+""+alarmOn, function(){
     console.log('Sent to python');
-   c.destroy();   
-  });  
+   client.destroy();   
+    });
+    },10000);  
 });
 
 
