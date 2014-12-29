@@ -47,30 +47,9 @@ while True:
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send("|".join([Id, version, serverAddress]))
 
-                print "Get settings"
-                print "Get size code"
-                size = tcpClient.recv(4).strip('\0')
-                print size
-                tcpClient.send(size)
-                
-                print "Get code"
-                code = tcpClient.recv(int(size)).strip('\0')
-                SetStrInFile(CurDir + "data/Settings.update",code)
-                tcpClient.send("0")
-
-                print "Rename update files to executeble files"
-                subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update",CurDir + "data/Settings"])
-                print "Settings update successfull!"
-
                 response = tcpClient.recv(16).strip('\0')
-                print "Action " + response
-                tcpClient.send("0")
 
-                if response == "run":
-                        print "Start manage.py and exit"
-                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
-                        exit()
-                elif response == "update":
+                if response == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
                                 path = tcpClient.recv(128).strip('\0')
@@ -91,13 +70,41 @@ while True:
 
                                 if more == "over":
                                         print "Start manage.py and exit"
-                                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
+                                        if not(os.path.exists(CurDir + "service.update")):
+                                                subprocess.Popen(["sudo","-u","root","-p","root","cp",CurDir + "serviceSub.py",CurDir + "service.update"])
                                         exit()
+
+                elif response == "settings":
+
+                        print "Get settings"
+                        print "Get size code"
+                        size = tcpClient.recv(4).strip('\0')
+                        print size
+                        tcpClient.send(size)
+                        
+                        print "Get code"
+                        code = tcpClient.recv(int(size)).strip('\0')
+                        SetStrInFile(CurDir + "data/Settings.update",code)
+                        tcpClient.send("0")
+        
+                        print "Rename update files to executeble files"
+                        subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update",CurDir + "data/Settings"])
+                        print "Settings update successfull!"
+        
+                        response = tcpClient.recv(16).strip('\0')
+                        print "Action " + response
+                        tcpClient.send("0")
+        
+                        if response == "run":
+                                print "Start manage.py and exit"
+                                subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "manage.py"])
+                                exit()
+                
                 break
 
-        except Exception:
+        except Exception as error:
+                print error
                 pass
                 sys.exc_clear()
-                print "Failed!"
                 print "reconnect 3g"
                 Connect3g()
