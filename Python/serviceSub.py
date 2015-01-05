@@ -48,6 +48,7 @@ while True:
                 tcpClient.send("|".join([Id, version, serverAddress]))
 
                 response = tcpClient.recv(16).strip('\0')
+                print response
 
                 if response == "update":
                         pathUpdate = "/devir/ModemCode/"
@@ -76,7 +77,6 @@ while True:
 
                 elif response == "settings":
 
-                        print "Get settings"
                         print "Get size code"
                         size = tcpClient.recv(4).strip('\0')
                         print size
@@ -87,12 +87,12 @@ while True:
                         SetStrInFile(CurDir + "data/Settings.update",code)
                         tcpClient.send("0")
         
-                        print "Rename update files to executeble files"
+                        print "File operation"
                         subprocess.call(["sudo","-u","root","-p","root","mv",CurDir + "data/Settings.update",CurDir + "data/Settings"])
                         print "Settings update successfull!"
         
                         response = tcpClient.recv(16).strip('\0')
-                        print "Action " + response
+                        print "Action is: " + response
                         tcpClient.send("0")
         
                         if response == "run":
