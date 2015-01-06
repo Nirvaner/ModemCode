@@ -243,6 +243,11 @@ function sendToPython(){
           console.log(doorState);
           console.log(alarmSet);
           console.log(alarmOn);
+          var alarmSetf = false;
+          if(alarmSet)
+          {
+            alarmSetf = true;
+          }
 
           console.log(""+doorState+""+alarmSet+""+alarmOn);
 
