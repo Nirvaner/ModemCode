@@ -243,15 +243,15 @@ function sendToPython(){
           console.log(doorState);
           console.log(alarmSet);
           console.log(alarmOn);
-          var alarmSetf = false;
+          var alarmSetf = 0;
           if(alarmSet)
           {
-            alarmSetf = true;
+            alarmSetf = 1;
           }
 
-          console.log(""+doorState+""+alarmSet+""+alarmOn);
+          console.log(""+doorState+""+alarmSetf+""+alarmOn);
 
-          client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+          client.write(""+doorState+""+alarmSetf+""+alarmOn, function(){
             console.log('Sent to python');
             client.destroy();   
         });
