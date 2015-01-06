@@ -121,22 +121,16 @@ def SKDEventsReceiver(skdState):
                                 iSkdState = iSkdState or 4
                         skdState = str(iSkdState)
                         print skdState
-                        SetToSkd("Voyna i mir \n Autor Tolstoi L.L.")
+                        SetToSkd("0\n0\n0")
                 except Exception:
                         pass
                         sys.exc_clear()
 
 def SetToSkd(response):
         try:
-                arr = response.split('|')
-                path = arr[1]
-                content = arr[2]
-                setSkdFile = open(path,'w')
-                setSkdFile.write(content)
-                setSkdFile.close()
                 skdClient = socket.socket()
                 skdClient.connect(("127.0.0.1",10001))
-                skdClient.send("reloadSettings")
+                skdClient.send(response)
                 skdClient.close()
         except Exception:
                 pass
