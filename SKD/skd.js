@@ -94,7 +94,7 @@ io.on('connection', function (socket) {
                     enableLight();
                     timeLeft = 60;
                     alarmSet = true;
-                    sendToPython(doorState, alarmSet, alarmWorking);
+                    sendToPython();
                     isWaitingForInput = false;
                     clearInterval(waitingForDoorCloseInterval);
                     unBlinkLight();
@@ -141,7 +141,7 @@ var gpio11 = gpio.export(17, {
 
 
             doorState = val;
-            sendToPython(doorState, alarmSet, alarmWorking);
+            sendToPython();
 
             if (val == 0) {
                 console.log("Door open");
@@ -186,13 +186,13 @@ setInterval(function () {
 function enableSound() {
     gpio23.set(1);
     alarmWorking = true;
-    sendToPython(doorState, alarmSet, true);
+    sendToPython();
 }
 
 function disableSound() {
     gpio23.set(0);
     alarmWorking = false;
-    sendToPython(doorState, alarmSet, false);
+    sendToPython();
 }
 
 function enableLight() {
@@ -220,7 +220,7 @@ function unBlinkLight() {
 }
 
 
-function sendToPython(doorStatus, alarmSet, alarmOn){
+function sendToPython(){
    console.log("Sending to python");
 
 var client = net.connect({port: 10000, host: "localhost"},
@@ -231,7 +231,7 @@ var client = net.connect({port: 10000, host: "localhost"},
       console.log(alarmSet);
       console.log(alarmOn);
 
-  client.write(""+doorStatus?1:0+""+alarmSet?1:0+""+alarmOn?1:0, function(){
+  client.write(""+doorState?1:0+""+alarmSet?1:0+""+alarmOn?1:0, function(){
     console.log('Sent to python');
    client.destroy();   
     });
