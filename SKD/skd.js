@@ -36,8 +36,8 @@ app.use(express.static(__dirname));
 var tcpserver = net.createServer(function(c) { //'connection' listener
   c.on('data', function(data) {
     console.log(data);
-});
-});
+    });
+    });
 tcpserver.listen(10001, function() { //'listening' listener
   console.log('TCP server');
 });
@@ -48,6 +48,7 @@ io.on('connection', function (socket) {
     savedSocket = socket;
 
     var showWaitingTimer = setInterval(function () {
+        console.log('Sending data to client');
         socket.broadcast.emit('time', {
             timeLeft: timeLeft,
             doorState: doorState,
