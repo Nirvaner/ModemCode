@@ -171,7 +171,8 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 time.sleep(0.01)
 
 print 'Manage started'
-
+print
+print "Current Settings is"
 print "ServerAddress: " + serverAddress
 print "ServerPort: " + str(serverPort)
 print "PLC Address: " + plcAddress
@@ -180,7 +181,6 @@ print "DBSize: " + str(size)
 print "LightReadInterval (sec): " + str(lightRead)
 print "HardReadInterval (sec): " + str(hardRead)
 print "BufferCheck: " + str(bytesToCheck)
-
 print
 print "Connect to 3g"
 ConnectTo3g()

@@ -71,7 +71,7 @@ while True:
                                 print more
 
                                 if more == "over":
-                                        print "Start manage.py and exit"
+                                        print "Update this script and start again"
                                         if not(os.path.exists(CurDir + "service.update")):
                                                 subprocess.Popen(["sudo","-u","root","-p","root","cp",CurDir + "serviceSub.py",CurDir + "service.update"])
                                         exit()
