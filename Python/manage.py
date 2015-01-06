@@ -98,7 +98,7 @@ def readFromQueue(q):
 def SKDEventsReceiver():
         server = socket.socket()
         server.bind(("", 10000))
-        server.listen(1)
+        server.listen(3)
         while True:
                 try:
                         skdSock, addr = sock.accept()
