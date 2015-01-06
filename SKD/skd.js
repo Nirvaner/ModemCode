@@ -227,7 +227,7 @@ var client = net.connect({port: 10000, host: "localhost"},
     function(c) { 
   console.log('connected to python!');
   setTimeout(function () {
-      console.log(doorStatus);
+      console.log(doorState);
       console.log(alarmSet);
       console.log(alarmOn);
 
