@@ -36,7 +36,7 @@ app.use(express.static(__dirname));
 var tcpserver = net.createServer(function(c) { //'connection' listener
   c.on('data', function(data) {
     console.log(data);
-  });
+});
 });
 tcpserver.listen(10001, function() { //'listening' listener
   console.log('TCP server');
@@ -66,12 +66,12 @@ io.on('connection', function (socket) {
         console.log('Alarm off');
         alarmSet = false;
          //sendToPython(doorState, alarmSet, alarmWorking);
-        clearInterval(inputWaitingTimer);
-        timeLeft = 60;
-        disableSound();
-        unBlinkLight();
-        disableLight();
-        if (waitingForDoorCloseInterval) {
+         clearInterval(inputWaitingTimer);
+         timeLeft = 60;
+         disableSound();
+         unBlinkLight();
+         disableLight();
+         if (waitingForDoorCloseInterval) {
             clearInterval(waitingForDoorCloseInterval);
             startedAlarmOnInterval = false;
         }
@@ -131,9 +131,9 @@ var gpio11 = gpio.export(17, {
             savedSocket.broadcast.emit('doorState', gpio11.val);
         }
 
-        setTimeout(function () {
-            doorState = gpio11.val;
-        }, 1000);
+        // setTimeout(function () {
+        //     doorState = gpio11.val;
+        // }, 1000);
 
         gpio11.on("change", function (val) {
             // value will report either 1 or 0 (number) when the value changes
@@ -220,23 +220,7 @@ function unBlinkLight() {
 }
 
 
-function sendToPython(){
-   console.log("Sending to python");
 
-var client = net.connect({port: 10000, host: "localhost"},
-    function(c) { 
-  console.log('connected to python!');
-  setTimeout(function () {
-      console.log(doorState);
-      console.log(alarmSet);
-      console.log(alarmOn);
-
-  client.write(""+doorState?1:0+""+alarmSet?1:0+""+alarmOn?1:0, function(){
-    console.log('Sent to python');
-   client.destroy();   
-    });
-    },0);  
-});
 
 
 // var client = new net.Socket();
@@ -245,5 +229,25 @@ var client = net.connect({port: 10000, host: "localhost"},
 //     client.destroy(); 
 //     });
 
-    
-}
+
+
+
+
+function sendToPython(){
+ console.log("Sending to python");
+
+ var client = net.connect({port: 10000, host: "localhost"},
+    function(c) { 
+      console.log('connected to python!');
+      setTimeout(function () {
+          console.log(doorState);
+          console.log(alarmSet);
+          console.log(alarmOn);
+
+          client.write(""+doorState?1:0+""+alarmSet?1:0+""+alarmOn?1:0, function(){
+            console.log('Sent to python');
+            client.destroy();   
+        });
+      },0);  
+  });
+ }
