@@ -49,17 +49,18 @@ while True:
 
                 response = tcpClient.recv(16).strip('\0')
                 print response
+                tcpClient.send("0")
 
                 if response == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
                                 path = tcpClient.recv(128).strip('\0')
                                 tcpClient.send("0")
-                                print "path" + path
+                                print "Path: " + path
 
                                 size = tcpClient.recv(4)
                                 tcpClient.send(size)
-                                print size
+                                print "Size: " + size
 
                                 code = tcpClient.recv(int(size))
                                 SetStrInFile(pathUpdate + path, code)
@@ -79,7 +80,7 @@ while True:
 
                         print "Get size code"
                         size = tcpClient.recv(4).strip('\0')
-                        print size
+                        print "Size: " + size
                         tcpClient.send(size)
                         
                         print "Get code"
