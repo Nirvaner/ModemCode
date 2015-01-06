@@ -95,7 +95,7 @@ def readFromQueue(q):
                         print "time sleep"
                         time.sleep(0.01)
 
-def SKDEventsReceiver():
+def SKDEventsReceiver(skdState):
         server = socket.socket()
         server.bind(("", 10000))
         server.listen(3)
@@ -195,7 +195,7 @@ t2 = threading.Thread(target=readFromQueue, args = (q,))
 t2.daemon = True
 t2.start()
 
-tReadFromSKD = threading.Thread(target=SKDEventsReceiver)
+tReadFromSKD = threading.Thread(target=SKDEventsReceiver, args = (skdState,))
 tReadFromSKD.daemon = True
 tReadFromSKD.start()
 
