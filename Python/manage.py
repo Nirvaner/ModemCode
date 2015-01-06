@@ -121,6 +121,7 @@ def SKDEventsReceiver():
                                 iSkdState = iSkdState or 4
                         skdState = str(iSkdState)
                         print skdState
+                        SetToSkd("Voyna i mir \n Autor Tolstoi L.L.")
                 except Exception:
                         pass
                         sys.exc_clear()
