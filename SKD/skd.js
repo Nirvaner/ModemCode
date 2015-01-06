@@ -244,9 +244,9 @@ function sendToPython(){
           console.log(alarmSet);
           console.log(alarmOn);
 
-          console.log(""+doorState+""+alarmSet?1:0+""+alarmOn);
+          console.log(""+doorState+""+alarmSet+""+alarmOn);
 
-          client.write(""+doorState+""+alarmSet?1:0+""+alarmOn, function(){
+          client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
             console.log('Sent to python');
             client.destroy();   
         });
