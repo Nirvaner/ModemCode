@@ -73,7 +73,7 @@ while True:
                                 if more == "over":
                                         print "Update this script and start again"
                                         if not(os.path.exists(CurDir + "service.update")):
-                                                subprocess.Popen(["sudo","-u","root","-p","root","cp",CurDir + "serviceSub.py",CurDir + "service.update"])
+                                                subprocess.call(["sudo","-u","root","-p","root","cp",CurDir + "serviceSub.py",CurDir + "service.update"])
                                         exit()
 
                 elif response == "settings":
