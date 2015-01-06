@@ -43,12 +43,6 @@ tcpserver.listen(10001, function() { //'listening' listener
 });
 
 
-
-
-
-
-
-
 io.on('connection', function (socket) {
     console.log('Connected client');
     savedSocket = socket;
@@ -71,7 +65,7 @@ io.on('connection', function (socket) {
     socket.on('pin', function (data) {
         console.log('Alarm off');
         alarmSet = false;
-         sendToPython(doorState, alarmSet, alarmWorking);
+         //sendToPython(doorState, alarmSet, alarmWorking);
         clearInterval(inputWaitingTimer);
         timeLeft = 60;
         disableSound();
@@ -233,11 +227,11 @@ var client = net.connect({port: 10000, host: "localhost"},
     function(c) { 
   console.log('connected to python!');
   setTimeout(function () {
-  client.write(""+doorState+""+alarmSet+""+alarmOn, function(){
+  client.write(""+doorState?1:0+""+alarmSet?1:0+""+alarmOn?1:0, function(){
     console.log('Sent to python');
    client.destroy();   
     });
-    },10000);  
+    },0);  
 });
 
 
