@@ -106,6 +106,7 @@ def SKDEventsReceiver():
                         state = skdSock.recv(3)
                         skdSock.close()
                         print state
+                        iSkdState = int(skdState)
                         if state[0] == "0":
                                 iSkdState = iSkdState and 6
                         else:
