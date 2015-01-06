@@ -101,7 +101,7 @@ def SKDEventsReceiver():
         server.listen(3)
         while True:
                 try:
-                        skdSock, addr = sock.accept()
+                        skdSock, addr = server.accept()
                         print "Client connect"
                         state = skdSock.recv(3)
                         skdSock.close()
