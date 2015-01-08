@@ -165,7 +165,7 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(int(date.hour, 8))
                                 firstArrayFromPLC += bytearray(int(date.minute, 8))
                                 firstArrayFromPLC += bytearray(int(date.second, 8))
-                                firstArrayFromPLC += bytearray(int(date.microsecond, 32))
+                                firstArrayFromPLC += bytearray(int(date.microsecond, 64))
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
