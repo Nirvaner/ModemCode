@@ -2,6 +2,7 @@ import snap7
 import Queue
 import threading
 import time
+import datetime
 import socket
 import subprocess
 import sys
@@ -158,7 +159,7 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
-                                date = time.datetime.now()
+                                date = datetime.datetime.now()
                                 firstArrayFromPLC += bytearray(int(date.year, 16))
                                 firstArrayFromPLC += bytearray(int(date.month, 8))
                                 firstArrayFromPLC += bytearray(int(date.day, 8))
