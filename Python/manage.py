@@ -150,7 +150,7 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 try:
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
-                        firstArrayFromPLC = bytearray(struct.pack("h",Id))
+                        firstArrayFromPLC = bytearray(struct.pack("<h",Id))
                         firstArrayFromPLC += bytearray(int(skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors=0
@@ -159,13 +159,13 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
                                 date = datetime.datetime.now()
-                                firstArrayFromPLC += bytearray(struct.pack("h",date.year))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.month))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.day))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.hour))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.minute))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.second))
-                                firstArrayFromPLC += bytearray(struct.pack("i",date.microsecond))
+                                firstArrayFromPLC += bytearray(struct.pack("<h",date.year))
+                                firstArrayFromPLC += bytearray(struct.pack("<b",date.month))
+                                firstArrayFromPLC += bytearray(struct.pack("<b",date.day))
+                                firstArrayFromPLC += bytearray(struct.pack("<b",date.hour))
+                                firstArrayFromPLC += bytearray(struct.pack("<b",date.minute))
+                                firstArrayFromPLC += bytearray(struct.pack("<b",date.second))
+                                firstArrayFromPLC += bytearray(struct.pack("<i",date.microsecond))
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
