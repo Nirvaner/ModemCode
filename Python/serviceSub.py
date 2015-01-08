@@ -78,6 +78,12 @@ while True:
 
                 elif response == "settings":
 
+                        sDate = tcpClient.recv(32).strip('\0')
+                        print "Get date " + sDate
+                        tcpClient.send('0')
+                        subprocess.call(["sudo","-u","root","-p","root","date","-s",sDate])
+                        subprocess.call(["sudo","-u","root","-p","root","date"])
+
                         print "Get size code"
                         size = tcpClient.recv(4).strip('\0')
                         print "Size: " + size
