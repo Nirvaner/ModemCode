@@ -76,12 +76,17 @@ def sendBufferToServer(buf):
                 elif response == "service":
                         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
                         exit()
-                elif response[0:3] == "skd":
-                        SetToSkd(response)
+                        return True
+                else:
+                        thread = threading.Thread(target = SendToSkd, args=(response,))
+                        thread.daemon = True
+                        thread.start()
+                        return True
                         
-        except Exception:
+        except Exception as error:
                 pass
                 sys.exc_clear()
+                print error
                 print "Conndect to 3g"
                 ConnectTo3g()
         return False
@@ -105,7 +110,7 @@ def SKDEventsReceiver(skdState):
                         print "Client connect"
                         state = skdSock.recv(3)
                         skdSock.close()
-                        print state
+                        print "State from skd: " + state
                         iSkdState = int(skdState)
                         if state[0] == "0":
                                 iSkdState = iSkdState and 6
@@ -120,21 +125,21 @@ def SKDEventsReceiver(skdState):
                         else:
                                 iSkdState = iSkdState or 4
                         skdState = str(iSkdState)
-                        print skdState
-                        SetToSkd("0\n0\n0")
-                except Exception:
+                except Exception as error:
                         pass
                         sys.exc_clear()
+                        print error
 
-def SetToSkd(response):
+def SendToSkd(s):
         try:
                 skdClient = socket.socket()
                 skdClient.connect(("127.0.0.1",10001))
-                skdClient.send(response)
+                skdClient.send(s)
                 skdClient.close()
-        except Exception:
+        except Exception as error:
                 pass
                 sys.exc_clear()
+                print error
 
 def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         client = snap7.client.Client()
@@ -155,9 +160,10 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 secondArrayForCheck = firstArrayFromPLC
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
-                except Exception:
+                except Exception as error:
                         pass
                         sys.exc_clear()
+                        print error
                         print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
