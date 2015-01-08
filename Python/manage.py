@@ -29,7 +29,7 @@ def SetIp(ipAddress):
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
 
-Id = GetId()
+Id = int(GetId())
 
 if os.path.exists(CurDir + "data/Settings") != True:
         subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
@@ -46,7 +46,7 @@ size = int(setArr[4])
 lightRead = int(setArr[5]) * 1000
 hardRead = float(setArr[6]) / 1000
 keyArr = setArr[7].split(',')
-skdState = "0"
+skdState = 0
 
 bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
 while len(bytesToCheck) > 0:
@@ -112,20 +112,19 @@ def SKDEventsReceiver(skdState):
                         state = skdSock.recv(3)
                         skdSock.close()
                         print "State from skd: " + state
-                        iSkdState = int(skdState)
                         if state[0] == "0":
-                                iSkdState = iSkdState and 6
+                                skdState = skdState and 6
                         else:
-                                iSkdState = iSkdState or 1
+                                skdState = skdState or 1
                         if state[1] == "0":
-                                iSkdState = iSkdState and 5
+                                skdState = skdState and 5
                         else:
-                                iSkdState = iSkdState or 2
+                                skdState = skdState or 2
                         if state[2] == "0":
-                                iSkdState = iSkdState and 3
+                                skdState = skdState and 3
                         else:
-                                iSkdState = iSkdState or 4
-                        skdState = str(iSkdState)
+                                skdState = skdState or 4
+                        print skdState
                 except Exception as error:
                         pass
                         sys.exc_clear()
@@ -151,22 +150,22 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 try:
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
-                        firstArrayFromPLC = bytearray(struct.pack("h",int(Id,16)))
-                        firstArrayFromPLC += bytearray(int(skdState,8))
+                        firstArrayFromPLC = bytearray(struct.pack("h",Id))
+                        firstArrayFromPLC += bytearray(int(skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
-                                date = datetime.datetime.now()
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.year), 16)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.month), 8)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.day), 8)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.hour), 8)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.minute), 8)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.second), 8)))
-                                firstArrayFromPLC += bytearray(struct.pack("h",int(str(date.microsecond), 64)))
+                                date = datetime.datetime.now())
+                                firstArrayFromPLC += bytearray(struct.pack("h",date.year))
+                                firstArrayFromPLC += bytearray(struct.pack("b",date.month))
+                                firstArrayFromPLC += bytearray(struct.pack("b",date.day))
+                                firstArrayFromPLC += bytearray(struct.pack("b",date.hour))
+                                firstArrayFromPLC += bytearray(struct.pack("b",date.minute))
+                                firstArrayFromPLC += bytearray(struct.pack("b",date.second))
+                                firstArrayFromPLC += bytearray(struct.pack("i",date.microsecond)))
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
