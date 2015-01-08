@@ -158,6 +158,14 @@ def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
+                                date = time.datetime.now()
+                                firstArrayFromPLC += bytearray(int(date.year, 16))
+                                firstArrayFromPLC += bytearray(int(date.month, 8))
+                                firstArrayFromPLC += bytearray(int(date.day, 8))
+                                firstArrayFromPLC += bytearray(int(date.hour, 8))
+                                firstArrayFromPLC += bytearray(int(date.minute, 8))
+                                firstArrayFromPLC += bytearray(int(date.second, 8))
+                                firstArrayFromPLC += bytearray(int(date.microsecond, 32))
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
