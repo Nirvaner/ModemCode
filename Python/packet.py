@@ -11,17 +11,16 @@ import struct
 
 CurDir = "/devir/ModemCode/Python/"
 
-def ConnectTo3g():
-        subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
-
 def GetStrFromFile(path):
         f = open(path,"r")
         res = f.read().strip('\0')
         f.close()
         return res.strip('\n')
 
-def GetId():
-        return GetStrFromFile(CurDir + "id")
+def SetStrInFile(path,s):
+        f = open(path,"w")
+        f.write(s)
+        f.close()        
 
 def SetIp(ipAddress):
         subprocess.call(["sudo","-u","root","-p","root","ifconfig",ipAddress,"netmask","255.255.255.0","up"])
@@ -29,61 +28,82 @@ def SetIp(ipAddress):
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
 
-Id = int(GetId())
-
-if os.path.exists(CurDir + "data/Settings") != True:
-        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
-        exit()
-setArr = GetStrFromFile(CurDir + "data/Settings").split('|')
-
+Id = int(GetStrFromFile(CurDir + "Id"))
 serverPort = 10102
+SetSettings(GetStrFromFile(CurDir + "data/Settings").strip('\n','\0'))
 
-serverAddress = setArr[0]
-ipAddress = setArr[1]
-plcAddress = setArr[2]
-db = int(setArr[3])
-size = int(setArr[4])
-lightRead = int(setArr[5]) * 1000
-hardRead = float(setArr[6]) / 1000
-keyArr = setArr[7].split(',')
-skdState = 0
+writeInPLC = (bytearray(), 0)
 
-bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
-while len(bytesToCheck) > 0:
-        bytesToCheck.pop()
-for it in keyArr:
-        bytesToCheck.add(int(it))
-
+q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
-q = Queue.Queue()
+def SetSettings(s):
+        SetStrInFile(CurDir + "data/Settings",s)
+        serArr = s.split('|')
+        serverAddress = setArr[0]
+        ipAddress = setArr[1]
+        plcAddress = setArr[2]
+        db = int(setArr[3])
+        size = int(setArr[4])
+        lightRead = int(setArr[5]) * 1000
+        hardRead = float(setArr[6]) / 1000
+        keyArr = setArr[7].split(',')
+        skdState = 0
+        bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
+        while len(bytesToCheck) > 0:
+                bytesToCheck.pop()
+        for it in keyArr:
+                bytesToCheck.add(int(it))
 
-def checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
-        for item in bytesToCheck:
-                if(firstArrayFromPLC[int(item)] != secondArrayForCheck[int(item)]):
-                        return True
-        return False
+def SetSkdState(state):
+        if state[0] == "0":
+                skdState = skdState and 6
+        else:
+                skdState = skdState or 1
+        if state[1] == "0":
+                skdState = skdState and 5
+        else:
+                skdState = skdState or 2
+        if state[2] == "0":
+                skdState = skdState and 3
+        else:
+                skdState = skdState or 4
+        print skdState
 
-def sendBufferToServer(buf):
+def EventsReceiver(skdState):
+        server = socket.socket()
+        server.bind(("", 10000))
+        server.listen(3)
+        while True:
+                try:
+                        skdSock, addr = server.accept()
+                        print "Client connect"
+                        command = skdSock.recv(512).strip('\0')
+                        skdSock.close()
+                        print "Command is: " + command[0]
+                        if command[0] == "0":
+                                print "SetSettings"
+                                SetSettings(command[1:])
+                        elif command[0] == "1":
+                                print "SetSkdState"
+                        elif command[0] == "2":
+                                print "SetBytesToSiements"
+                except Exception as error:
+                        pass
+                        sys.exc_clear()
+                        print error
+
+def SendBufferToServer(buf):
         try:
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress, serverPort))
                 tcpClient.send(buf)
-                response = tcpClient.recv(16)
+                response = tcpClient.recv(1024)
+                print response
                 tcpClient.close()
-                if response == "0":
+                if response[0] == "0":
                         return True
-                elif response == "service":
-                        subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
-                        exit()
-                        return True
-                else:
-                        thread = threading.Thread(target = SendToSkd, args=(response,))
-                        thread.daemon = True
-                        thread.start()
-                        return True
-                        
         except Exception as error:
                 pass
                 sys.exc_clear()
@@ -92,7 +112,7 @@ def sendBufferToServer(buf):
                 ConnectTo3g()
         return False
 
-def readFromQueue(q):
+def ReadFromQueue(q):
         while True:
                 if q.qsize()>0:
                         obj = q.get()
@@ -101,47 +121,13 @@ def readFromQueue(q):
                         print "time sleep"
                         time.sleep(0.01)
 
-def SKDEventsReceiver(skdState):
-        server = socket.socket()
-        server.bind(("", 10000))
-        server.listen(3)
-        while True:
-                try:
-                        skdSock, addr = server.accept()
-                        print "Client connect"
-                        state = skdSock.recv(3)
-                        skdSock.close()
-                        print "State from skd: " + state
-                        if state[0] == "0":
-                                skdState = skdState and 6
-                        else:
-                                skdState = skdState or 1
-                        if state[1] == "0":
-                                skdState = skdState and 5
-                        else:
-                                skdState = skdState or 2
-                        if state[2] == "0":
-                                skdState = skdState and 3
-                        else:
-                                skdState = skdState or 4
-                        print skdState
-                except Exception as error:
-                        pass
-                        sys.exc_clear()
-                        print error
+def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
+        for item in bytesToCheck:
+                if(firstArrayFromPLC[int(item)] != secondArrayForCheck[int(item)]):
+                        return True
+        return False
 
-def SendToSkd(s):
-        try:
-                skdClient = socket.socket()
-                skdClient.connect(("127.0.0.1",10001))
-                skdClient.send(s)
-                skdClient.close()
-        except Exception as error:
-                pass
-                sys.exc_clear()
-                print error
-
-def readFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
+def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         client = snap7.client.Client()
         currentMillis=0
         lastMillis=0
@@ -203,10 +189,10 @@ t2 = threading.Thread(target=readFromQueue, args = (q,))
 t2.daemon = True
 t2.start()
 
-tReadFromSKD = threading.Thread(target=SKDEventsReceiver, args = (skdState,))
-tReadFromSKD.daemon = True
-tReadFromSKD.start()
+t3 = threading.Thread(target=SKDEventsReceiver, args = (skdState,))
+t3.daemon = True
+t3.start()
 
 t1.join()
 t2.join()
-tReadFromSKD.join()
+t3.join()
