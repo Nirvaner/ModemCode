@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-CurDir = "/devir/ModemCode/Python/"
+CurDir = "/devir/ModemCode/manage/"
 
 while True:
 	subprocess.call(["sudo","-u","root","-p","root","python",CurDir + "service.py"])
