@@ -44,6 +44,7 @@ def SendToSkdJS(s):
         tcpClient.close()
 
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
+serverAddress = info.split('|')[3]
 
 serverPort = 10101
 
