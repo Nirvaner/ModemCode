@@ -51,7 +51,7 @@ siementsSub = "global"
 skdSub = "global"
 
 pingInterval = 60
-isConnect = false
+isConnect = False
 
 print "Service started"
 ConnectToServer()
