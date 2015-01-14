@@ -9,7 +9,7 @@ import sys
 import os
 import struct
 
-CurDir = "/devir/ModemCode/Python/"
+CurDir = "/devir/ModemCode/manage/"
 
 def GetStrFromFile(path):
         f = open(path,"r")

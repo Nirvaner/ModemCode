@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-CurDir = "/devir/ModemCode/Python/"
+CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
 
 tcpClient = socket.socket()
