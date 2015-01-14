@@ -30,13 +30,29 @@ def ResetEth():
 
 Id = int(GetStrFromFile(CurDir + "Id"))
 serverPort = 10102
-SetSettings(GetStrFromFile(CurDir + "data/Settings").strip('\n','\0'))
 
 writeInPLC = (bytearray(), 0)
 
 q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
+
+SetStrInFile(CurDir + "data/Settings",s)
+        serArr = s.split('|')
+        serverAddress = setArr[0]
+        ipAddress = setArr[1]
+        plcAddress = setArr[2]
+        db = int(setArr[3])
+        size = int(setArr[4])
+        lightRead = int(setArr[5]) * 1000
+        hardRead = float(setArr[6]) / 1000
+        keyArr = setArr[7].split(',')
+        skdState = 0
+        bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
+        while len(bytesToCheck) > 0:
+                bytesToCheck.pop()
+        for it in keyArr:
+                bytesToCheck.add(int(it))
 
 def SetSettings(s):
         SetStrInFile(CurDir + "data/Settings",s)

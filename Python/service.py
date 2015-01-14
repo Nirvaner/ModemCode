@@ -63,11 +63,11 @@ while True:
                         tcpClient.send('|'.join(str(modemNumber),str(version),serverAddress))
 
                 elif response[0:8] == "settings":
-                        SendToPacketPY(response.strip("\0")[8:-1])
+                        SendToPacketPY(response.strip("\0")[8:])
                         tcpClient.send("0")
 
                 elif response[0:7] == "address":
-                        serverAddress = response.strip('\0')[7:-1]
+                        serverAddress = response.strip('\0')[7:]
                         SetStrInFile(CurDir + "data/ServerAddress",serverAddress)
                         tcpClient.send("0")
                         ConnectToServer()
