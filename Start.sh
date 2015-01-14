@@ -1,3 +1,3 @@
 #!bin/bash
-sudo -u root -p root python /devir/ModemCode/Python/service.py &
+sudo -u root -p root bash /devir/ModemCode/start.sh &
 exit 0

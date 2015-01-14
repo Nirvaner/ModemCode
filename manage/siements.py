@@ -37,26 +37,30 @@ q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
-SetStrInFile(CurDir + "data/Settings",s)
-        serArr = s.split('|')
-        serverAddress = setArr[0]
-        ipAddress = setArr[1]
-        plcAddress = setArr[2]
-        db = int(setArr[3])
-        size = int(setArr[4])
-        lightRead = int(setArr[5]) * 1000
-        hardRead = float(setArr[6]) / 1000
-        keyArr = setArr[7].split(',')
-        skdState = 0
-        bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
-        while len(bytesToCheck) > 0:
-                bytesToCheck.pop()
-        for it in keyArr:
-                bytesToCheck.add(int(it))
+serverAddress = "0.0.0.0"
+ipAddress = "0.0.0.0"
+plcAddress = "0.0.0.0"
+db = 0
+size = 0
+lightRead = 0
+hardRead = 0
+skdState = 0
+bytesToCheck = {0,1};
+isSet = False
 
 def SetSettings(s):
         SetStrInFile(CurDir + "data/Settings",s)
-        serArr = s.split('|')
+        setArr = s.split('|')
+        global serverAddress
+        global ipAddress
+        global plcAddress
+        global db
+        global size
+        global lightRead
+        global hardRead
+        global bytesToCheck
+        global isSet
+        isSet = True
         serverAddress = setArr[0]
         ipAddress = setArr[1]
         plcAddress = setArr[2]
@@ -65,7 +69,6 @@ def SetSettings(s):
         lightRead = int(setArr[5]) * 1000
         hardRead = float(setArr[6]) / 1000
         keyArr = setArr[7].split(',')
-        skdState = 0
         bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
         while len(bytesToCheck) > 0:
                 bytesToCheck.pop()
@@ -103,6 +106,7 @@ def EventsReceiver(skdState):
                                 SetSettings(command[1:])
                         elif command[0] == "1":
                                 print "SetSkdState"
+                                SetSkdState(command[1:])
                         elif command[0] == "2":
                                 print "SetBytesToSiements"
                 except Exception as error:
@@ -183,32 +187,23 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 time.sleep(0.01)
 
 print 'Manage started'
-print
-print "Current Settings is"
-print "ServerAddress: " + serverAddress
-print "ServerPort: " + str(serverPort)
-print "PLC Address: " + plcAddress
-print "DB: " + str(db)
-print "DBSize: " + str(size)
-print "LightReadInterval (sec): " + str(lightRead)
-print "HardReadInterval (sec): " + str(hardRead)
-print "BufferCheck: " + str(bytesToCheck)
-print
-print "Connect to 3g"
-ConnectTo3g()
 
-t1 = threading.Thread(target=readFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
-t1.daemon = True
-t1.start()
+tEventsReceiver = threading.Thread(target=EventsReceiver, args = (skdState,))
+tEventsReceiver.daemon = True
+tEventsReceiver.start()
 
-t2 = threading.Thread(target=readFromQueue, args = (q,))
-t2.daemon = True
-t2.start()
+while True:
+        if not(isSet):
+                time.sleep(0)
 
-t3 = threading.Thread(target=SKDEventsReceiver, args = (skdState,))
-t3.daemon = True
-t3.start()
+tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
+tReadFromPLC.daemon = True
+tReadFromPLC.start()
 
-t1.join()
-t2.join()
-t3.join()
+tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
+tReadFromQueue.daemon = True
+tReadFromQueue.start()
+
+tReadFromPLC.join()
+tReadFromQueue.join()
+tEventsReceiver.join()

@@ -1,68 +1,28 @@
-import time
-import socket
-import sys
-import subprocess
 import os
+import sys
+import socket
 
-def SystemReboot():
-        subprocess.popen(["sudo","-u","root","-p","root","reboot"])
+initServerAddress = "192.168.66.110"
 
-def GetId():
-        fId = open(CurDir + "id","r")
-        res = fId.read()
-        fId.close()
-        return int(res)
+CurDir = "/devir/ModemCode/manage/"
 
-def SetId(id):
-	fId = open(CurDir + "id","w")
-	fId.write(str(id))
-	fId.close()
-
-def SetServiceServer(ServiceServer):
-        f = open(CurDir + "data/ServiceServer","w")
-        f.write(ServiceServer)
-        f.close()
-
-def SetStartPy(currentPy):
-        sh = open("/home/pi/Start.sh","w")
-        sh.write("#!bin/bash" + '\n')
-        sh.write("sudo -u root -p root python " + CurDir + currentPy + ".py &" + '\n')
-        sh.write("exit 0")
-        sh.close()
-
-CurDir = "/home/pi/Python/"
-id = GetId()
-
-serverAddress = "10.0.0.10"
-serverPort = 10000
-
-serviceServer = ""
-
-print "Init start"
-
+tcpClient = socket.socket()
 while True:
-	print "Querying ID"
 	try:
-       		scfg = socket.socket()
-       		scfg.connect((serverAddress, serverPort))
-       		scfg.send(str(id))
-		settings = scfg.recv(1024)
-		setArr = settings.split("|")
-		id = setArr[0].strip('\0')
-		serviceServer = setArr[1].strip('\0')
-       		print "My ID is: " + str(id)
-		print "My ServiceServer " + serviceServer
-       		scfg.close
+		tcpClient.connect((initServerAddress,9999))
+		response = tcpClient.recv(32).strip('\0')
+		print response
+		tcpClient.send(response)
+		tcpClient.close()
+		f = open(CurDir + "set","w")
+		f.write(response)
+		f.close()
+		f = (CurDir + "../start.sh")
+		content = "#!bin/bash\nsudo -u root -p root python" + CurDir + "self.py &\nexit 0"
+		f.write(content)
+		f.close()
 		break
-	except Exception:
-	        pass
-	        sys.exc_clear()
-		print "Querying ID is failed"
-		time.sleep(1)
-
-print "Write Id and ServiceServer in this system"
-SetId(id)
-SetServiceServer(serviceServer)
-print "ModemID is " + str(id)
-print "ServiceServer is " + serviceServer
-SetStartPy("service")
+	except Exception as error:
+    	pass
+    	sys.exc_clear()
+    	print error
