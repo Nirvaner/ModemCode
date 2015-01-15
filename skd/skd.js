@@ -245,13 +245,12 @@ function sendToPython(){
           console.log('connected to python!');
           setTimeout(function () {
 
-              try{
-                  console.log(doorState);
-                  console.log(alarmSet);
-                  console.log(alarmOn);
-                  var alarmSetf = 0;
-                  if(alarmSet)
-                  {
+            try{
+                console.log(doorState);
+                console.log(alarmSet);
+                console.log(alarmOn);
+                var alarmSetf = 0;
+                if(alarmSet){
                     alarmSetf = 1;
                 }
 
@@ -261,6 +260,9 @@ function sendToPython(){
                     console.log('Sent to python');
                     client.destroy(); 
                 });
+            }
+            catch (error){
+                // Tupo stroka
             }
         },0);  
       });
