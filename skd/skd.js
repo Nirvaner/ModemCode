@@ -262,6 +262,7 @@ try{
             client.destroy(); 
             });
           }
+          finally {}
       },0);  
   });
 }
