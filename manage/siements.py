@@ -156,8 +156,9 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
                         firstArrayFromPLC += bytearray(int(skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)
-                        readPLCErrors=0
+                        readPLCErrors = 0
                         currentMillis = int(round(time.time()*1000))
+                        print "Checking arrays"
                         if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
