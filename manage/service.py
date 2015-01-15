@@ -68,7 +68,7 @@ while True:
                         if not(siementsSub):
                                 siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                         if not(skdSub):
-                                skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
+                                #skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
                 elif response[0:8] == "datetime":
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
                         tcpClient.send("0")
