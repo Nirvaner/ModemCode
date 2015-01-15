@@ -30,8 +30,13 @@ def ConnectToServer():
         print "Connect to server"
         #subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
-        tcpClient.connect((serverAddress,serverPort))
-        tcpClient.send(info)
+        try:
+                tcpClient.connect((serverAddress,serverPort))
+                tcpClient.send(info)
+        except Exception as error:
+                print error
+                pass
+                sys.exc_clear()
 def SendToPacketPY(s):
         tcpClient = socket.socket()
         tcpClient.connect(("127.0.0.1", 10002))
@@ -55,12 +60,8 @@ pingInterval = 60
 isConnect = False
 
 print "Service started"
-try:
-        ConnectToServer()
-except Exception as error:
-        print error
-        pass
-        sys.exc_clear()
+
+ConnectToServer()
 
 while True:
         try:
