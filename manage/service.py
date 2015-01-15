@@ -41,7 +41,7 @@ def SendToSiementsPY(s):
         try:
                 siementsClient = socket.socket()
                 siementsClient.connect(("127.0.0.1", 10002))
-                siementsClient.send(s)
+                siementsClient.send("0" + s)
                 siementsClient.close()
         except Exception as error:
                 print "Exception in SendToSiementsPY"

@@ -98,7 +98,7 @@ def EventsReceiver(skdState):
         while True:
                 try:
                         skdSock, addr = server.accept()
-                        print "Client connect"
+                        print "Client connect to EventsReceiver in SiementsPY"
                         command = skdSock.recv(512).strip('\0')
                         skdSock.close()
                         print "Command is: " + command[0]
