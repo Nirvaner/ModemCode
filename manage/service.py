@@ -67,7 +67,7 @@ while True:
                 elif response[0:3] == "run":
                         if not(siementsSub):
                                 siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
-                        if not(skdSub):
+                        #if not(skdSub):
                                 #skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
                 elif response[0:8] == "datetime":
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
