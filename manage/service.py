@@ -43,11 +43,22 @@ def SendToSiementsPY(s):
                 siementsClient.connect(("127.0.0.1", 10002))
                 siementsClient.send(s)
                 siementsClient.close()
+        except Exception as error:
+                print "Exception in SendToSiementsPY"
+                print error
+                pass
+                sys.exc_clear()
 def SendToSkdJS(s):
+        try:
                 skdClient = socket.socket()
                 skdClient.connect(("127.0.0.1", 10003))
                 skdClient.send(s)
                 skdClient.close()
+        except Exception as error:
+                print "Exception in SendToSkdJS"
+                print error
+                pass
+                sys.exc_clear()
 
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
 serverAddress = info.split('|')[2]
