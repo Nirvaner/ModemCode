@@ -87,7 +87,7 @@ while True:
                         if not(siementsSub):
                                 siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                                 time.sleep(1)
-                        if not(skdSub):
+                        #if not(skdSub):
                                 #skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
                                 #time.sleep(1)
                         tcpClient.send("0")
