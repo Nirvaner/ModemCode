@@ -58,9 +58,9 @@ print "Service started"
 try:
         ConnectToServer()
 except Exception as error:
-print error
-pass
-sys.exc_clear()
+        print error
+        pass
+        sys.exc_clear()
 
 while True:
         try:
