@@ -28,7 +28,7 @@ def SetServerAddress(address):
         SetStrInFile(path,content)
 def ConnectToServer():
         print "Connect to server"
-        subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
+        #subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
         tcpClient.connect((serverAddress,serverPort))
         tcpClient.send(info)
@@ -48,8 +48,8 @@ serverAddress = info.split('|')[2]
 
 serverPort = 10101
 
-siementsSub = "global"
-skdSub = "global"
+siementsSub = None
+skdSub = None
 
 pingInterval = 60
 isConnect = False
