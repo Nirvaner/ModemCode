@@ -241,8 +241,11 @@ function sendToPython(){
 try{
  var client = net.connect({port: 10000, host: "localhost"},
     function(c) { 
+      
       console.log('connected to python!');
       setTimeout(function () {
+
+          try{
           console.log(doorState);
           console.log(alarmSet);
           console.log(alarmOn);
@@ -256,11 +259,10 @@ try{
 
           client.write(""+doorState+""+alarmSetf+""+alarmOn, function(){
             console.log('Sent to python');
-            client.destroy();   
-        });
+            client.destroy(); 
+            });
+          }
       },0);  
   });
-} catch(){
-    
 }
  }}
