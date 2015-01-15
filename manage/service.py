@@ -55,7 +55,12 @@ pingInterval = 60
 isConnect = False
 
 print "Service started"
-ConnectToServer()
+try:
+        ConnectToServer()
+except Exception as error:
+print error
+pass
+sys.exc_clear()
 
 while True:
         try:
