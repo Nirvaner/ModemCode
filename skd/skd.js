@@ -267,4 +267,7 @@ function sendToPython(){
         },0);  
       });
    }
+   catch(error){
+    
+   }
 }
