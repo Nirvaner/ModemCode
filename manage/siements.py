@@ -28,7 +28,7 @@ def SetIp(ipAddress):
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
 
-Id = int(GetStrFromFile(CurDir + "Id"))
+modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
 serverPort = 10102
 
 writeInPLC = (bytearray(), 0)
@@ -156,7 +156,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 try:
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
-                        firstArrayFromPLC = bytearray(struct.pack("h",Id))
+                        firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
                         firstArrayFromPLC += bytearray(int(skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors=0
