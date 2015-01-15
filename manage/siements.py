@@ -33,10 +33,6 @@ serverPort = 10102
 
 writeInPLC = (bytearray(), 0)
 
-q = Queue.Queue()
-firstArrayFromPLC = bytearray(size)
-secondArrayForCheck = bytearray(size)
-
 serverAddress = "0.0.0.0"
 ipAddress = "0.0.0.0"
 plcAddress = "0.0.0.0"
@@ -47,6 +43,10 @@ hardRead = 0
 skdState = 0
 bytesToCheck = {0,1};
 isSet = False
+
+q = Queue.Queue()
+firstArrayFromPLC = bytearray(size)
+secondArrayForCheck = bytearray(size)
 
 def SetSettings(s):
         print "SetSettings: " + s
