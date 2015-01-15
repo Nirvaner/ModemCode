@@ -60,12 +60,16 @@ def SetSettings(s):
         global hardRead
         global bytesToCheck
         global isSet
+        global firstArrayFromPLC
+        global secondArrayForCheck
         isSet = True
         serverAddress = setArr[0]
         ipAddress = setArr[1]
         plcAddress = setArr[2]
         db = int(setArr[3])
         size = int(setArr[4])
+        firstArrayFromPLC = bytearray(size)
+        secondArrayForCheck = bytearray(size)
         lightRead = int(setArr[5]) * 1000
         hardRead = float(setArr[6]) / 1000
         keyArr = setArr[7].split(',')
@@ -158,7 +162,6 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors = 0
                         currentMillis = int(round(time.time()*1000))
-                        print "Checking arrays"
                         if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
