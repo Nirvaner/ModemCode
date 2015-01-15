@@ -118,17 +118,15 @@ def SendBufferToServer(buf):
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress, serverPort))
                 tcpClient.send(buf)
-                response = tcpClient.recv(1024)
+                response = tcpClient.recv(4)
                 print response
                 tcpClient.close()
                 if response[0] == "0":
                         return True
         except Exception as error:
+                print error
                 pass
                 sys.exc_clear()
-                print error
-                print "Conndect to 3g"
-                ConnectTo3g()
         return False
 
 def ReadFromQueue(q):
@@ -160,7 +158,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors=0
                         currentMillis = int(round(time.time()*1000))
-                        if ((checkBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
+                        if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
                                 date = datetime.datetime.now()
