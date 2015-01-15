@@ -37,7 +37,7 @@ def ConnectToServer():
                 print error
                 pass
                 sys.exc_clear()
-def SendToPacketPY(s):
+def SendToSiementsPY(s):
         tcpClient = socket.socket()
         tcpClient.connect(("127.0.0.1", 10002))
         tcpClient.send(s)
