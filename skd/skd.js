@@ -48,16 +48,9 @@ io.on('connection', function (socket) {
     savedSocket = socket;
 
     var showWaitingTimer = setInterval(function () {
-        console.log('Sending data to client'+{
-            timeLeft: timeLeft,
-            doorState: doorState,
-            alarmState: alarmSet,
-            isWaitingForInput: isWaitingForInput,
-            doorWaiting: startedAlarmOnInterval,
-            doorCloseTime: doorCloseTimeLeft
-        });
+        console.log('Sending data to client');
         
-        socket.broadcast.emit('time', {
+        socket.emit('time', {
             timeLeft: timeLeft,
             doorState: doorState,
             alarmState: alarmSet,
