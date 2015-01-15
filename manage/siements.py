@@ -50,7 +50,6 @@ secondArrayForCheck = bytearray(size)
 
 def SetSettings(s):
         print "SetSettings: " + s
-        SetStrInFile(CurDir + "data/Settings",s)
         setArr = s.split('|')
         global serverAddress
         global ipAddress
