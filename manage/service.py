@@ -38,15 +38,16 @@ def ConnectToServer():
                 pass
                 sys.exc_clear()
 def SendToSiementsPY(s):
-        tcpClient = socket.socket()
-        tcpClient.connect(("127.0.0.1", 10002))
-        tcpClient.send(s)
-        tcpClient.close()
+        try:
+                siementsClient = socket.socket()
+                siementsClient.connect(("127.0.0.1", 10002))
+                siementsClient.send(s)
+                siementsClient.close()
 def SendToSkdJS(s):
-        tcpClient = socket.socket()
-        tcpClient.connect(("127.0.0.1", 10003))
-        tcpClient.send(s)
-        tcpClient.close()
+                skdClient = socket.socket()
+                skdClient.connect(("127.0.0.1", 10003))
+                skdClient.send(s)
+                skdClient.close()
 
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
 serverAddress = info.split('|')[2]
