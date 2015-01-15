@@ -87,9 +87,9 @@ while True:
                         if not(siementsSub):
                                 siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                                 time.sleep(1)
-                        #if not(skdSub):
-                                #skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
-                                #time.sleep(1)
+                        if not(skdSub):
+                                skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
+                                time.sleep(1)
                         tcpClient.send("0")
                 elif response[0:8] == "datetime":
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
@@ -98,7 +98,10 @@ while True:
                         SendToSiementsPY(response.strip("\0")[8:])
                         tcpClient.send("0")
                 elif response[0:3] == "skd":
-                        SendToSkdJS(response[3:])
+                        tcpClient.send(response[3:])
+                        response = tcpClient.recv(int(response[3:]))
+                        SendToSkdJS(response)
+                        tcpClient.send("0")
                 elif response[0:7] == "address":
                         serverAddress = response.strip('\0')[7:]
                         SetServerAddress(serverAddress)
