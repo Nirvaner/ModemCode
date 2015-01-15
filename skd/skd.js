@@ -48,7 +48,14 @@ io.on('connection', function (socket) {
     savedSocket = socket;
 
     var showWaitingTimer = setInterval(function () {
-        console.log('Sending data to client');
+        console.log('Sending data to client'+{
+            timeLeft: timeLeft,
+            doorState: doorState,
+            alarmState: alarmSet,
+            isWaitingForInput: isWaitingForInput,
+            doorWaiting: startedAlarmOnInterval,
+            doorCloseTime: doorCloseTimeLeft
+        });
         
         socket.broadcast.emit('time', {
             timeLeft: timeLeft,
@@ -256,9 +263,9 @@ function sendToPython(){
                     alarmSetf = 1;
                 }
 
-                console.log(""+doorState+""+alarmSetf+""+alarmOn);
+                console.log("1"+doorState+""+alarmSetf+""+alarmOn);
 
-                client.write(""+doorState+""+alarmSetf+""+alarmOn, function(){
+                client.write("1"+doorState+""+alarmSetf+""+alarmOn, function(){
                     console.log('Sent to python');
                     client.destroy(); 
                 });
