@@ -49,6 +49,7 @@ io.on('connection', function (socket) {
 
     var showWaitingTimer = setInterval(function () {
         console.log('Sending data to client');
+        
         socket.broadcast.emit('time', {
             timeLeft: timeLeft,
             doorState: doorState,
@@ -237,6 +238,7 @@ function unBlinkLight() {
 function sendToPython(){
  console.log("Sending to python");
 
+try{
  var client = net.connect({port: 10000, host: "localhost"},
     function(c) { 
       console.log('connected to python!');
@@ -258,4 +260,7 @@ function sendToPython(){
         });
       },0);  
   });
- }
+} catch(){
+    
+}
+ }}
