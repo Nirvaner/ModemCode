@@ -239,13 +239,10 @@ function sendToPython(){
    console.log("Sending to python");
 
     try{
-       var client = net.connect({port: 10000, host: "localhost"},
+       var client = net.connect({port: 10002, host: "localhost"},
         function(c) { 
 
-            client.on('error', function(data) {
-          console.log(data.toString());
-            client.end();
-            });
+            
 
           console.log('connected to python!');
           setTimeout(function () {
@@ -271,6 +268,12 @@ function sendToPython(){
             }
         },0);  
       });
+
+client.on('error', function(data) {
+          console.log(data.toString());
+            client.end();
+            });
+
    }
    catch(error){
 
