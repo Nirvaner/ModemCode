@@ -1,170 +1,221 @@
-<html>
-<head >
-    <meta codeset="ASCII">
-    <script src="jquery-1.10.2.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <title>Ввод пароля</title>
-</head>
-<body>
-    <div id='waitDoor' style="display:none; width:100%; text-align:center; font-size: 2em;">
-        <span id='doorCloseTimeLeft'></span> секунд для закрытия двери</br>
-        Состояние двери: <span id='doorState1'></span>
-    </div>
-    <div id='mainScreen' style='display:none; font-size:3em;'>
-        <div>
-            ВНС 39
-        </div>
-        <div>
-            Состояние двери:
-            <span id='doorState'></span>
-        </div>
-        <div>
-            Состояние сигнализации:
-            <span id='alarmState'></span>
-        </div>
-        <div style='display:none;'>
-            Состояние ввода:
-            <span id='isWaitingForInput'></span>
-        </div>
-        <div style='display:none'>
-            Ожидание закрытия двери:
-            <span id='doorWaiting'></span>
-        </div>
-        <div style='display:none'>
-            Времени до закрытия двери:
-            <span id='doorCloseTimeLeft'></span>
-        </div>
-        <div id='btnAlarmOff' onclick='manualOff()' style='width:100%; text-align:center;  background-color: #f0f0f0;  font-size:1.3em; border:1px solid black'>
-            Отключить сигнализацию
-        </div>
-        <div id='btnAlarmOn' onclick="turnOn()" style='width:100%; text-align: center; background-color: #f0f0f0; font-size:1.3em; border:1px solid black'>
-            Включить сигнализацию
-        </div>
-    </div>
-    <script>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta codeset="ASCII">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        var socket = io();
-        var manualTurnOff = false;
-        function turnOff() {
-            socket.emit('pin', $('#').html());
-        }
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="style.css" rel="stylesheet">
+		<script src="jquery-1.10.2.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<title>Ввод пароля</title>
 
-        showingPinEnter = false;
+	</head>
+	<body>
+    
+		<div id='waitDoor' class="container" style="display:none;">
+			<div class="row">
+				<div class="col-xs-12">
+					<h1 class="text-center"><mark id='doorCloseTimeLeft'>50</mark> секунд для закрытия двери</h1>
+				</div>
+				<div class="col-xs-12">
+					<h1 class="text-center">Состояние двери: <mark id='doorState1'>Открыта</mark></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="mainScreen" class="container" style="display:none;">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="panel panel-default">
+						<div class="panel-heading"><h1 class="qqq-h1">ВНС 39</h1></div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-12">
+									<h1 class="">Состояние двери: <mark id='doorState'>Открыта</mark></h1>
+								</div>
+								<div class="col-xs-12">
+									<h1 class="">Состояние сигнализации: <mark id='alarmState'>Открыта</mark></h1>
+								</div>
+								<div class="col-xs-12">
+									<h1 class="" style="display:none;">Состояние ввода: <mark id='isWaitingForInput'>Открыта</mark></h1>
+								</div>
+								<div class="col-xs-12">
+									<h1 class="" style="display:none;">Ожидание закрытия двери: <mark id='doorWaiting'>Открыта</mark></h1>
+								</div>
+								<div class="col-xs-12">
+									<h1 class="" style="display:none;">Времени до закрытия двери: <mark id='doorCloseTimeLeft'>Открыта</mark></h1>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-2"></div>
+								<div class="col-xs-8">
+									<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">Отключить сигнализацию</button>
+								</div>
+								<div class="col-xs-2"></div>
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-2"></div>
+								<div class="col-xs-8">
+									<button id='btnAlarmOn' onclick="turnOn()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">Включить сигнализацию</button>
+								</div>
+								<div class="col-xs-2"></div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
 
-        function manualOff() {
-            manualTurnOff = true;
-        }
+			var socket = io();
+			var manualTurnOff = false;
+			function turnOff() {
+				socket.emit('pin', $('#pin').html());
+			}
 
-        function turnOn() {
-            socket.emit('alarmOn', 123);
-        }
+			showingPinEnter = false;
 
-        socket.on('time', function (data) {
+			function manualOff() {
+				manualTurnOff = true;
+			}
 
-            if (data.isWaitingForInput || manualTurnOff) {
-                if (!showingPinEnter) {
-                    $('#pin').html('');
-                    $('#mainScreen').hide();
-                    $('#pinEnter').show();
-                    $('waitDoor').hide();
-                    showingPinEnter = true;
-                }
-            } else {
-                $('#pinEnter').hide();
-                $('#mainScreen').show();
-                $('#waitDoor').hide();
-                showingPinEnter = false;
-            }
+			function turnOn() {
+				socket.emit('alarmOn', 123);
+			}
 
-            $('#leftSeconds').html(data.timeLeft);
-            if (!data.doorState) {
-                $('#doorState').html('Открыта');
-                $('#doorState1').html('Открыта');
-            } else {
-                $('#doorState').html('Закрыта');
-                $('#doorState1').html('Закрыта');
-            }
+			socket.on('time', function (data) {
 
-            if (data.alarmState) {
-                $('#btnAlarmOff').show();
-                $('#btnAlarmOn').hide();
-                $('#alarmState').html('Установлена');
-            } else {
-                $('#btnAlarmOn').show();
-                $("#btnAlarmOff").hide();
-                $('#alarmState').html('Снято');
-                manualTurnOff = false;
-                showingPinEnter = false;
-            }
-            $('#isWaitingForInput').html(data.isWaitingForInput);
-            if (data.doorWaiting) {
-                $('#waitDoor').show();
-                $('#mainScreen').hide();
-                $('#pinEnter').hide();
-            }
-            $('#doorWaiting').html(data.doorWaiting);
-            $('#doorCloseTimeLeft').html(data.doorCloseTime);
-        });
+				if (data.isWaitingForInput || manualTurnOff) {
+					if (!showingPinEnter) {
+						$('#pin').html('');
+						$('#mainScreen').hide();
+						$('#pinEnter').show();
+						$('#waitDoor').hide();
+						showingPinEnter = true;
+					}
+				} else {
+					$('#pinEnter').hide();
+					$('#mainScreen').show();
+					$('#waitDoor').hide();
+					showingPinEnter = false;
+				}
 
-        socket.on('doorState', function (data) {
-            $('doorState').html(data);
-        });
+				$('#leftSeconds').html(data.timeLeft);
+				if (!data.doorState) {
+					$('#doorState').html('Открыта');
+					$('#doorState1').html('Открыта');
+				} else {
+					$('#doorState').html('Закрыта');
+					$('#doorState1').html('Закрыта');
+				}
 
-        socket.on('alarmState', function (data) {
-            $('alarmState').html(data);
-        });
-    </script>
-    <div id='pinEnter' style='display:none;'>
-        <style type="text/css">
-            .keys td {
-                border: 1px solid black;
-                font-size: 4em;
-                text-align: center;
-            }
-        </style>
-        <table style="width:100%; height:100%">
-            <tr style="height:100px;">
-                <td style="font-size: 4em;">
-                    Pin: &nbsp;&nbsp;&nbsp;&nbsp;<span id='pin'></span>
-                </td>
-                <td style='font-size:4em; text-align:right; color:darkred;'>
-                    <span id="leftSeconds"></span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <table class="keys" style="width:100%;height:100%;">
-                        <tr> <td style='width:30%'> 1 </td> <td style='width:30%'> 2 </td> <td style='width:30%'> 3 </td> </tr>
-                        <tr> <td> 4 </td> <td> 5 </td> <td> 6 </td> </tr>
-                        <tr> <td> 7 </td> <td> 8 </td> <td> 9 </td> </tr>
-                        <tr> <td> C </td> <td> 0 </td> <td> Ok </td> </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <script>
-        $('.keys td').on("click", function () {
-            $(this).css('background', '#f0f0f0');
-            var that = this;
-            button_clicked($(this).html());
-            setTimeout(function () {
-                $(that).css('background', 'white');
-            }, 500);
-        });
-        function button_clicked(code) {
-            code = code.trim();
-            //alert(code);
-            if (code == "Ok") {
-                turnOff();
-                return;
-            }
-            if (code == "C") {
-                $('#pin').html('');
-                return;
-            }
-            $('#pin').append(code);
-        }
-    </script>
+				if (data.alarmState) {
+					$('#btnAlarmOff').show();
+					$('#btnAlarmOn').hide();
+					$('#alarmState').html('Установлена');
+				} else {
+					$('#btnAlarmOn').show();
+					$("#btnAlarmOff").hide();
+					$('#alarmState').html('Снято');
+					manualTurnOff = false;
+					showingPinEnter = false;
+				}
+				$('#isWaitingForInput').html(data.isWaitingForInput);
+				if (data.doorWaiting) {
+					$('#waitDoor').show();
+					$('#mainScreen').hide();
+					$('#pinEnter').hide();
+				}
+				$('#doorWaiting').html(data.doorWaiting);
+				$('#doorCloseTimeLeft').html(data.doorCloseTime);
+			});
+
+			socket.on('doorState', function (data) {
+				$('#doorState').html(data);
+			});
+
+			socket.on('alarmState', function (data) {
+				$('#alarmState').html(data);
+			});
+		</script>
+		
+		<div id='pinEnter' class="container" style="display:none;">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well">
+						<div class="row">
+							<div class="col-xs-2">
+								<h1 class="qqq-h1 pull-right">Pin:</h1>
+							</div>
+							<div class="col-xs-8">
+								<h1 id='pin' class="qqq-h1 text-muted">*****</h1>
+							</div>
+							<div class="col-xs-2">
+								<h1 id="leftSeconds" class="qqq-h1 text-danger pull-left">60</h1>
+								<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4" style="background:0F0;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">1</button></div>
+				<div class="col-xs-4" style="background:F00;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">2</button></div>
+				<div class="col-xs-4" style="background:00F;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">3</button></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4" style="background:0F0;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">4</button></div>
+				<div class="col-xs-4" style="background:F00;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">5</button></div>
+				<div class="col-xs-4" style="background:00F;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">6</button></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4" style="background:0F0;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">7</button></div>
+				<div class="col-xs-4" style="background:F00;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">8</button></div>
+				<div class="col-xs-4" style="background:00F;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">9</button></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4" style="background:0F0;"><button class="key btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">C</button></div>
+				<div class="col-xs-4" style="background:F00;"><button class="key btn btn-default btn-lg btn-block qqq-btn" type="submit">0</button></div>
+				<div class="col-xs-4" style="background:00F;"><button class="key btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">Ok</button></div>
+			</div>
+		</div>
+		
+		<script>
+			$('.key').on("click", function () {
+				button_clicked($(this).html());
+			});
+			function button_clicked(code) {
+				code = code.trim();
+				//alert(code);
+				if (code == "Ok") {
+					turnOff();
+					return;
+				}
+				if (code == "C") {
+					$('#pin').html('');
+					return;
+				}
+				$('#pin').append(code);
+			}
+		</script>
 </body>
 </html>
