@@ -190,6 +190,7 @@ print 'Manage started'
 tEventsReceiver = threading.Thread(target=EventsReceiver, args = (skdState,))
 tEventsReceiver.daemon = True
 tEventsReceiver.start()
+print "tEventsReceiver is started"
 
 while True:
         if not(isSet):
@@ -198,10 +199,12 @@ while True:
 tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
 tReadFromPLC.daemon = True
 tReadFromPLC.start()
+print "tReadFromPLC is started"
 
 tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
 tReadFromQueue.daemon = True
 tReadFromQueue.start()
+print "tReadFromQueue is started"
 
 tReadFromPLC.join()
 tReadFromQueue.join()
