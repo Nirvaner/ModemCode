@@ -195,6 +195,8 @@ print "tEventsReceiver is started"
 while True:
         if not(isSet):
                 time.sleep(0)
+        else:
+                break
 
 tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
 tReadFromPLC.daemon = True
