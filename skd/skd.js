@@ -34,9 +34,9 @@ app.use(express.static(__dirname));
 
 
 var tcpserver = net.createServer(function(c) { //'connection' listener
-  c.on('data', function(data) {
-    console.log(data);
-});
+    c.on('data', function(data) {
+        console.log(data);
+    });
 });
 tcpserver.listen(10001, function() { //'listening' listener
   console.log('TCP server');
@@ -137,7 +137,7 @@ var gpio11 = gpio.export(17, {
         //     doorState = gpio11.val;
         // }, 1000);
 
-gpio11.on("change", function (val) {
+        gpio11.on("change", function (val) {
             // value will report either 1 or 0 (number) when the value changes
 
 
@@ -158,7 +158,7 @@ gpio11.on("change", function (val) {
             }
 
         });
-}
+    }
 });
 
 
@@ -238,7 +238,7 @@ function unBlinkLight() {
 function sendToPython(){
    console.log("Sending to python");
 
-   try{
+    try{
        var client = net.connect({port: 10000, host: "localhost"},
         function(c) { 
 
