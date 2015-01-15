@@ -79,6 +79,7 @@ def SetSettings(s):
                 bytesToCheck.add(int(it))
 
 def SetSkdState(state):
+        global skdState
         if state[0] == "0":
                 skdState = skdState and 6
         else:
