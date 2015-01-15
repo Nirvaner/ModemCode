@@ -93,7 +93,7 @@ def SetSkdState(state):
 
 def EventsReceiver(skdState):
         server = socket.socket()
-        server.bind(("", 10000))
+        server.bind(("", 10002))
         server.listen(3)
         while True:
                 try:
