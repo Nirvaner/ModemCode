@@ -137,7 +137,7 @@ def ReadFromQueue(q):
         while True:
                 if q.qsize()>0:
                         obj = q.get()
-                        if not(sendBufferToServer(obj)):
+                        if not(SendBufferToServer(obj)):
                                 q.put(obj)
                         print "time sleep"
                         time.sleep(0.01)
