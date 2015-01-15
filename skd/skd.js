@@ -48,7 +48,7 @@ io.on('connection', function (socket) {
     savedSocket = socket;
 
     var showWaitingTimer = setInterval(function () {
-        console.log('Sending data to client');
+       // console.log('Sending data to client');
         
         socket.emit('time', {
             timeLeft: timeLeft,
