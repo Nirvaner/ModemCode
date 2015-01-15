@@ -49,6 +49,7 @@ bytesToCheck = {0,1};
 isSet = False
 
 def SetSettings(s):
+        print "SetSettings: " + s
         SetStrInFile(CurDir + "data/Settings",s)
         setArr = s.split('|')
         global serverAddress
