@@ -41,7 +41,7 @@ size = 0
 lightRead = 0
 hardRead = 0
 skdState = 0
-bytesToCheck = {0,1};
+bytesToCheck = {0,1,2};
 isSet = False
 
 q = Queue.Queue()
@@ -69,7 +69,6 @@ def SetSettings(s):
         lightRead = int(setArr[5]) * 1000
         hardRead = float(setArr[6]) / 1000
         keyArr = setArr[7].split(',')
-        bytesToCheck = {0,1,2,3,4,5,6,7,8,9};
         while len(bytesToCheck) > 0:
                 bytesToCheck.pop()
         for it in keyArr:
