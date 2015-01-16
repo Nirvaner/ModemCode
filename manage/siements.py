@@ -186,7 +186,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 ResetEth()
                                 time.sleep(10)
                                 SetIp(ipAddress)
-                                readPLCErrors.clear()
+                                readPLCErrors = 0
                         time.sleep(3)
                 time.sleep(0.01)
 
