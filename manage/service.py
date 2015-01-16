@@ -104,7 +104,7 @@ while True:
                         response = tcpClient.recv(int(response[3:]))
                         if SendToSkdJS(response):
                                 tcpClient.send("0")
-                        else
+                        else:
                                 tcpClient.send("1")
                 elif response[0:7] == "address":
                         serverAddress = response.strip('\0')[7:]
