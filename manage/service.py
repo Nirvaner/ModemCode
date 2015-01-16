@@ -55,11 +55,13 @@ def SendToSkdJS(s):
                 skdClient.connect(("127.0.0.1", 10003))
                 skdClient.send(s)
                 skdClient.close()
+                return True
         except Exception as error:
                 print "Exception in SendToSkdJS"
                 print error
                 pass
                 sys.exc_clear()
+                return False
 
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
 serverAddress = info.split('|')[2]
@@ -100,8 +102,10 @@ while True:
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
                         response = tcpClient.recv(int(response[3:]))
-                        SendToSkdJS(response)
-                        tcpClient.send("0")
+                        if SendToSkdJS(response):
+                                tcpClient.send("0")
+                        else
+                                tcpClient.send("1")
                 elif response[0:7] == "address":
                         serverAddress = response.strip('\0')[7:]
                         SetServerAddress(serverAddress)
