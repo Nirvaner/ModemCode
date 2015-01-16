@@ -86,14 +86,17 @@ def SetSkdState(state):
                 skdState = skdState and 6
         else:
                 skdState = skdState or 1
+        print state[0] + ":" + str(skdState)
         if state[1] == "0":
                 skdState = skdState and 5
         else:
                 skdState = skdState or 2
+        print state[1] + ":" + str(skdState)
         if state[2] == "0":
                 skdState = skdState and 3
         else:
                 skdState = skdState or 4
+        print state[2] + ":" + str(skdState)
         print "Itog: " + str(skdState)
 
 def EventsReceiver(skdState):
@@ -161,7 +164,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
-                        firstArrayFromPLC += bytearray(int(skdState))
+                        firstArrayFromPLC += bytearray(struct.pack("b",skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)
                         readPLCErrors = 0
                         currentMillis = int(round(time.time()*1000))
