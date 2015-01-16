@@ -92,7 +92,7 @@ while True:
                                 time.sleep(1)
                         if not(skdSub):
                                 skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
-                                time.sleep(10)
+                                time.sleep(20)
                         tcpClient.send("0")
                 elif response[0:8] == "datetime":
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
