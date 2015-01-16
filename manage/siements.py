@@ -27,6 +27,7 @@ def SetIp(ipAddress):
 
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
+        time.sleep(5)
 
 modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
 serverPort = 10102
