@@ -23,7 +23,7 @@ def SetStrInFile(path,s):
         f.close()        
 
 def SetIp(ipAddress):
-        subprocess.call(["sudo","-u","root","-p","root","ifconfig",ipAddress,"netmask","255.255.255.0","up"])
+        subprocess.call(["sudo","-u","root","-p","root","ifconfig","eth0",ipAddress,"netmask","255.255.255.0","up"])
 
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
@@ -184,8 +184,9 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
                                 ResetEth()
-                                time.sleep(15)
+                                time.sleep(10)
                                 SetIp(ipAddress)
+                                readPLCErrors.clear()
                         time.sleep(3)
                 time.sleep(0.01)
 
