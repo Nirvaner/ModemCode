@@ -83,19 +83,19 @@ def SetSkdState(state):
         global skdState
         print "Start: " + str(skdState)
         if state[0] == "0":
-                skdState = skdState and 3
+                skdState = skdState & 6
         else:
-                skdState = skdState or 1
+                skdState = skdState | 1
         print state[0] + ":" + str(skdState)
         if state[1] == "0":
-                skdState = skdState and 5
+                skdState = skdState & 5
         else:
-                skdState = skdState or 2
+                skdState = skdState | 2
         print state[1] + ":" + str(skdState)
         if state[2] == "0":
-                skdState = skdState and 6
+                skdState = skdState & 3
         else:
-                skdState = skdState or 4
+                skdState = skdState | 4
         print state[2] + ":" + str(skdState)
         print "Itog: " + str(skdState)
 
