@@ -27,7 +27,6 @@ def SetIp(ipAddress):
 
 def ResetEth():
         subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
-        time.sleep(5)
 
 modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
 serverPort = 10102
@@ -185,6 +184,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
                                 ResetEth()
+                                time.sleep(15)
                                 SetIp(ipAddress)
                         time.sleep(3)
                 time.sleep(0.01)
