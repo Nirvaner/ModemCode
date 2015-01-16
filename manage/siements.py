@@ -79,7 +79,9 @@ def SetSettings(s):
                 bytesToCheck.add(int(it))
 
 def SetSkdState(state):
+        print "Prilet skd state: " + state
         global skdState
+        print "Start: " + str(skdState)
         if state[0] == "0":
                 skdState = skdState and 6
         else:
@@ -92,7 +94,7 @@ def SetSkdState(state):
                 skdState = skdState and 3
         else:
                 skdState = skdState or 4
-        print skdState
+        print "Itog: " + str(skdState)
 
 def EventsReceiver(skdState):
         server = socket.socket()
