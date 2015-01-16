@@ -172,13 +172,13 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
                                 date = datetime.datetime.now()
-                                firstArrayFromPLC += bytearray(struct.pack("h",date.year))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.month))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.day))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.hour))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.minute))
-                                firstArrayFromPLC += bytearray(struct.pack("b",date.second))
-                                firstArrayFromPLC += bytearray(struct.pack("i",date.microsecond))
+                                firstArrayFromPLC += bytearray(struct.pack("h",int(date.year)))
+                                firstArrayFromPLC += bytearray(struct.pack("b",int(date.month)))
+                                firstArrayFromPLC += bytearray(struct.pack("b",int(date.day)))
+                                firstArrayFromPLC += bytearray(struct.pack("b",int(date.hour)))
+                                firstArrayFromPLC += bytearray(struct.pack("b",int(date.minute)))
+                                firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
+                                firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
