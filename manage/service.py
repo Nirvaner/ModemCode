@@ -32,6 +32,7 @@ def ConnectToServer():
         #subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
         try:
+                tcpClient.close()
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send(info)
         except Exception as error:
