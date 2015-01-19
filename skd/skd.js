@@ -38,7 +38,7 @@ var tcpserver = net.createServer(function(c) { //'connection' listener
         console.log(data);
     });
 });
-tcpserver.listen(10001, function() { //'listening' listener
+tcpserver.listen(10003, function() { //'listening' listener
   console.log('TCP server');
 });
 
