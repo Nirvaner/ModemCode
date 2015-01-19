@@ -113,7 +113,7 @@ while True:
                         tcpClient.send("0")
                         ConnectToServer()
                 elif response[0:6] == "reboot":
-                        subprocess.Popen("sudo","-u","root","-p","root","reboot")
+                        subprocess.Popen(["sudo","-u","root","-p","root","reboot"])
                 elif response[0:6] == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
