@@ -1,0 +1,70 @@
+<!DOCTYPE html><!--HTML5 doctype-->
+<html style="width:100%; height:100%;">
+<head>
+	<title>Your New Application</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<style type="text/css">
+		/* Prevent copy paste for all elements except text fields */
+		*  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); }
+		input, textarea  { -webkit-user-select:text; }
+		body { background-color:white; color:black }
+	</style>
+	<script src='intelxdk.js'></script>
+	<script type="text/javascript">
+		/* Intel native bridge is available */
+		var onDeviceReady=function(){
+		//hide splash screen
+		intel.xdk.device.hideSplashScreen();
+		};
+		document.addEventListener("intel.xdk.device.ready",onDeviceReady,false);
+	</script>
+    <meta charset="utf-8">
+
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="width:100%; height:100%;">
+	<script src="jquery-1.10.2.min.js"></script>
+    <script>
+        var dataLoaded = false;
+        function checkConnection(){
+                $.ajax({
+              url: 'http://192.168.66.200',
+              success: function(){
+                  if(!dataLoaded){
+                $("iframe").attr("src","http://192.168.66.200");
+                      dataLoaded = true;
+                  }
+                  $("#sucssstate").show();
+                  $("#errstate").hide();
+                  setTimeout(function(){
+                    checkConnection();
+                  },1000);
+              },
+            error: function(){
+                  $("#sucssstate").hide();
+                  $("#errstate").show();
+                dataLoaded = false;
+                $("iframe").attr("src","");
+                checkConnection();
+            }
+            });
+
+        }
+        $( document ).ready(function() {
+            checkConnection();
+                });
+    </script>
+    <iframe id="sucssstate" style="width:100%; height:100%;"></iframe>
+    <div id="errstate" class="text-center">
+        <h3>Не удалось подключиться</h3>
+        <h3>ПОВТОРНАЯ ПОПЫТКА</h3>
+        <hr>
+        <h4 class="text-left" style="margin-left:10px;">Почему Вы это видите:</h4>
+        <h4 class="text-left" style="margin-left:10px;">1. Вы далеко от объекта</h4>
+        <h4 class="text-left" style="margin-left:10px;">2. Ошибка Wi-Fi</h4>
+        <h4 class="text-left" style="margin-left:10px;">3. СКД не доступен</h4>
+        
+    </div>
+</body>
+</html>
