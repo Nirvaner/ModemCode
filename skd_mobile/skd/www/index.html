@@ -29,10 +29,10 @@
         var dataLoaded = false;
         function checkConnection(){
                 $.ajax({
-              url: 'http://192.168.66.200',
+              url: 'http://10.0.0.1',
               success: function(){
                   if(!dataLoaded){
-                $("iframe").attr("src","http://192.168.66.200");
+                $("iframe").attr("src","http://10.0.0.1");
                       dataLoaded = true;
                   }
                   $("#sucssstate").show();
