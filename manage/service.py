@@ -81,11 +81,12 @@ ConnectToServer()
 
 while True:
         try:
-                response = tcpClient.recv(1024)
+                response = tcpClient.recv(1024).strip('\0')
                 isConnect = True
                 print response
                 if response[0] == "0":
                         tcpClient.send("0")
+                        print "Ping ok"
                 elif response[0:3] == "run":
                         if not(siementsSub):
                                 siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
@@ -98,7 +99,7 @@ while True:
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
                         tcpClient.send("0")
                 elif response[0:8] == "settings":
-                        SendToSiementsPY(response.strip("\0")[8:])
+                        SendToSiementsPY(response[8:])
                         tcpClient.send("0")
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
@@ -108,7 +109,7 @@ while True:
                         else:
                                 tcpClient.send("1")
                 elif response[0:7] == "address":
-                        serverAddress = response.strip('\0')[7:]
+                        serverAddress = response[7:]
                         SetServerAddress(serverAddress)
                         tcpClient.send("0")
                         ConnectToServer()
@@ -119,14 +120,14 @@ while True:
                         pathUpdate = "/devir/ModemCode/"
                         while True:
                                 tcpClient.send("update")
-                                path = tcpClient.recv(128).strip("\0")
+                                path = tcpClient.recv(128).strip('\0')
                                 tcpClient.send("0")
                                 print "Path: " + path
-                                size = tcpClient.recv(4)
+                                size = tcpClient.recv(4).strip('\0')
                                 tcpClient.send(size)
                                 print "Size: " + size
-                                code = tcpClient.recv(int(size))
-                                arrPath = path.split('|')
+                                code = tcpClient.recv(int(size)).strip('\0')
+                                arrPath = path.split('/')
                                 if arrPath[-1] == "service.py":
                                         arrPath[-1] = "service"
                                         path = '/'.join(path)
@@ -135,7 +136,7 @@ while True:
                                         SetStrInFile(pathUpdate + path + ".update", code)
                                 tcpClient.send("0")
                                 print "File downloaded"
-                                more = tcpClient.recv(16)
+                                more = tcpClient.recv(16).strip('\0')
                                 print more
                                 if more == "over":
                                         print "Terminate all process and update"
