@@ -22,12 +22,6 @@ def SetStrInFile(path,s):
         f.write(s)
         f.close()        
 
-def SetIp(ipAddress):
-        subprocess.call(["sudo","-u","root","-p","root","ifconfig","eth0",ipAddress,"netmask","255.255.255.0","up"])
-
-def ResetEth():
-        subprocess.call(["sudo","-u","root","-p","root","/etc/init.d/networking","restart"])
-
 modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
 serverPort = 10102
 
@@ -79,25 +73,19 @@ def SetSettings(s):
                 bytesToCheck.add(int(it))
 
 def SetSkdState(state):
-        print "Prilet skd state: " + state
         global skdState
-        print "Start: " + str(skdState)
         if state[0] == "0":
                 skdState = skdState & 6
         else:
                 skdState = skdState | 1
-        print state[0] + ":" + str(skdState)
         if state[1] == "0":
                 skdState = skdState & 5
         else:
                 skdState = skdState | 2
-        print state[1] + ":" + str(skdState)
         if state[2] == "0":
                 skdState = skdState & 3
         else:
                 skdState = skdState | 4
-        print state[2] + ":" + str(skdState)
-        print "Itog: " + str(skdState)
 
 def EventsReceiver(skdState):
         server = socket.socket()
@@ -188,9 +176,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
-                                ResetEth()
-                                time.sleep(10)
-                                SetIp(ipAddress)
+                                #Suda nado chto nit' dopisat'
                                 readPLCErrors = 0
                         time.sleep(3)
                 time.sleep(0.01)

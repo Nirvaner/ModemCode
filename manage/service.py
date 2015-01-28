@@ -45,11 +45,13 @@ def SendToSiementsPY(s):
                 siementsClient.connect(("127.0.0.1", 10002))
                 siementsClient.send("0" + s)
                 siementsClient.close()
+                return True
         except Exception as error:
                 print "Exception in SendToSiementsPY"
                 print error
                 pass
                 sys.exc_clear()
+                return False
 def SendToSkdJS(s):
         try:
                 skdClient = socket.socket()
@@ -99,8 +101,10 @@ while True:
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
                         tcpClient.send("0")
                 elif response[0:8] == "settings":
-                        SendToSiementsPY(response[8:])
-                        tcpClient.send("0")
+                        if SendToSiementsPY(response[8:]):
+                                tcpClient.send("0")
+                        else:
+                                tcpClient.send("1")
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
                         response = tcpClient.recv(int(response[3:]))
