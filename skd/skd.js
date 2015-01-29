@@ -22,6 +22,8 @@ var alarmWorking = false;
 var objectName = '';
 var skdUsers = [];
 
+var currentUser = null;
+
 
 
 
@@ -134,6 +136,14 @@ io.on('connection', function (socket) {
     });
 
     socket.on('pin', function (data) {
+        var userPin = _.find(skdUsers, function(subElem){
+            return subElem.Pin = data;
+         });
+         if(userPin==null){
+            return
+         }
+         else{        
+
         console.log('Alarm off');
         alarmSet = false;
          //sendToPython(doorState, alarmSet, alarmWorking);
@@ -148,6 +158,10 @@ io.on('connection', function (socket) {
         }
         isWaitingForInput = false;
         //window.clearInterval(showWaitingTimer);
+
+        currentUser = userPin.Id;
+
+        }
     });
 
     socket.on('alarmOn', function () {
