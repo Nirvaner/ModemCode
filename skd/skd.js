@@ -64,6 +64,34 @@ var tcpserver = net.createServer(function(c) { //'connection' listener
         {
             console.log("Получили CRUD операцию пользователей");
             console.log(sData.substring(1));
+
+             var arr = JSON.parse(sData.substring(1));
+
+             _.each(arr, function(elem){
+                if(elem.IsDeleted){
+                    skdUsers = _.reject(skdUsers, function(subElem){
+                        return subElem.Id == elem.Id;
+                    });
+                } else {
+
+                    if(_.find(skdUsers, function(subElem){
+                        return subElem.Id == elem.Id;
+                    }) == null){
+                        skdUsers.push(elem);
+                    } else{
+
+                         skdUsers = _.reject(skdUsers, function(subElem){
+                        return subElem.Id == elem.Id;
+                             });
+                          skdUsers.push(elem);
+
+                    }
+
+                }
+
+             });
+
+
         }
 
 
@@ -87,6 +115,7 @@ io.on('connection', function (socket) {
        // console.log('Sending data to client');
         
         socket.emit('time', {
+            objectName: objectName,
             timeLeft: timeLeft,
             doorState: doorState,
             alarmState: alarmSet,
