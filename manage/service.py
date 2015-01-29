@@ -84,7 +84,7 @@ while True:
         try:
                 response = tcpClient.recv(1024).strip('\0')
                 if response == "":
-                        print "This is null response"
+                        ConnectToServer()
                 elif response[0] == "0":
                         tcpClient.send("0")
                         print "Ping ok"
