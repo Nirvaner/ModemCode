@@ -140,7 +140,8 @@ io.on('connection', function (socket) {
             return subElem.Pin = data;
          });
          if(userPin==null){
-            return
+            console.log("Неверный пин");
+            return;
          }
          else{        
 
