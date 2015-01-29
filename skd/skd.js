@@ -18,9 +18,9 @@ var startedAlarmOnInterval = false;
 var savedSocket = null;
 var alarmWorking = false;
 
-server.listen(port, function () {
-    console.log('Server listening at port %d', port);
-});
+
+
+
 
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
@@ -30,18 +30,20 @@ server.listen(port, function () {
 //},1000);
 
 //Start static webServer on nodejs, __dirname - currentDir of this file
-app.use(express.static(__dirname));
-
-
 var tcpserver = net.createServer(function(c) { //'connection' listener
     c.on('data', function(data) {
-        console.log(data);
+        console.log(data.toString());
     });
 });
 tcpserver.listen(10003, function() { //'listening' listener
-  console.log('TCP server');
+  console.log('TCP server created');
 });
 
+server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+});
+
+app.use(express.static(__dirname));
 
 io.on('connection', function (socket) {
     console.log('Connected client');
