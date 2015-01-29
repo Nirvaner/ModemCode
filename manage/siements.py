@@ -102,9 +102,6 @@ def EventsReceiver(skdState):
                                 print "SetSettings"
                                 SetSettings(command[1:])
                         elif command[0] == "1":
-                                print "SetSkdState"
-                                SetSkdState(command[1:])
-                        elif command[0] == "2":
                                 print "SetBytesToSiements"
                 except Exception as error:
                         pass
@@ -117,7 +114,6 @@ def SendBufferToServer(buf):
                 tcpClient.connect((serverAddress, serverPort))
                 tcpClient.send(buf)
                 response = tcpClient.recv(4)
-                print response
                 tcpClient.close()
                 if response[0] == "0":
                         return True

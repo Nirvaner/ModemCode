@@ -75,7 +75,6 @@ siementsSub = None
 skdSub = None
 
 pingInterval = 60
-isConnect = False
 
 print "Service started"
 
@@ -84,9 +83,9 @@ ConnectToServer()
 while True:
         try:
                 response = tcpClient.recv(1024).strip('\0')
-                isConnect = True
-                print "Response is: " + response
-                if response[0] == "0":
+                if response == "":
+                        print "This is null response"
+                elif response[0] == "0":
                         tcpClient.send("0")
                         print "Ping ok"
                 elif response[0:3] == "run":
