@@ -92,7 +92,7 @@ var tcpserver = net.createServer(function(c) { //'connection' listener
              });
 
               _.each(skdUsers, function(elem){
-                  console.log(elem.Firstname);
+                  console.log(elem.FirstName);
               });
 
 
