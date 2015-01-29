@@ -1,6 +1,7 @@
 var net = require('net');
 var gpio = require("gpio");
 var express = require('express');
+var _ = require('underscore')._;
 var app = express();
 var doorState = 1;
 var isWaitingForInput = false;
@@ -17,6 +18,10 @@ var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
 var savedSocket = null;
 var alarmWorking = false;
+//----------------------- 
+var objectName = '';
+var skdUsers = [];
+
 
 
 
@@ -49,6 +54,8 @@ var tcpserver = net.createServer(function(c) { //'connection' listener
             var arr = JSON.parse(sData.substring(1));
 
             console.log(arr[0].Value);
+
+
 
         }else if(sData[0]=='3')
         {
