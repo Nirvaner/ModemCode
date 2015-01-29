@@ -52,8 +52,11 @@ var tcpserver = net.createServer(function(c) { //'connection' listener
             console.log(sData.substring(1));
 
             var arr = JSON.parse(sData.substring(1));
-
-            console.log(arr[0].Value);
+            var skdNameElem = _.find(arr, function(elem){
+                return elem.Name = "FacilityName";
+            });
+            objectName = skdNameElem.Value;
+            console.log("Имя объекта: "+objectName);
 
 
 
