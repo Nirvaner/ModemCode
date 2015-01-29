@@ -32,7 +32,26 @@ var alarmWorking = false;
 //Start static webServer on nodejs, __dirname - currentDir of this file
 var tcpserver = net.createServer(function(c) { //'connection' listener
     c.on('data', function(data) {
-        console.log(data.toString());
+        //
+        var sData = data.toString();
+        console.log("Получен пакет: "+sData);
+
+        if(sData[0]=='0'){
+            console.log("Выключаем сигнализацию!!!");
+        }
+        else if(sData[0]=='1'){
+            console.log("Включаем сигнализацию!!!");
+        } else if(sData[0]=='2')
+        {
+            console.log("Получили настройки!");
+            console.log(sData.substring(1));
+        }else if(sData[0]=='3')
+        {
+            console.log("Получили CRUD операцию пользователей");
+            console.log(sData.substring(1));
+        }
+
+
     });
 });
 tcpserver.listen(10003, function() { //'listening' listener
