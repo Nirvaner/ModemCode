@@ -24,7 +24,7 @@ var skdUsers = [];
 
 var currentUser = '0';
 
-
+  
 
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
