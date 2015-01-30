@@ -22,7 +22,7 @@ var alarmWorking = false;
 var objectName = '';
 var skdUsers = [];
 
-var currentUser = null;
+var currentUser = '0';
 
 
 
@@ -137,7 +137,7 @@ io.on('connection', function (socket) {
 
     socket.on('pin', function (data) {
         var userPin = _.find(skdUsers, function(subElem){
-            return subElem.Pin = data;
+            return subElem.Pin == data;
          });
          if(userPin==null){
             console.log("Неверный пин");
@@ -147,7 +147,7 @@ io.on('connection', function (socket) {
 
         console.log('Alarm off');
         alarmSet = false;
-         //sendToPython(doorState, alarmSet, alarmWorking);
+         sendToPython(doorState, alarmSet, alarmWorking,currentUser);
          clearInterval(inputWaitingTimer);
          timeLeft = 60;
          disableSound();
@@ -180,7 +180,7 @@ io.on('connection', function (socket) {
                     enableLight();
                     timeLeft = 60;
                     alarmSet = true;
-                    sendToPython();
+                    sendToPython(doorState, alarmSet, alarmWorking,currentUser);
                     isWaitingForInput = false;
                     clearInterval(waitingForDoorCloseInterval);
                     unBlinkLight();
@@ -227,7 +227,7 @@ var gpio11 = gpio.export(17, {
 
 
             doorState = val;
-            sendToPython();
+            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
 
             if (val == 0) {
                 console.log("Door open");
@@ -272,13 +272,13 @@ setInterval(function () {
 function enableSound() {
     gpio23.set(1);
     alarmWorking = true;
-    sendToPython();
+   // sendToPython();
 }
 
 function disableSound() {
     gpio23.set(0);
     alarmWorking = false;
-    sendToPython();
+   // sendToPython();
 }
 
 function enableLight() {
@@ -319,7 +319,7 @@ function unBlinkLight() {
 
 
 
-function sendToPython(){
+function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr){
    console.log("Sending to python");
 
     try{
@@ -332,17 +332,17 @@ function sendToPython(){
           setTimeout(function () {
 
             try{
-                console.log(doorState);
-                console.log(alarmSet);
-                console.log(alarmOn);
+                console.log(doorSt);
+                console.log(alarmSt);
+                console.log(alarmOnOff);
                 var alarmSetf = 0;
-                if(alarmSet){
+                if(alarmSt){
                     alarmSetf = 1;
                 }
 
-                console.log("1"+doorState+""+alarmSetf+""+alarmOn);
+                console.log("1"+doorSt+""+alarmSetf+""+alarmOnOff);
 
-                client.write("1"+doorState+""+alarmSetf+""+alarmOn, function(){
+                client.write("1"+doorSt+""+alarmSetf+""+alarmOnOff+""+currentUsr, function(){
                     console.log('Sent to python');
                     client.destroy(); 
                 });
