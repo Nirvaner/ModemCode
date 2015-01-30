@@ -108,6 +108,9 @@ def EventsReceiver(skdState):
                                 print "SetSkdState"
                                 SetSkdState(command[1:])
                         elif command[0] == "2":
+                                global writeToSiementsStartPosition
+                                global writeToSiementsData
+                                global isNeedWriteToSiements
                                 print "WriteToSiements"
                                 writeArr = command[2:].split("|")
                                 writeToSiementsStartPosition = writeArr[0]
