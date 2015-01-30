@@ -156,9 +156,11 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         readPLCErrors=0
         while True:
                 try:
+                        global isNeedWriteToSiements
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
                         if isNeedWriteToSiements:
+                                print "WriteToSiements"
                                 client.db_write(db, writeToSiementsStartPosition, int(writeToSiementsData))
                                 isNeedWriteToSiements = False
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
