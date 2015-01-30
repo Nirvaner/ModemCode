@@ -37,6 +37,9 @@ hardRead = 0
 skdState = 0
 bytesToCheck = {0,1,2};
 isSet = False
+isNeedWriteToSiements = False
+writeToSiementsStartPosition = 0
+writeToSiementsData = 0
 
 q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
@@ -102,7 +105,18 @@ def EventsReceiver(skdState):
                                 print "SetSettings"
                                 SetSettings(command[1:])
                         elif command[0] == "1":
-                                print "SetBytesToSiements"
+                                print "SetSkdState"
+                                SetSkdState(command[1:])
+                        elif command[0] == "2":
+                                global writeToSiementsStartPosition
+                                global writeToSiementsData
+                                global isNeedWriteToSiements
+                                print "WriteToSiements"
+                                writeArr = command[2:].split("|")
+                                writeToSiementsStartPosition = writeArr[0]
+                                writeToSiementsData = writeArr[1]
+                                isNeedWriteToSiements = True
+
                 except Exception as error:
                         pass
                         sys.exc_clear()
@@ -145,8 +159,13 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
         readPLCErrors=0
         while True:
                 try:
+                        global isNeedWriteToSiements
                         if not(client.get_connected()):
                                 client.connect(plcAddress, 0,0)
+                        if isNeedWriteToSiements:
+                                print "WriteToSiements"
+                                client.db_write(db, writeToSiementsStartPosition, int(writeToSiementsData))
+                                isNeedWriteToSiements = False
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
                         firstArrayFromPLC += bytearray(struct.pack("b",skdState))
                         firstArrayFromPLC += client.db_read(db, 0, size)

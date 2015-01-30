@@ -43,7 +43,7 @@ def SendToSiementsPY(s):
         try:
                 siementsClient = socket.socket()
                 siementsClient.connect(("127.0.0.1", 10002))
-                siementsClient.send("0" + s)
+                siementsClient.send(s)
                 siementsClient.close()
                 return True
         except Exception as error:
@@ -119,6 +119,11 @@ while True:
                 elif response[0:6] == "reboot":
                         tcpClient.send("0")
                         subprocess.Popen(["sudo","-u","root","-p","root","reboot"])
+                elif response[0:8] == "siements":
+                        if SendToSiementsPY(response[8:]):
+                                tcpClient.send("0")
+                        else:
+                                tcpClient.send("1")
                 elif response[0:6] == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
