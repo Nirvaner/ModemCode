@@ -26,9 +26,6 @@ var currentUser = null;
 
 
 
-
-
-
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
 //             savedSocket.broadcast.emit('time', timeLeft);
@@ -37,74 +34,63 @@ var currentUser = null;
 //},1000);
 
 //Start static webServer on nodejs, __dirname - currentDir of this file
-var tcpserver = net.createServer(function(c) { //'connection' listener
-    c.on('data', function(data) {
+var tcpserver = net.createServer(function (c) { //'connection' listener
+    c.on('data', function (data) {
         //
         var sData = data.toString();
-        console.log("Получен пакет: "+sData);
 
-        if(sData[0]=='0'){
+        if (sData[0] == '0') {
             console.log("Выключаем сигнализацию!!!");
         }
-        else if(sData[0]=='1'){
+        else if (sData[0] == '1') {
             console.log("Включаем сигнализацию!!!");
-        } else if(sData[0]=='2')
-        {
+        } else if (sData[0] == '2') {
             console.log("Получили настройки!");
             console.log(sData.substring(1));
 
             var arr = JSON.parse(sData.substring(1));
-            var skdNameElem = _.find(arr, function(elem){
+            var skdNameElem = _.find(arr, function (elem) {
                 return elem.Name = "FacilityName";
             });
             objectName = skdNameElem.Value;
-            console.log("Имя объекта: "+objectName);
+            console.log("Имя объекта: " + objectName);
 
 
 
-        }else if(sData[0]=='3')
-        {
+        } else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
             console.log(sData.substring(1));
 
-             var arr = JSON.parse(sData.substring(1));
+            var arr = JSON.parse(sData.substring(1));
 
-             _.each(arr, function(elem){
-                if(elem.IsDeleted){
-                    skdUsers = _.reject(skdUsers, function(subElem){
+            _.each(arr, function (elem) {
+                if (elem.IsDeleted) {
+                    skdUsers = _.reject(skdUsers, function (subElem) {
                         return subElem.Id == elem.Id;
                     });
                 } else {
 
-                    if(_.find(skdUsers, function(subElem){
+                    if (_.find(skdUsers, function (subElem) {
                         return subElem.Id == elem.Id;
-                    }) == null){
+                    }) == null) {
                         skdUsers.push(elem);
-                    } else{
-
-                         skdUsers = _.reject(skdUsers, function(subElem){
-                        return subElem.Id == elem.Id;
-                             });
-                          skdUsers.push(elem);
-
+                    } else {
+                        skdUsers = _.reject(skdUsers, function (subElem) {
+                            return subElem.Id == elem.Id;
+                        });
+                        skdUsers.push(elem);
                     }
-
                 }
-
-             });
-
-              _.each(skdUsers, function(elem){
-                  console.log(elem.FirstName);
-              });
-
-
+            });
+            _.each(skdUsers, function (elem) {
+                console.log(elem.FirstName);
+            });
         }
-
-
     });
 });
-tcpserver.listen(10003, function() { //'listening' listener
-  console.log('TCP server created');
+
+tcpserver.listen(10003, function () { //'listening' listener
+    console.log('TCP server created');
 });
 
 server.listen(port, function () {
@@ -118,8 +104,8 @@ io.on('connection', function (socket) {
     savedSocket = socket;
 
     var showWaitingTimer = setInterval(function () {
-       // console.log('Sending data to client');
-        
+        // console.log('Sending data to client');
+
         socket.emit('time', {
             objectName: objectName,
             timeLeft: timeLeft,
@@ -136,31 +122,31 @@ io.on('connection', function (socket) {
     });
 
     socket.on('pin', function (data) {
-        var userPin = _.find(skdUsers, function(subElem){
+        var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin = data;
-         });
-         if(userPin==null){
+        });
+        if (userPin == null) {
             console.log("Неверный пин");
             return;
-         }
-         else{        
-
-        console.log('Alarm off');
-        alarmSet = false;
-         //sendToPython(doorState, alarmSet, alarmWorking);
-         clearInterval(inputWaitingTimer);
-         timeLeft = 60;
-         disableSound();
-         unBlinkLight();
-         disableLight();
-         if (waitingForDoorCloseInterval) {
-            clearInterval(waitingForDoorCloseInterval);
-            startedAlarmOnInterval = false;
         }
-        isWaitingForInput = false;
-        //window.clearInterval(showWaitingTimer);
+        else {
 
-        currentUser = userPin.Id;
+            console.log('Alarm off');
+            alarmSet = false;
+            //sendToPython(doorState, alarmSet, alarmWorking);
+            clearInterval(inputWaitingTimer);
+            timeLeft = 60;
+            disableSound();
+            unBlinkLight();
+            disableLight();
+            if (waitingForDoorCloseInterval) {
+                clearInterval(waitingForDoorCloseInterval);
+                startedAlarmOnInterval = false;
+            }
+            isWaitingForInput = false;
+            //window.clearInterval(showWaitingTimer);
+
+            currentUser = userPin.Id;
 
         }
     });
@@ -260,7 +246,7 @@ setInterval(function () {
                     if (timeLeft < 1) {
                         //gpio22.set(1);				
                         //gpio23.set(1);
-                        enableSound();                        
+                        enableSound();
                     }
                 }
             }, 1000);
@@ -319,47 +305,47 @@ function unBlinkLight() {
 
 
 
-function sendToPython(){
-   console.log("Sending to python");
+function sendToPython() {
+    console.log("Sending to python");
 
-    try{
-       var client = net.connect({port: 10002, host: "localhost"},
-        function(c) { 
+    try {
+        var client = net.connect({ port: 10002, host: "localhost" },
+           function (c) {
 
-            
 
-          console.log('connected to python!');
-          setTimeout(function () {
 
-            try{
-                console.log(doorState);
-                console.log(alarmSet);
-                console.log(alarmOn);
-                var alarmSetf = 0;
-                if(alarmSet){
-                    alarmSetf = 1;
-                }
+               console.log('connected to python!');
+               setTimeout(function () {
 
-                console.log("1"+doorState+""+alarmSetf+""+alarmOn);
+                   try {
+                       console.log(doorState);
+                       console.log(alarmSet);
+                       console.log(alarmOn);
+                       var alarmSetf = 0;
+                       if (alarmSet) {
+                           alarmSetf = 1;
+                       }
 
-                client.write("1"+doorState+""+alarmSetf+""+alarmOn, function(){
-                    console.log('Sent to python');
-                    client.destroy(); 
-                });
-            }
-            catch (error){
-                // Tupo stroka
-            }
-        },0);  
-      });
+                       console.log("1" + doorState + "" + alarmSetf + "" + alarmOn);
 
-client.on('error', function(data) {
-          console.log(data.toString());
+                       client.write("1" + doorState + "" + alarmSetf + "" + alarmOn, function () {
+                           console.log('Sent to python');
+                           client.destroy();
+                       });
+                   }
+                   catch (error) {
+                       // Tupo stroka
+                   }
+               }, 0);
+           });
+
+        client.on('error', function (data) {
+            console.log(data.toString());
             client.end();
-            });
+        });
 
-   }
-   catch(error){
+    }
+    catch (error) {
 
-   }
+    }
 }
