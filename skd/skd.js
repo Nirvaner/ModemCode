@@ -83,7 +83,7 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
                 }
             });
             _.each(skdUsers, function (elem) {
-                console.log(elem.FirstName);
+                console.log(elem.FirstName + "sss" + );
             });
         }
     });
@@ -130,10 +130,10 @@ io.on('connection', function (socket) {
             return;
          }
          else{        
-
+             currentUser = userPin.Id;
         console.log('Alarm off');
         alarmSet = false;
-         sendToPython(doorState, alarmSet, alarmWorking,currentUser);
+         sendToPython(doorState, alarmSet, alarmWorking, currentUser);
          clearInterval(inputWaitingTimer);
          timeLeft = 60;
          disableSound();
@@ -146,7 +146,7 @@ io.on('connection', function (socket) {
             isWaitingForInput = false;
             //window.clearInterval(showWaitingTimer);
 
-            currentUser = userPin.Id;
+           
 
         }
     });
@@ -326,9 +326,14 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr){
                     alarmSetf = 1;
                 }
 
-                console.log("1"+doorSt+""+alarmSetf+""+alarmOnOff);
+                  var sAlarmOnOff = 0;
+                if(alarmOnOff){
+                    sAlarmOnOff = 1;
+                }
 
-                client.write("1"+doorSt+""+alarmSetf+""+alarmOnOff+""+currentUsr, function(){
+                console.log("1"+doorSt+""+alarmSetf+""+sAlarmOnOff+""+currentUsr);
+
+                client.write("1"+doorSt+""+alarmSetf+""+sAlarmOnOff+""+currentUsr, function(){
                     console.log('Sent to python');
                     client.destroy(); 
                 });
