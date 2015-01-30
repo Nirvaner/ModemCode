@@ -167,6 +167,9 @@ io.on('connection', function (socket) {
                     timeLeft = 60;
                     alarmSet = true;
                     sendToPython(doorState, alarmSet, alarmWorking,currentUser);
+
+                    currentUser = '0';
+
                     isWaitingForInput = false;
                     clearInterval(waitingForDoorCloseInterval);
                     unBlinkLight();
