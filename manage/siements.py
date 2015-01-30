@@ -89,6 +89,7 @@ def SetSkdState(state):
                 skdState = skdState & 3
         else:
                 skdState = skdState | 4
+        print state
 
 def EventsReceiver(skdState):
         server = socket.socket()
