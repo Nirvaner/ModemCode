@@ -101,7 +101,7 @@ while True:
                         tcpClient.send("0")
                 elif response[0:8] == "settings":
                         if siementsSub:
-                                packetSub.terminate()
+                                siementsSub.terminate()
                         siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                         i = 0
                         while True:
@@ -156,9 +156,9 @@ while True:
                                 print more
                                 if more == "over":
                                         print "Terminate all process and update"
-                                        if packetSub:
-                                                packetSub.terminate()
-                                                packetSub = None
+                                        if siementsSub:
+                                                siementsSub.terminate()
+                                                siementsSub = None
                                         if skdSub:
                                                 skdSub.terminate()
                                                 skdSub = None

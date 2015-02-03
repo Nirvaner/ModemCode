@@ -183,6 +183,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.minute)))
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
+                                
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
@@ -204,11 +205,21 @@ tEventsReceiver.daemon = True
 tEventsReceiver.start()
 print "tEventsReceiver is started"
 
+while True:
+        if not(isSet):
+                time.sleep(0)
+        else:
+                break
+
 tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
 tReadFromPLC.daemon = True
+tReadFromPLC.start()
+print "tReadFromPLC is started"
 
 tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
 tReadFromQueue.daemon = True
+tReadFromQueue.start()
+print "tReadFromQueue is started"
 
 tReadFromPLC.join()
 tReadFromQueue.join()
