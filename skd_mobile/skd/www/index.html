@@ -45,8 +45,10 @@
                   $("#sucssstate").hide();
                   $("#errstate").show();
                 dataLoaded = false;
-            //    $("iframe").attr("src","");
-                checkConnection();
+               // $("iframe").attr("src","");
+                  setTimeout(function(){
+                    checkConnection();
+                  },1000);
             }
             });
 
