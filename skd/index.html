@@ -217,10 +217,10 @@
 		<script>
 		var i=0;
 			$('.key').on("mouseover", function () {
-			i++;
 				button_clicked($(this).html());
+				i++;
 				$("#asd123").html(i);
-				$('#asd123').mouseover();
+				$(this).mouseout();
 			});
 			function button_clicked(code) {
 				code = code.trim();
