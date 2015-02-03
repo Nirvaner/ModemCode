@@ -1,3 +1,3 @@
 #!bin/bash
-sudo -u root -p root bash /devir/ModemCode/start.sh &
+sudo -u root -p root python /devir/ModemCode/manage/self.sh &
 exit 0
