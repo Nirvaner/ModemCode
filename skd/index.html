@@ -11,6 +11,7 @@
 		<script src="jquery-1.10.2.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script src="ionsound/ion.sound.js"></script>
 		<title>Ввод пароля</title>
 
 	</head>
@@ -208,18 +209,28 @@
 				<div class="col-xs-4" ><button class="key btn btn-default btn-lg btn-block qqq-btn" >0</button></div>
 				<div class="col-xs-4" ><button class="key btn btn-default btn-lg btn-block btn-success qqq-btn" >Ok</button></div>
 			</div>
-			<div class="row">
-				<div class="col-xs-4" ><span id="asd123"></span></div>
-			</div>
 			
 		</div>
 		
 		<script>
-		var i=0;
+			
+		$(document).ready(function(){
+
+			ion.sound({
+				sounds: [
+					{name: "water_droplet"}
+				],
+				path: "sounds/",
+				preload: true,
+				volume: 1.0
+			});
+
+
+		});
+		
 			$('.key').on("touchstart", function () {
 				button_clicked($(this).html());
-				i++;
-				$("#asd123").html(i);
+				ion.sound.play("water_droplet");
 			});
 			function button_clicked(code) {
 				code = code.trim();
