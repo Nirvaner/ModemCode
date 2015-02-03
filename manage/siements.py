@@ -183,7 +183,8 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.minute)))
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
-                                
+                                if len(q) > 100:
+                                        c = q.get()
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
                 except Exception as error:
