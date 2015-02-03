@@ -183,7 +183,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.minute)))
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
-                                if q.qsize > 100:
+                                if q.qsize() > 1000:
                                         c = q.get()
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
