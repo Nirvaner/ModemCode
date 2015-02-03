@@ -100,10 +100,18 @@ while True:
                         subprocess.Popen(["sudo","-u","root","-p","root","date","-s",response[8:]])
                         tcpClient.send("0")
                 elif response[0:8] == "settings":
-                        if SendToSiementsPY(response[8:]):
-                                tcpClient.send("0")
-                        else:
-                                tcpClient.send("1")
+                        if siementsSub:
+                                packetSub.terminate()
+                        siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
+                        i = 0
+                        while True:
+                                if SendToSiementsPY(response[8:]):
+                                        break
+                                time.sleep(1)
+                                i = i + 1
+                                if i > 10:
+                                        tcpClient.send("1")
+                        tcpClient.send("0")
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
                         response = tcpClient.recv(int(response[3:]))

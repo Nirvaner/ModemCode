@@ -204,21 +204,11 @@ tEventsReceiver.daemon = True
 tEventsReceiver.start()
 print "tEventsReceiver is started"
 
-while True:
-        if not(isSet):
-                time.sleep(0)
-        else:
-                break
-
 tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
 tReadFromPLC.daemon = True
-tReadFromPLC.start()
-print "tReadFromPLC is started"
 
 tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
 tReadFromQueue.daemon = True
-tReadFromQueue.start()
-print "tReadFromQueue is started"
 
 tReadFromPLC.join()
 tReadFromQueue.join()
