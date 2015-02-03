@@ -45,7 +45,7 @@
                   $("#sucssstate").hide();
                   $("#errstate").show();
                 dataLoaded = false;
-                $("iframe").attr("src","");
+            //    $("iframe").attr("src","");
                 checkConnection();
             }
             });
@@ -55,9 +55,9 @@
             checkConnection();
                 });
     </script>
-    <iframe id="sucssstate" style="width:100%; height:100%;"></iframe>
+    <iframe id="sucssstate" style="width:100%; height:98%;"></iframe>
     <div id="errstate" class="text-center">
-        <h3>Не удалось подключиться</h3>
+        <h3 style="margin-top:0px;">Не удалось подключиться</h3>
         <h3>ПОВТОРНАЯ ПОПЫТКА</h3>
         <hr>
         <h4 class="text-left" style="margin-left:10px;">Почему Вы это видите:</h4>
