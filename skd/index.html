@@ -216,11 +216,10 @@
 		
 		<script>
 		var i=0;
-			$('.key').on("mouseenter", function () {
+			$('.key').on("touchstart click", function () {
 				button_clicked($(this).html());
 				i++;
 				$("#asd123").html(i);
-				$(this).mouseleave();
 			});
 			function button_clicked(code) {
 				code = code.trim();
