@@ -17,7 +17,7 @@
 	</head>
 	<body>
     
-		<div id='waitDoor' class="container" style="display:block;">
+		<div id='waitDoor' class="container" style="display:none;">
 			<div class="row">
 				<div class="col-xs-12">
 					<h1 class="text-center"><mark id='doorCloseTimeLeft'></mark> секунд для закрытия двери</h1>
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		
-		<div id="mainScreen" class="container" style="display:block;">
+		<div id="mainScreen" class="container" style="display:none;">
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="panel panel-default">
@@ -44,25 +44,25 @@
 								<div class="col-xs-6 qqq-row-left">
 									<h1 class="">Состояние двери:</h1>
 									<h1 class=""><mark id='doorState'></mark></h1>
-									<img id="doorOpenIcon" src="img/openDoor.png" style="display:block; height:150px;"/>
-									<img id="doorCloseIcon" src="img/closedDoor.png" style="display:block; height:150px;"/>
+									<img id="doorOpenIcon" src="img/openDoor.png" style="display:none; height:150px;"/>
+									<img id="doorCloseIcon" src="img/closedDoor.png" style="display:none; height:150px;"/>
 								</div>
 								<div class="col-xs-6 qqq-row-right">
 									<h1 class="">Состояние сигнализации:</h1>
 									<h1 class=""><mark id='alarmState'></mark></h1>
-									<img id="alarmOnIcon" src="img/alarmOn.jpg" style="display:block; height:150px;"/>
-									<img id="alarmOffIcon" src="img/alarmOff.png" style="display:block; height:150px;"/>
+									<img id="alarmOnIcon" src="img/alarmOn.jpg" style="display:none; height:150px;"/>
+									<img id="alarmOffIcon" src="img/alarmOff.png" style="display:none; height:150px;"/>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-xs-12">
-									<h1 class="" style="display:block;">Состояние ввода: <mark id='isWaitingForInput'></mark></h1>
+									<h1 class="" style="display:none;">Состояние ввода: <mark id='isWaitingForInput'></mark></h1>
 								</div>
 								<div class="col-xs-12">
-									<h1 class="" style="display:block;">Ожидание закрытия двери: <mark id='doorWaiting'></mark></h1>
+									<h1 class="" style="display:none;">Ожидание закрытия двери: <mark id='doorWaiting'></mark></h1>
 								</div>
 								<div class="col-xs-12">
-									<h1 class="" style="display:block;">Времени до закрытия двери: <mark id='doorCloseTimeLeft'></mark></h1>
+									<h1 class="" style="display:none;">Времени до закрытия двери: <mark id='doorCloseTimeLeft'></mark></h1>
 								</div>
 							</div>
 							
@@ -186,7 +186,7 @@
 			});
 		</script>
 		
-		<div id='pinEnter' class="container" style="display:block;">
+		<div id='pinEnter' class="container" style="display:none;">
 			<div class="row">
 				<div class="col-xs-12">&nbsp;</div>
 			</div>
