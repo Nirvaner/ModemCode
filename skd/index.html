@@ -148,10 +148,14 @@
 					$('#btnAlarmOff').show();
 					$('#btnAlarmOn').hide();
 					$('#alarmState').html('Установлена');
+					$("#alarmOnIcon").show();
+					$("#alarmOffIcon").hide();
 				} else {
 					$('#btnAlarmOn').show();
 					$("#btnAlarmOff").hide();
 					$('#alarmState').html('Снято');
+					$("#alarmOnIcon").hide();
+					$("#alarmOffIcon").show();
 					manualTurnOff = false;
 					showingPinEnter = false;
 				}
