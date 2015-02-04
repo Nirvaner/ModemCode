@@ -24,6 +24,8 @@ var skdUsers = [];
 
 var currentUser = '0';
 
+  
+
 //showWaitingTimer=setInterval(function(){	
 //	if(savedSocket!=null){
 //             savedSocket.broadcast.emit('time', timeLeft);
@@ -39,52 +41,9 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
 
         if (sData[0] == '0') {
             console.log("Выключаем сигнализацию!!!");
-            //debug
-            console.log('Alarm off');
-            alarmSet = false;
-            sendToPython(doorState, alarmSet, alarmWorking, "0");
-            clearInterval(inputWaitingTimer);
-            timeLeft = 60;
-            disableSound();
-            unBlinkLight();
-            disableLight();
-            if (waitingForDoorCloseInterval) {
-                clearInterval(waitingForDoorCloseInterval);
-                startedAlarmOnInterval = false;
-            }
-            isWaitingForInput = false;
-            //debugend
         }
         else if (sData[0] == '1') {
             console.log("Включаем сигнализацию!!!");
-            //debug
-            console.log('Alarm on query');
-            doorCloseTimeLeft = 60;
-            if (!startedAlarmOnInterval) {
-                startedAlarmOnInterval = true;
-                blinkLight();
-                waitingForDoorCloseInterval = setInterval(function () {
-                    console.log(doorCloseTimeLeft + ' seconds to close door');
-                    doorCloseTimeLeft--;
-                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
-                    if (doorCloseTimeLeft < 1) {
-                        console.log('Alarm on');
-                        enableLight();
-                        timeLeft = 60;
-                        alarmSet = true;
-                        sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-    
-                        currentUser = '0';
-    
-                        isWaitingForInput = false;
-                        clearInterval(waitingForDoorCloseInterval);
-                        unBlinkLight();
-                        startedAlarmOnInterval = false;
-                        enableLight();
-                    }
-                }, 1000);
-            }
-            //debugend
         } else if (sData[0] == '2') {
             console.log("Получили настройки!");
             console.log(sData.substring(1));
@@ -95,6 +54,8 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
             });
             objectName = skdNameElem.Value;
             console.log("Имя объекта: " + objectName);
+
+
 
         } else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
@@ -122,7 +83,7 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
                 }
             });
             _.each(skdUsers, function (elem) {
-                console.log(elem.FirstName + " " + elem.Id);
+                console.log(elem.FirstName + "sss" + elem.Id);
             });
         }
     });
@@ -161,29 +122,32 @@ io.on('connection', function (socket) {
     });
 
     socket.on('pin', function (data) {
-        var userPin = _.find(skdUsers, function (subElem) {
+        var userPin = _.find(skdUsers, function(subElem){
             return subElem.Pin == data;
-        });
-        if (userPin == null) {
+         });
+         if(userPin==null){
             console.log("Неверный пин");
             return;
-        }
-        else {
-            currentUser = userPin.Id;
-            console.log('Alarm off');
-            alarmSet = false;
-            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-            clearInterval(inputWaitingTimer);
-            timeLeft = 60;
-            disableSound();
-            unBlinkLight();
-            disableLight();
-            if (waitingForDoorCloseInterval) {
-                clearInterval(waitingForDoorCloseInterval);
-                startedAlarmOnInterval = false;
+         }
+         else{        
+             currentUser = userPin.Id;
+        console.log('Alarm off');
+        alarmSet = false;
+         sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+         clearInterval(inputWaitingTimer);
+         timeLeft = 60;
+         disableSound();
+         unBlinkLight();
+         disableLight();
+         if (waitingForDoorCloseInterval) {
+            clearInterval(waitingForDoorCloseInterval);
+            startedAlarmOnInterval = false;
             }
             isWaitingForInput = false;
             //window.clearInterval(showWaitingTimer);
+
+           
+
         }
     });
 
@@ -202,7 +166,7 @@ io.on('connection', function (socket) {
                     enableLight();
                     timeLeft = 60;
                     alarmSet = true;
-                    sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+                    sendToPython(doorState, alarmSet, alarmWorking,currentUser);
 
                     currentUser = '0';
 
@@ -215,6 +179,7 @@ io.on('connection', function (socket) {
             }, 1000);
         }
     });
+
 });
 
 var gpio23 = gpio.export(23, {
@@ -230,6 +195,7 @@ var gpio22 = gpio.export(22, {
         gpio22.set(0);
     }
 });
+
 
 var gpio11 = gpio.export(17, {
     direction: "in",
@@ -295,13 +261,13 @@ setInterval(function () {
 function enableSound() {
     gpio23.set(1);
     alarmWorking = true;
-    // sendToPython();
+   // sendToPython();
 }
 
 function disableSound() {
     gpio23.set(0);
     alarmWorking = false;
-    // sendToPython();
+   // sendToPython();
 }
 
 function enableLight() {
@@ -311,6 +277,7 @@ function enableLight() {
 function disableLight() {
     gpio22.set(0);
 }
+
 
 var blinker = null;
 var blinkerStat = 0;
@@ -327,53 +294,68 @@ function unBlinkLight() {
     clearInterval(blinker);
 }
 
+
+
+
+
 // var client = new net.Socket();
 //     client.connect(10000, '127.0.0.1', function() {
 //   client.write(""+doorState+""+alarmSet+""+alarmOn);
 //     client.destroy(); 
 //     });
 
-function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
-    console.log("Sending to python");
+
+
+ 
+
+
+function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr){
+   console.log("Sending to python");
 
     try {
         var client = net.connect({ port: 10002, host: "localhost" },
            function (c) {
 
-               console.log('connected to python!');
+    console.log('connected to python!');
                setTimeout(function () {
 
 
-                   try {
-                       console.log(doorSt);
-                       console.log(alarmSt);
-                       console.log(alarmOnOff);
-                       var alarmSetf = 0;
-                       if (alarmSt) {
-                           alarmSetf = 1;
-                       }
+            try{
+                console.log(doorSt);
+                console.log(alarmSt);
+                console.log(alarmOnOff);
+                var alarmSetf = 0;
+                if(alarmSt){
+                    alarmSetf = 1;
+                }
 
-                       var sAlarmOnOff = 0;
-                       if (alarmOnOff) {
-                           sAlarmOnOff = 1;
-                       }
+                  var sAlarmOnOff = 0;
+                if(alarmOnOff){
+                    sAlarmOnOff = 1;
+                }
 
-                       console.log("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
+                console.log("1"+doorSt+""+alarmSetf+""+sAlarmOnOff+""+currentUsr);
 
-                       client.write("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr, function () {
-                           console.log('Sent to python');
-                           client.destroy();
-                       });
-                   }
-                   catch (error) {
-                       // Tupo stroka
-                   }
-               }, 0);
-           });
+                client.write("1"+doorSt+""+alarmSetf+""+sAlarmOnOff+""+currentUsr, function(){
+                    console.log('Sent to python');
+                    client.destroy(); 
+                });
+            }
+            catch (error){
+                // Tupo stroka
+            }
+        },0);  
+      });           
+
+      
+
         client.on('error', function (data) {
             console.log(data.toString());
             client.end();
         });
+
     }
-    catch (error) { }
+    catch (error) {
+
+    }
 }
