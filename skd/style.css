@@ -1,9 +1,15 @@
 .qqq-btn{
-	font-size: 50px;
+	font-size: 35px;
 }
 .qqq-h1{
 	margin:0;
 }
 .qqq2-h1{
 	padding: 15px;
+}
+.qqq-row .qqq-row-right{
+	border-left: 1px solid black;
+}
+.qqq-row .qqq-row-left{
+	border-right: 1px solid black;
 }
