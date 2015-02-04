@@ -16,6 +16,7 @@
 		var onDeviceReady=function(){
 		//hide splash screen
 		intel.xdk.device.hideSplashScreen();
+        intel.xdk.device.setRotateOrientation('landscape');
 		};
 		document.addEventListener("intel.xdk.device.ready",onDeviceReady,false);
 	</script>
