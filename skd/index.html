@@ -232,6 +232,14 @@
 				button_clicked($(this).html());
 				ion.sound.play("water_droplet");
 			});
+			$('.key').on("click", function () {
+				var isAndroid = navigator.userAgent.toLowerCase().indexOf("android");
+				if(isAndroid == -1){
+					button_clicked($(this).html());
+					ion.sound.play("water_droplet");
+				}
+			});
+			
 			function button_clicked(code) {
 				code = code.trim();
 				//alert(code);
