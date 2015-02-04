@@ -116,6 +116,10 @@
 			function turnOn() {
 				socket.emit('alarmOn', 123);
 			}
+			
+			socket.on('pinerror', function(){
+				alert("Неверный пинкод");
+			});
 
 			socket.on('time', function (data) {
 				$("#objectName").html(data.objectName);

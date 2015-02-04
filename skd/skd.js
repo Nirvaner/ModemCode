@@ -166,6 +166,7 @@ io.on('connection', function (socket) {
         });
         if (userPin == null) {
             console.log("Неверный пин");
+			socket.emit("pinerror",123);
             return;
         }
         else {
