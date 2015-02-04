@@ -90,10 +90,10 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
             console.log(sData.substring(1));
 
             var arr = JSON.parse(sData.substring(1));
-            var skdNameElem = _.find(arr, function (elem) {
-                return elem.Name = "FacilityName";
-            });
-            objectName = skdNameElem.Value;
+            //var skdNameElem = _.find(arr, function (elem) {
+            //    return elem.Name = "FacilityName";
+            //});
+            objectName = arr[0].Value + " " + arr[1].Value;//skdNameElem.Value;
             console.log("Имя объекта: " + objectName);
 
         } else if (sData[0] == '3') {
