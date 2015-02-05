@@ -196,6 +196,11 @@
 				$('#doorWaiting').html(data.doorWaiting);
 				$('#doorCloseTimeLeft').html(data.doorCloseTime);
 			});
+			
+			socket.on('userName', funtion(data){
+				var username = data; //get username
+				alert(data);
+			});
 
 			socket.on('doorState', function (data) {
 				$('#doorState').html(data);
