@@ -35,12 +35,25 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="panel panel-default" style="margin-bottom:0;">
-						<div class="panel-heading"><h1 class="qqq-h1 qqq-margin0" id="objectName">Неизвестно</h1></div>
+						<div class="panel-heading">
+						
+							<div style="overflow:hidden;">
+							</div>
+							<div class="row">
+								<div class="col-xs-10">
+									<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="objectName">Неизвестно</span></h1>
+									<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;">Пользователь: <span id="userName">Неизвестно</span></h1>
+								</div>
+								<div class="col-xs-2 text-right">
+									<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
+								</div>
+							</div>
+						</div>
 						<div class="panel-body" style="padding:1em;">
 						
 							<div class="row text-center">
 								<div class="col-xs-12">
-									<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
+									
 								</div>
 							</div>
 							<div class="row qqq-row text-center">
@@ -198,8 +211,7 @@
 			});
 			
 			socket.on('userName', function(data){
-				var username = data; //get username
-				alert(data);
+				$("#userName").html(data);
 			});
 
 			socket.on('doorState', function (data) {
