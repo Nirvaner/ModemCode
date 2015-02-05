@@ -42,12 +42,12 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
             //debug
             console.log('Alarm off');
             alarmSet = false;
-            sendToPython(doorState, alarmSet, alarmWorking, "0");
             clearInterval(inputWaitingTimer);
             timeLeft = 60;
             disableSound();
             unBlinkLight();
             disableLight();
+            sendToPython(doorState, alarmSet, alarmWorking, "0");
             if (waitingForDoorCloseInterval) {
                 clearInterval(waitingForDoorCloseInterval);
                 startedAlarmOnInterval = false;
@@ -173,12 +173,12 @@ io.on('connection', function (socket) {
             currentUser = userPin.Id;
             console.log('Alarm off');
             alarmSet = false;
-            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             clearInterval(inputWaitingTimer);
             timeLeft = 60;
             disableSound();
             unBlinkLight();
             disableLight();
+            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (waitingForDoorCloseInterval) {
                 clearInterval(waitingForDoorCloseInterval);
                 startedAlarmOnInterval = false;
