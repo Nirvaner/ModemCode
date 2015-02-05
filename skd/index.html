@@ -198,7 +198,6 @@
 					$('#alarmState').html('Снято');
 					$("#alarmOnIcon").hide();
 					$("#alarmOffIcon").show();
-					$("#userName").show();
 					manualTurnOff = false;
 					showingPinEnter = false;
 				}
@@ -214,6 +213,7 @@
 			
 			socket.on('userName', function(data){
 				$("#userName").html(data);
+				$("#userName").show();
 			});
 
 			socket.on('doorState', function (data) {
