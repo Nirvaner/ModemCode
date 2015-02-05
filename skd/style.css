@@ -27,10 +27,10 @@
 	}
 }
 mark.stateOk{
-	background:#0F0;
+	background:#5cb85c;
 	color:#FFF;
 }
 mark.stateWarning{
-	background:#F00;
+	background:#d9534f;
 	color:#FFF;
 }
