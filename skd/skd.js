@@ -63,11 +63,11 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
             if (!startedAlarmOnInterval) {
                 startedAlarmOnInterval = true;
                 blinkLight();
-                waitingForDoorCloseInterval = setInterval(function () {
-                    console.log(doorCloseTimeLeft + ' seconds to close door');
-                    doorCloseTimeLeft--;
-                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
-                    if (doorCloseTimeLeft < 1) {
+                //waitingForDoorCloseInterval = setInterval(function () {
+                    //console.log(doorCloseTimeLeft + ' seconds to close door');
+                    //doorCloseTimeLeft--;
+                    //if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
+                    //if (doorCloseTimeLeft < 1) {
                         console.log('Alarm on');
                         enableLight();
                         timeLeft = 60;
@@ -81,8 +81,8 @@ var tcpserver = net.createServer(function (c) { //'connection' listener
                         unBlinkLight();
                         startedAlarmOnInterval = false;
                         enableLight();
-                    }
-                }, 1000);
+                    //}
+                //}, 1000);
             }
             //debugend
         } else if (sData[0] == '2') {
