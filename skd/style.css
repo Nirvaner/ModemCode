@@ -1,14 +1,16 @@
 .qqq-btn{
-	font-size: 35px;
+	font-size: 2.5em;
 }
 .qqq-btn2{
 	font-size: 30px;
 }
 .qqq-h1{
-	margin:0;
+	font-size: 2.5em;
+	margin-top: .5em;
+	margin-bottom: 0.3em;
 }
-.qqq2-h1{
-	padding: 15px;
+.qqq-margin0{
+	margin:0;
 }
 .qqq-row .qqq-row-right{
 	border-left: 1px solid black;
@@ -18,4 +20,9 @@
 }
 .qqq-well{
 	padding:13px;
+}
+@media screen and (max-width: 640px) {
+	body{
+		font-size: 8px;
+	}
 }
