@@ -142,15 +142,15 @@
 				$('#leftSeconds').html(data.timeLeft);
 				if (!data.doorState) {
 					$('#doorState').html('Открыта');
-					$('#doorState').removeClass("stateWarning");
-					$('#doorState').addClass("stateOk");
+					$('#doorState').addClass("stateWarning");
+					$('#doorState').removeClass("stateOk");
 					$('#doorState1').html('Открыта');
 					$("#doorOpenIcon").show();
 					$("#doorCloseIcon").hide();
 				} else {
 					$('#doorState').html('Закрыта');
-					$('#doorState').addClass("stateWarning");
-					$('#doorState').removeClass("stateOk");
+					$('#doorState').removeClass("stateWarning");
+					$('#doorState').addClass("stateOk");
 					$('#doorState1').html('Закрыта');
 					$("#doorOpenIcon").hide();
 					$("#doorCloseIcon").show();
