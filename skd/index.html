@@ -18,12 +18,15 @@
 	<body>
     
 		<div id='waitDoor' class="container" style="display:none;">
-			<div class="row">
+			<div class="row text-center">
 				<div class="col-xs-12">
-					<h1 class="qqq-h1 text-center"><mark id='doorCloseTimeLeft'></mark> секунд для закрытия двери</h1>
+					<h1 class="qqq-h1"><mark id='doorCloseTimeLeft'></mark> секунд для закрытия двери</h1>
 				</div>
 				<div class="col-xs-12">
-					<h1 class="qqq-h1 text-center">Состояние двери: <mark id='doorState1'></mark></h1>
+					<h1 class="qqq-h1">Состояние двери:</h1>
+					<h1 class="qqq-h1"><mark id='doorState1'>Неизвестно</mark></h1>
+					<img id="doorOpenIcon1" src="img/openDoor.png" style="display:none; height:10em;"/>
+					<img id="doorCloseIcon1" src="img/closedDoor.png" style="display:none; height:10em;"/>
 				</div>
 			</div>
 		</div>
@@ -146,15 +149,23 @@
 					$('#doorState').addClass("stateWarning");
 					$('#doorState').removeClass("stateOk");
 					$('#doorState1').html('Открыта');
+					$('#doorState1').addClass("stateWarning");
+					$('#doorState1').removeClass("stateOk");
 					$("#doorOpenIcon").show();
 					$("#doorCloseIcon").hide();
+					$("#doorOpenIcon1").show();
+					$("#doorCloseIcon1").hide();
 				} else {
 					$('#doorState').html('Закрыта');
 					$('#doorState').removeClass("stateWarning");
 					$('#doorState').addClass("stateOk");
 					$('#doorState1').html('Закрыта');
+					$('#doorState1').removeClass("stateWarning");
+					$('#doorState1').addClass("stateOk");
 					$("#doorOpenIcon").hide();
 					$("#doorCloseIcon").show();
+					$("#doorOpenIcon1").hide();
+					$("#doorCloseIcon1").show();
 				}
 
 				if (data.alarmState) {
