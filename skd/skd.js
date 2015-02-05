@@ -281,6 +281,7 @@ setInterval(function () {
                     timeLeft--;
                     if (timeLeft < 0) timeLeft = 0;
                     console.log('Waiting for user input.' + timeLeft + ' seconds left.');
+                    sendToPython(doorState, alarmSet, alarmWorking, currentUser);
                     if (timeLeft < 1) {
                         //gpio22.set(1);				
                         //gpio23.set(1);
