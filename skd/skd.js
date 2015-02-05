@@ -179,7 +179,14 @@ io.on('connection', function (socket) {
             unBlinkLight();
             disableLight();
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-            socket.emit("userName", userPin.LastName + " " + userPin.FirstName[0] + ". " + userPin.FatherName[0] + ".");
+            var userFullName = userPin.LastName;
+            if (userPin.FirstName != ""){
+                userFullName += " " + userPin.FirstName[0] + ".";
+            }
+            if (userPin.FatherName != ""){
+                userFullName += " " + userPin.FatherName[0] + ".";
+            }
+            socket.emit("userName", userFullName);
             if (waitingForDoorCloseInterval) {
                 clearInterval(waitingForDoorCloseInterval);
                 startedAlarmOnInterval = false;
