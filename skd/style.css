@@ -26,3 +26,11 @@
 		font-size: 8px;
 	}
 }
+mark.stateOk{
+	background:#0F0;
+	color:#FFF;
+}
+mark.stateWarning{
+	background:#F00;
+	color:#FFF;
+}
