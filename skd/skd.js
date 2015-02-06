@@ -302,7 +302,7 @@ io.on('connection', function (socket) {
 });
 
 doorState = gpio11.val;
-console.log(doorState.toString());
+console.log(doorState);
 setInterval(function () {
     if (!isWaitingForInput && alarmSet) {
         if (doorState == 0 && alarmSet && !isWaitingForInput) {
