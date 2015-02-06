@@ -135,7 +135,7 @@ SetSignal = function(SignalOn){
         alarmSet = true;
         sendToPython(doorState, alarmSet, alarmWorking, currentUser);
         currentUser = '0';
-        isWaitingForInput = true;
+        isWaitingForInput = false;
         if (waitingForDoorCloseInterval != null){
             clearInterval(waitingForDoorCloseInterval);
             waitingForDoorCloseInterval = null;
