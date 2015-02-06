@@ -282,6 +282,7 @@ io.on('connection', function (socket) {
                 if (doorCloseTimeLeft < 1) {
                     if (doorState = "0"){
                         socket.emit("unableToSetSignal", 123);
+                        SetSignal(false);
                     }
                     else {
                         SetSignal(true);
