@@ -18,8 +18,7 @@
 				ion.sound({
 					sounds: [
 						{name: "water_droplet"},
-						{name: "webAlert_2"},
-						{name: "bell_ring"}
+						{name: "webAlert_2"}
 					],
 					path: "sounds/",
 					preload: true,
@@ -49,7 +48,7 @@
 					<button onclick='alarmEnablingCancel()' class="btn btn-default btn-lg btn-block btn-danger qqq-btn" >Отмена</button>
 				</div>
 				<div class="col-xs-6">
-					<button onclick='alarmEnablingForced()' class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
+					<button id="alarmEnablingForcedButton" onclick='alarmEnablingForced()' class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
 				</div>
 			</div>
 		</div>
@@ -203,6 +202,7 @@
 					$("#doorCloseIcon").hide();
 					$("#doorOpenIcon1").show();
 					$("#doorCloseIcon1").hide();
+					$('#alarmEnablingForcedButton').attr("disabled","disabled");
 				} else {
 					$('#doorState').html('Закрыта');
 					$('#doorState').removeClass("stateWarning");
@@ -214,6 +214,7 @@
 					$("#doorCloseIcon").show();
 					$("#doorOpenIcon1").hide();
 					$("#doorCloseIcon1").show();
+					$('#alarmEnablingForcedButton').removeAttr("disabled","disabled");
 				}
 
 				if (data.alarmState) {
