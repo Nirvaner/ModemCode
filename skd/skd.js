@@ -290,9 +290,9 @@ io.on('connection', function (socket) {
     });
 });
 
+doorState = gpio11.val();
 setInterval(function () {
     if (!isWaitingForInput && alarmSet) {
-        console.log("DoorState=" + doorState);
         if (doorState == 0 && alarmSet && !isWaitingForInput) {
             console.log('lunching countdown timer');
             isWaitingForInput = true;
