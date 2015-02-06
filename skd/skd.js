@@ -280,7 +280,7 @@ io.on('connection', function (socket) {
                 doorCloseTimeLeft--;
                 if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
                 if (doorCloseTimeLeft < 1) {
-                    if (doorState = "0"){
+                    if (doorState == "0"){
                         socket.emit("unableToSetSignal", 123);
                         SetSignal(false);
                     }
