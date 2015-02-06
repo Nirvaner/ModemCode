@@ -177,7 +177,6 @@
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
 							ion.sound.play("webAlert_2", {
-								volume: 1.0,
 								loop: true
 							});
 							isAlarmSoundOn = true;
@@ -332,9 +331,6 @@
 			$('.key').on("touchstart", function () {
 				button_clicked($(this).html());
 				ion.sound.play("water_droplet");
-				ion.sound.play("webAlert_2", {
-					volume: 0.0
-				});
 			});
 			$('.key').on("click", function () {
 				var isAndroid = navigator.userAgent.toLowerCase().indexOf("android");
