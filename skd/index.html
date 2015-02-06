@@ -160,6 +160,10 @@
 			socket.on('pinerror', function(){
 				alert("Неверный пинкод");
 			});
+			
+			socket.on('unableToSetSignal', function(){
+				alert("unableToSetSignal");
+			});
 
 			socket.on('time', function (data) {
 				$("#objectName").html(data.objectName);
