@@ -23,6 +23,123 @@ var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
 
+var gpio23 = gpio.export(23, {
+    direction: "out",
+    ready: function () {
+        gpio23.set(0);
+    }
+});
+
+var gpio22 = gpio.export(22, {
+    direction: "out",
+    ready: function () {
+        gpio22.set(0);
+    }
+});
+
+function enableSound() {
+    gpio23.set(1);
+    alarmWorking = true;
+    // sendToPython();
+}
+
+function disableSound() {
+    gpio23.set(0);
+    alarmWorking = false;
+    // sendToPython();
+}
+
+function enableLight() {
+    gpio22.set(1)
+}
+
+function disableLight() {
+    gpio22.set(0);
+}
+
+var blinker = null;
+var blinkerStat = 0;
+function blinkLight() {
+    blinker = setInterval(function () {
+        if (blinkerStat == 1)
+            blinkerStat = 0;
+        else blinkerStat = 1;
+        gpio22.set(blinkerStat);
+    }, 500);
+}
+
+function unBlinkLight() {
+    if (blinker != null){
+        clearInterval(blinker);
+        blinker = null;
+    }
+}
+
+SetSignal = function(SignalOn, WithTimeOut){
+    if (SignalOn){
+        console.log("Включаем сигналку с таймером");
+    }
+    else{
+        console.log("Выключаем сигналку");
+    }
+}
+
+function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
+    console.log("Sending to python");
+    try {
+        var client = net.connect({ port: 10002, host: "localhost" },
+           function (c) {
+               console.log('connected to python!');
+               setTimeout(function () {
+                   try {
+                       console.log(doorSt);
+                       console.log(alarmSt);
+                       console.log(alarmOnOff);
+                       var alarmSetf = 0;
+                       if (alarmSt) {
+                           alarmSetf = 1;
+                       }
+                       var sAlarmOnOff = 0;
+                       if (alarmOnOff) {
+                           sAlarmOnOff = 1;
+                       }
+                       console.log("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
+                       client.write("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr, function () {
+                           console.log('Sent to python');
+                           client.destroy();
+                       });
+                   }
+                   catch (error) { }
+               }, 0);
+           });
+        client.on('error', function (data) {
+            console.log(data.toString());
+            client.end();
+        });
+    }
+    catch (error) { }
+}
+
+var gpio11 = gpio.export(17, {
+    direction: "in",
+    interval: 200,
+    ready: function () {
+
+        if (savedSocket) {
+            savedSocket.broadcast.emit('doorState', gpio11.val);
+        }
+        gpio11.on("change", function (val) {
+            doorState = val;
+            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+            if (val == 0) {
+                console.log("Открыли дверь");
+            } else {
+                console.log("Закрыли дверь");
+            }
+        });
+    }
+});
+
 var tcpserver = net.createServer(function (c) {
     c.on('data', function (data) {
         var sData = data.toString();
@@ -43,7 +160,6 @@ var tcpserver = net.createServer(function (c) {
         }
         else if (sData[0] == '1') {
             console.log('Alarm on');
-            doorCloseTimeLeft = 60;
             if (!startedAlarmOnInterval) {
                 startedAlarmOnInterval = true;
                 blinkLight();
@@ -53,7 +169,7 @@ var tcpserver = net.createServer(function (c) {
                 alarmSet = true;
                 sendToPython(doorState, alarmSet, alarmWorking, currentUser);
                 currentUser = '0';
-                isWaitingForInput = false;
+                isWaitingForInput = true;
                 clearInterval(waitingForDoorCloseInterval);
                 unBlinkLight();
                 startedAlarmOnInterval = false;
@@ -93,7 +209,7 @@ var tcpserver = net.createServer(function (c) {
                 }
             });
             _.each(skdUsers, function (elem) {
-                console.log(elem.FirstName + " " + elem.Id);
+                console.log("Имя: " + elem.FirstName + "|Ид: " + elem.Id);
             });
         }
     });
@@ -182,7 +298,7 @@ io.on('connection', function (socket) {
                     alarmSet = true;
                     sendToPython(doorState, alarmSet, alarmWorking, currentUser);
                     currentUser = '0';
-                    isWaitingForInput = false;
+                    isWaitingForInput = true;
                     clearInterval(waitingForDoorCloseInterval);
                     unBlinkLight();
                     startedAlarmOnInterval = false;
@@ -192,41 +308,6 @@ io.on('connection', function (socket) {
         }
     });
 });
-
-var gpio23 = gpio.export(23, {
-    direction: "out",
-    ready: function () {
-        gpio23.set(0);
-    }
-});
-
-var gpio22 = gpio.export(22, {
-    direction: "out",
-    ready: function () {
-        gpio22.set(0);
-    }
-});
-
-var gpio11 = gpio.export(17, {
-    direction: "in",
-    interval: 200,
-    ready: function () {
-
-        if (savedSocket) {
-            savedSocket.broadcast.emit('doorState', gpio11.val);
-        }
-        gpio11.on("change", function (val) {
-            doorState = val;
-            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-            if (val == 0) {
-                console.log("Door open");
-            } else {
-                console.log("Door closed");
-            }
-        });
-    }
-});
-
 
 setInterval(function () {
     if (!isWaitingForInput && alarmSet) {
@@ -248,75 +329,3 @@ setInterval(function () {
         }
     }
 }, 500);
-
-
-function enableSound() {
-    gpio23.set(1);
-    alarmWorking = true;
-    // sendToPython();
-}
-
-function disableSound() {
-    gpio23.set(0);
-    alarmWorking = false;
-    // sendToPython();
-}
-
-function enableLight() {
-    gpio22.set(1)
-}
-
-function disableLight() {
-    gpio22.set(0);
-}
-
-var blinker = null;
-var blinkerStat = 0;
-function blinkLight() {
-    blinker = setInterval(function () {
-        if (blinkerStat == 1)
-            blinkerStat = 0;
-        else blinkerStat = 1;
-        gpio22.set(blinkerStat);
-    }, 500);
-}
-
-function unBlinkLight() {
-    clearInterval(blinker);
-}
-
-function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
-    console.log("Sending to python");
-    try {
-        var client = net.connect({ port: 10002, host: "localhost" },
-           function (c) {
-               console.log('connected to python!');
-               setTimeout(function () {
-                   try {
-                       console.log(doorSt);
-                       console.log(alarmSt);
-                       console.log(alarmOnOff);
-                       var alarmSetf = 0;
-                       if (alarmSt) {
-                           alarmSetf = 1;
-                       }
-                       var sAlarmOnOff = 0;
-                       if (alarmOnOff) {
-                           sAlarmOnOff = 1;
-                       }
-                       console.log("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
-                       client.write("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr, function () {
-                           console.log('Sent to python');
-                           client.destroy();
-                       });
-                   }
-                   catch (error) { }
-               }, 0);
-           });
-        client.on('error', function (data) {
-            console.log(data.toString());
-            client.end();
-        });
-    }
-    catch (error) { }
-}
