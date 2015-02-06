@@ -9,11 +9,11 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 80;
 
 var doorState = 1;
-var isWaitingForInput = false;
 var alarmOn = 0;
 var timeLeft = 60;
 var doorCloseTimeLeft = 60;
 var alarmSet = true;
+var isWaitingForInput = false;
 var inputWaitingTimer = null;
 var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
@@ -292,6 +292,7 @@ io.on('connection', function (socket) {
 
 setInterval(function () {
     if (!isWaitingForInput && alarmSet) {
+        console.log("DoorState=" + doorState);
         if (doorState == 0 && alarmSet && !isWaitingForInput) {
             console.log('lunching countdown timer');
             isWaitingForInput = true;
