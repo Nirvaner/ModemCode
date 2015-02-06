@@ -155,7 +155,10 @@
 						$('#pinEnter').show();
 						$('#waitDoor').hide();
 						showingPinEnter = true;
+						console.log("1data.doorState - "+data.doorState);
+						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
+							console.log("3 - inside if");
 							ion.sound.play("water_droplet", {
 								loop: true
 							});
