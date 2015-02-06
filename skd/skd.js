@@ -284,6 +284,10 @@ io.on('connection', function (socket) {
     socket.on("alarmEnablingCancel", function () {
         SetSignal(false);
     });
+
+    socket.on("alarmEnablingForced", function () {
+        SetSignal(true);
+    });
 });
 
 setInterval(function () {
