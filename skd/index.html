@@ -29,10 +29,10 @@
 					<img id="doorCloseIcon1" src="img/closedDoor.png" style="display:none; height:10em;"/>
 				</div>
 				<div class="col-xs-6">
-					<button class="btn btn-default btn-lg btn-block btn-danger qqq-btn" >Отмена</button>
+					<button onclick='alarmEnablingCancel()' class="btn btn-default btn-lg btn-block btn-danger qqq-btn" >Отмена</button>
 				</div>
 				<div class="col-xs-6">
-					<button class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
+					<button onclick='alarmEnablingForced()' class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
 				</div>
 			</div>
 		</div>
@@ -57,11 +57,23 @@
 						</div>
 						<div class="panel-body" style="padding:1em;">
 						
-							<div class="row text-center">
-								<div class="col-xs-12">
-									
+							<div class="row">
+								<div class="col-xs-6">
+									<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
+										<p class="" style="margin:0;">Отключить сигнализацию</p>
+									</button>
+									<button id='btnAlarmOn' onclick="turnOn()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
+										<p class="" style="margin:0;">Включить сигнализацию</p>
+									</button>
+								</div>
+								<div class="col-xs-6">
+									<button id='showDetails' onclick="showDetails()"  class="btn btn-default btn-lg btn-block btn-info qqq-btn" type="submit">
+										<p class="" style="margin:0;">Подробнее</p>
+									</button>
 								</div>
 							</div>
+							
+							
 							<div class="row qqq-row text-center">
 								<div class="col-xs-6 qqq-row-left">
 									<h1 class="qqq-h1">Состояние двери:</h1>
@@ -92,25 +104,6 @@
 								<div class="col-xs-12">&nbsp;</div>
 							</div>
 							
-							<div class="row">
-								<div class="col-xs-2"></div>
-								<div class="col-xs-8">
-									<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
-										<p class="" style="margin:0;">Отключить сигнализацию</p>
-									</button>
-								</div>
-								<div class="col-xs-2"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-xs-2"></div>
-								<div class="col-xs-8">
-									<button id='btnAlarmOn' onclick="turnOn()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
-										<p class="" style="margin:0;">Включить сигнализацию</p>
-									</button>
-								</div>
-								<div class="col-xs-2"></div>
-							</div>
 							
 						</div>
 					</div>
@@ -126,6 +119,13 @@
 				socket.emit('pin', $('#pin').html());
 			}
 
+			function alarmEnablingCancel(){
+				socket.emit('alarmEnablingCancel', 123);
+			}
+			function alarmEnablingForced(){
+				socket.emit('alarmEnablingForced', 123);
+			}
+			
 			showingPinEnter = false;
 
 			function manualOff() {
