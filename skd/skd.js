@@ -178,13 +178,16 @@ io.on('connection', function (socket) {
             disableSound();
             unBlinkLight();
             disableLight();
+            var userFullName = "";
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-            var userFullName = userPin.LastName;
-            if (userPin.FirstName != ""){
-                userFullName += " " + userPin.FirstName[0] + ".";
-            }
-            if (userPin.FatherName != ""){
-                userFullName += " " + userPin.FatherName[0] + ".";
+            if (currentUser != null){
+                userFullName = userPin.LastName;
+                if (userPin.FirstName != ""){
+                    userFullName += " " + userPin.FirstName[0] + ".";
+                }
+                if (userPin.FatherName != ""){
+                    userFullName += " " + userPin.FatherName[0] + ".";
+                }
             }
             socket.emit("userName", userFullName);
             if (waitingForDoorCloseInterval) {

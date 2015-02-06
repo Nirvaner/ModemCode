@@ -31,6 +31,7 @@ serverAddress = "0.0.0.0"
 ipAddress = "0.0.0.0"
 plcAddress = "0.0.0.0"
 db = 0
+db_recv = 7
 size = 0
 lightRead = 0
 hardRead = 0
@@ -165,7 +166,9 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 client.connect(plcAddress, 0,0)
                         if isNeedWriteToSiements:
                                 print "WriteToSiements"
-                                #client.db_write(db, writeToSiementsStartPosition, bytearray(struct.pack("b", writeToSiementsData))))
+                                value = struct.unpack("B", str(client.db_read(dbRecv, writeToSiementsStartPosition, 1)))
+                                value = value & writeToSiementsData
+                                client.db_write(dbRecv, writeToSiementsStartPosition, bytearray(struct.pack("B", value)))
                                 isNeedWriteToSiements = False
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
                         firstArrayFromPLC += bytearray(struct.pack("b",skdState))
