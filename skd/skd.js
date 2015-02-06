@@ -12,7 +12,7 @@ var doorState = 1;
 var alarmOn = 0;
 var timeLeft = 60;
 var doorCloseTimeLeft = 60;
-var alarmSet = true;
+var alarmSet = false;
 var isWaitingForInput = false;
 var inputWaitingTimer = null;
 var waitingForDoorCloseInterval = null;
@@ -147,7 +147,10 @@ SetSignal = function(SignalOn){
     else{
         console.log("Выключаем сигналку");
         alarmSet = false;
-        clearInterval(inputWaitingTimer);
+        if (inputWaitingTimer != null){
+            clearInterval(inputWaitingTimer);
+            inputWaitingTimer = null;
+        }
         timeLeft = 60;
         disableSound();
         unBlinkLight();
@@ -209,6 +212,8 @@ var tcpserver = net.createServer(function (c) {
         }
     });
 });
+
+SetSignal(false);
 
 tcpserver.listen(10003, function () {
     console.log('TCP server created');
