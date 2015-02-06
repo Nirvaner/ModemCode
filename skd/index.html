@@ -214,6 +214,7 @@
 			socket.on('userName', function(data){
 				$("#userName").html(data);
 				$("#userNameWrap").show();
+				alert(data);
 			});
 
 			socket.on('doorState', function (data) {
