@@ -165,10 +165,10 @@ var tcpserver = net.createServer(function (c) {
     c.on('data', function (data) {
         var sData = data.toString();
         if (sData[0] == '0') {
-            SetSignal(true);
+            SetSignal(false);
         }
         else if (sData[0] == '1') {
-            SetSignal(false);
+            SetSignal(true);
         }
         else if (sData[0] == '2') {
             console.log("Получили настройки!");
