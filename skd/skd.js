@@ -75,43 +75,32 @@ function unBlinkLight() {
     }
 }
 
-SetSignal = function(SignalOn, WithTimeOut){
-    if (SignalOn){
-        console.log("Включаем сигналку с таймером");
-    }
-    else{
-        console.log("Выключаем сигналку");
-    }
-}
-
 function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
     console.log("Sending to python");
     try {
         var client = net.connect({ port: 10002, host: "localhost" },
            function (c) {
-               console.log('connected to python!');
                setTimeout(function () {
-                   try {
-                       console.log(doorSt);
-                       console.log(alarmSt);
-                       console.log(alarmOnOff);
-                       var alarmSetf = 0;
-                       if (alarmSt) {
-                           alarmSetf = 1;
-                       }
-                       var sAlarmOnOff = 0;
-                       if (alarmOnOff) {
-                           sAlarmOnOff = 1;
-                       }
-                       console.log("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
-                       client.write("1" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr, function () {
-                           console.log('Sent to python');
-                           client.destroy();
-                       });
-                   }
-                   catch (error) { }
-               }, 0);
-           });
+                    try {
+                        console.log(doorSt);
+                        console.log(alarmSt);
+                        console.log(alarmOnOff);
+                        var alarmSetf = 0;
+                        if (alarmSt) {
+                            alarmSetf = 1;
+                        }
+                        var sAlarmOnOff = 0;
+                        if (alarmOnOff) {
+                            sAlarmOnOff = 1;
+                        }
+                        console.log("Send to python: 1|" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
+                        client.write("1" + doorSt + alarmSetf + sAlarmOnOff + currentUsr, function () {
+                            client.destroy();
+                        });
+                    }
+                    catch (error) { }
+                }, 0);
+            });
         client.on('error', function (data) {
             console.log(data.toString());
             client.end();
@@ -124,7 +113,6 @@ var gpio11 = gpio.export(17, {
     direction: "in",
     interval: 200,
     ready: function () {
-
         if (savedSocket) {
             savedSocket.broadcast.emit('doorState', gpio11.val);
         }
@@ -140,50 +128,58 @@ var gpio11 = gpio.export(17, {
     }
 });
 
+SetSignal = function(SignalOn){
+    if (SignalOn){
+        console.log("Включаем сигналку");
+        timeLeft = 60;
+        alarmSet = true;
+        sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+        currentUser = '0';
+        isWaitingForInput = true;
+        if (waitingForDoorCloseInterval != null){
+            clearInterval(waitingForDoorCloseInterval);
+            waitingForDoorCloseInterval = null;
+        }
+        unBlinkLight();
+        startedAlarmOnInterval = false;
+        enableLight();
+        sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+    }
+    else{
+        console.log("Выключаем сигналку");
+        alarmSet = false;
+        clearInterval(inputWaitingTimer);
+        timeLeft = 60;
+        disableSound();
+        unBlinkLight();
+        disableLight();
+        if (waitingForDoorCloseInterval) {
+            clearInterval(waitingForDoorCloseInterval);
+            startedAlarmOnInterval = false;
+        }
+        isWaitingForInput = false;
+        sendToPython(doorState, alarmSet, alarmWorking, currentUser);
+    }
+}
+
 var tcpserver = net.createServer(function (c) {
     c.on('data', function (data) {
         var sData = data.toString();
         if (sData[0] == '0') {
-            console.log('Alarm off');
-            alarmSet = false;
-            clearInterval(inputWaitingTimer);
-            timeLeft = 60;
-            disableSound();
-            unBlinkLight();
-            disableLight();
-            sendToPython(doorState, alarmSet, alarmWorking, "0");
-            if (waitingForDoorCloseInterval) {
-                clearInterval(waitingForDoorCloseInterval);
-                startedAlarmOnInterval = false;
-            }
-            isWaitingForInput = false;
+            SetSignal(true);
         }
         else if (sData[0] == '1') {
-            console.log('Alarm on');
-            if (!startedAlarmOnInterval) {
-                startedAlarmOnInterval = true;
-                blinkLight();
-                console.log('Alarm on');
-                enableLight();
-                timeLeft = 60;
-                alarmSet = true;
-                sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-                currentUser = '0';
-                isWaitingForInput = true;
-                clearInterval(waitingForDoorCloseInterval);
-                unBlinkLight();
-                startedAlarmOnInterval = false;
-                enableLight();
-            }
-        } else if (sData[0] == '2') {
+            SetSignal(false);
+        }
+        else if (sData[0] == '2') {
             console.log("Получили настройки!");
             console.log(sData.substring(1));
 
             var arr = JSON.parse(sData.substring(1));
             objectName = arr[0].Value + " " + arr[1].Value;
             console.log("Имя объекта: " + objectName);
-
-        } else if (sData[0] == '3') {
+        }
+        else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
             console.log(sData.substring(1));
 
@@ -256,15 +252,8 @@ io.on('connection', function (socket) {
         }
         else {
             currentUser = userPin.Id;
-            console.log('Alarm off');
-            alarmSet = false;
-            clearInterval(inputWaitingTimer);
-            timeLeft = 60;
-            disableSound();
-            unBlinkLight();
-            disableLight();
+            SetSignal(false);
             var userFullName = "";
-            sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (currentUser != null){
                 userFullName = userPin.LastName;
                 if (userPin.FirstName != ""){
@@ -275,11 +264,6 @@ io.on('connection', function (socket) {
                 }
             }
             socket.emit("userName", userFullName);
-            if (waitingForDoorCloseInterval) {
-                clearInterval(waitingForDoorCloseInterval);
-                startedAlarmOnInterval = false;
-            }
-            isWaitingForInput = false;
         }
     });
 
@@ -293,16 +277,7 @@ io.on('connection', function (socket) {
                 doorCloseTimeLeft--;
                 if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
                 if (doorCloseTimeLeft < 1) {
-                    console.log('Alarm on');
-                    timeLeft = 60;
-                    alarmSet = true;
-                    sendToPython(doorState, alarmSet, alarmWorking, currentUser);
-                    currentUser = '0';
-                    isWaitingForInput = true;
-                    clearInterval(waitingForDoorCloseInterval);
-                    unBlinkLight();
-                    startedAlarmOnInterval = false;
-                    enableLight();
+                    SetSignal(true);
                 }
             }, 1000);
         }
