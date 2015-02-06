@@ -12,6 +12,22 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="ionsound/ion.sound.js"></script>
+		<script>
+			$(document).ready(function(){
+
+				ion.sound({
+					sounds: [
+						{name: "water_droplet"},
+						{name: "webAlert"}
+					],
+					path: "sounds/",
+					preload: true,
+					volume: 1.0
+				});
+
+
+			});
+		</script>
 		<title>Ввод пароля</title>
 
 	</head>
@@ -159,9 +175,8 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							ion.sound.play("water_droplet", {
-								loop: true
-							});
+							
+							ion.sound.play("water_droplet");
 							isAlarmSoundOn = true;
 						}
 					}
@@ -309,20 +324,7 @@
 		
 		<script>
 			
-		$(document).ready(function(){
-
-			ion.sound({
-				sounds: [
-					{name: "water_droplet"},
-					{name: "webAlert"}
-				],
-				path: "sounds/",
-				preload: true,
-				volume: 1.0
-			});
-
-
-		});
+		
 		
 			$('.key').on("touchstart", function () {
 				button_clicked($(this).html());
