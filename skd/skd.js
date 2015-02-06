@@ -133,7 +133,6 @@ SetSignal = function(SignalOn){
         console.log("Включаем сигналку");
         timeLeft = 60;
         alarmSet = true;
-        sendToPython(doorState, alarmSet, alarmWorking, currentUser);
         currentUser = '0';
         isWaitingForInput = false;
         if (waitingForDoorCloseInterval != null){
@@ -153,11 +152,11 @@ SetSignal = function(SignalOn){
         disableSound();
         unBlinkLight();
         disableLight();
+        isWaitingForInput = false;
         if (waitingForDoorCloseInterval) {
             clearInterval(waitingForDoorCloseInterval);
             startedAlarmOnInterval = false;
         }
-        isWaitingForInput = false;
         sendToPython(doorState, alarmSet, alarmWorking, currentUser);
     }
 }
@@ -268,7 +267,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('alarmOn', function () {
-        console.log('Alarm on query');
         doorCloseTimeLeft = 60;
         if (!startedAlarmOnInterval) {
             startedAlarmOnInterval = true;
@@ -281,6 +279,10 @@ io.on('connection', function (socket) {
                 }
             }, 1000);
         }
+    });
+
+    socket.on("alarmEnablingCancel", function () {
+        SetSignal(false);
     });
 });
 
