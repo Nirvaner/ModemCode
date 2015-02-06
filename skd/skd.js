@@ -290,7 +290,7 @@ io.on('connection', function (socket) {
     });
 });
 
-doorState = gpio11.val();
+doorState = gpio11.val;
 setInterval(function () {
     if (!isWaitingForInput && alarmSet) {
         if (doorState == 0 && alarmSet && !isWaitingForInput) {
