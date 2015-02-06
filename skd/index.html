@@ -175,7 +175,7 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							
+							alert("Sound Play Should Start Shortly");
 							ion.sound.play("water_droplet");
 							isAlarmSoundOn = true;
 						}
