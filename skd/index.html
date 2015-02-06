@@ -176,12 +176,12 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							window.parent.playAlert();
+							parent.playAlert();
 							isAlarmSoundOn = true;
 						}
 					}
 				} else {
-					window.parent.stopAlert();
+					parent.stopAlert();
 					isAlarmSoundOn = false;
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
