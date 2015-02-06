@@ -18,7 +18,8 @@
 				ion.sound({
 					sounds: [
 						{name: "water_droplet"},
-						{name: "webAlert_2"}
+						{name: "webAlert_2"},
+						{name: "bell_ring"}
 					],
 					path: "sounds/",
 					preload: true,
@@ -175,14 +176,14 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							ion.sound.play("webAlert_2", {
+							ion.sound.play("bell_ring", {
 								loop: true
 							});
 							isAlarmSoundOn = true;
 						}
 					}
 				} else {
-					ion.sound.stop("webAlert_2");
+					ion.sound.stop("bell_ring");
 					isAlarmSoundOn = false;
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
