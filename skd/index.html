@@ -113,6 +113,7 @@
 		
 		<script>
 
+			var isAlarmSoundOn = false;
 			var socket = io();
 			var manualTurnOff = false;
 			function turnOff() {
@@ -154,8 +155,14 @@
 						$('#pinEnter').show();
 						$('#waitDoor').hide();
 						showingPinEnter = true;
+						if(!data.doorState & !isAlarmSoundOn){
+							ion.sound.play("webAlert", {
+								loop: true
+							});
+						}
 					}
 				} else {
+					ion.sound.stop("webAlert");
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
 					$('#waitDoor').hide();
@@ -301,7 +308,8 @@
 
 			ion.sound({
 				sounds: [
-					{name: "water_droplet"}
+					{name: "water_droplet"},
+					{name: "webAlert"}
 				],
 				path: "sounds/",
 				preload: true,
