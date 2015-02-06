@@ -175,13 +175,12 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							alert("Sound Play Should Start Shortly");
-							ion.sound.play("water_droplet");
+							ion.sound.play("webAlert");
 							isAlarmSoundOn = true;
 						}
 					}
 				} else {
-					ion.sound.stop("water_droplet");
+					ion.sound.stop("webAlert");
 					isAlarmSoundOn = false;
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
