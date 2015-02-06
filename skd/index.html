@@ -159,10 +159,12 @@
 							ion.sound.play("webAlert", {
 								loop: true
 							});
+							isAlarmSoundOn = true;
 						}
 					}
 				} else {
 					ion.sound.stop("webAlert");
+					isAlarmSoundOn = false;
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
 					$('#waitDoor').hide();
