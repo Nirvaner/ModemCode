@@ -19,6 +19,12 @@
         intel.xdk.device.setRotateOrientation('landscape');
 		};
 		document.addEventListener("intel.xdk.device.ready",onDeviceReady,false);
+        function playAlert(){
+            intel.xdk.player.startAudio("webAlert_2.mp3", true);
+        }
+        function stopAlert(){
+            intel.xdk.player.stopAudio();
+        }
 	</script>
     <meta charset="utf-8">
 

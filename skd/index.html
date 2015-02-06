@@ -176,14 +176,12 @@
 						console.log("2isAlarmSoundOn - "+isAlarmSoundOn);
 						if(!data.doorState & !isAlarmSoundOn){
 							console.log("3 - inside if");
-							ion.sound.play("webAlert_2", {
-								loop: true
-							});
+							window.parent.playAlert();
 							isAlarmSoundOn = true;
 						}
 					}
 				} else {
-					ion.sound.stop("webAlert_2");
+					window.parent.stopAlert();
 					isAlarmSoundOn = false;
 					$('#pinEnter').hide();
 					$('#mainScreen').show();
