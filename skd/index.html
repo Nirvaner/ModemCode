@@ -193,6 +193,8 @@
 
 			function turnOn() {
 				socket.emit('alarmOn', $('#pin').html());
+				showingPinEnter = false;
+				isTurnOn = false;
 			}
 			
 			socket.on('pinerror', function(){
