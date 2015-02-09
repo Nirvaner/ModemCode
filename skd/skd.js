@@ -112,10 +112,14 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
 var gpio11 = gpio.export(17, {
     direction: "in",
     interval: 200,
-    ready: function () {
+    ready: function (val) {
+        doorState = val;
+            console.log("DoorState val is ");
+            console.log(val);
+            console.log("DoorState gpio11.val is ");
+            console.log(gpio11.val);
         if (savedSocket) {
-            doorState = gpio11.val;
-            savedSocket.broadcast.emit('doorState', doorState);
+            savedSocket.broadcast.emit('doorState', gpio11.val);
         }
         gpio11.on("change", function (val) {
             doorState = val;
