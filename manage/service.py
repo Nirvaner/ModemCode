@@ -89,9 +89,6 @@ while True:
                         tcpClient.send("0")
                         print "Ping ok"
                 elif response[0:3] == "run":
-                        if not(siementsSub):
-                                siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
-                                time.sleep(1)
                         if not(skdSub):
                                 skdSub = subprocess.Popen(["sudo","-u","root","-p","root",DevirDir + "skd/NodeJs/bin/node",DevirDir + "skd/skd.js"])
                                 time.sleep(20)
@@ -102,7 +99,6 @@ while True:
                 elif response[0:8] == "settings":
                         if siementsSub:
                                 siementsSub.terminate()
-                                time.sleep(1)
                         siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                         i = 0
                         while True:
