@@ -210,7 +210,9 @@
 
 				if (data.isWaitingForInput || manualTurnOff || isTurnOn) {
 					if (!showingPinEnter) {
-						$('#pin').html('');
+						if(!isTurnOn){
+							$('#pin').html('');
+						}
 						$('#mainScreen').hide();
 						$('#pinEnter').show();
 						$('#waitDoor').hide();
