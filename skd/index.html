@@ -78,7 +78,7 @@
 									<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
 										<p class="" style="margin:0;">Отключить сигнализацию</p>
 									</button>
-									<button id='btnAlarmOn' onclick="turnOn2()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
+									<button id='btnAlarmOn' onclick="turnOn()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
 										<p class="" style="margin:0;">Включить сигнализацию</p>
 									</button>
 								</div>
@@ -151,13 +151,6 @@
 		
 		<script>
 		
-			var isTurnOn = false;
-		
-			function turnOn2(){
-				showingPinEnter = true;
-				isTurnOn = true;
-			}
-		
 			function showDetails(){
 				$("#panelBody1").hide();
 				$("#panelBody2").show();
@@ -192,7 +185,7 @@
 			}
 
 			function turnOn() {
-				socket.emit('alarmOn', $('#pin').html());
+				socket.emit('alarmOn', 123);
 			}
 			
 			socket.on('pinerror', function(){
@@ -387,12 +380,7 @@
 				code = code.trim();
 				//alert(code);
 				if (code == "Ok") {
-					if(!isTurnOn){
-						turnOff();
-					}
-					else{
-						turnOn();
-					}
+					turnOff();
 					return;
 				}
 				if (code == "Очистить") {
