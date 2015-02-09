@@ -172,6 +172,7 @@
 			var manualTurnOff = false;
 			function turnOff() {
 				socket.emit('pin', $('#pin').html());
+				$('#pin').html("");
 			}
 
 			function alarmEnablingCancel(){
@@ -195,6 +196,7 @@
 				socket.emit('alarmOn', $('#pin').html());
 				showingPinEnter = false;
 				isTurnOn = false;
+				$('#pin').html("");
 			}
 			
 			socket.on('pinerror', function(){
