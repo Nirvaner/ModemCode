@@ -128,6 +128,7 @@ var gpio11 = gpio.export(17, {
     }
 });
 
+console.log("Door state is: ");
 console.log(gpio11.val);
 
 SetSignal = function(SignalOn){
