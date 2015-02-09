@@ -206,7 +206,7 @@
 			socket.on('time', function (data) {
 				$("#objectName").html(data.objectName);
 
-				if (data.isWaitingForInput || manualTurnOff) {
+				if (data.isWaitingForInput || manualTurnOff || isTurnOn) {
 					if (!showingPinEnter) {
 						$('#pin').html('');
 						$('#mainScreen').hide();
