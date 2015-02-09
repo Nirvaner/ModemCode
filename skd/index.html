@@ -304,6 +304,12 @@
 					manualTurnOff = false;
 					showingPinEnter = false;
 				}
+				if(data.isWaitingForInput){
+					$("#isWaitingCountdown").show();
+				}
+				else{
+					$("#isWaitingCountdown").hide();
+				}
 				$('#isWaitingForInput').html(data.isWaitingForInput);
 				if (data.doorWaiting) {
 					$('#waitDoor').show();
@@ -334,6 +340,13 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">&nbsp;</div>
+			</div>
+			<div id="isWaitingCountdown" class="row" style="display:none;">
+				<div class="col-xs-12">
+					<h1 class="qqq-h1 text-danger pull-left">Дверь была открыта, введите пинкод. Осталось: </h1>
+					<h1 id="leftSeconds" class="qqq-h1 text-danger pull-left">60</h1>
+					<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">&nbsp;</div>
@@ -376,12 +389,8 @@
 				<div class="col-xs-4">
 					<div class="well qqq-well">
 						<div class="row">
-							<div class="col-xs-10">
+							<div class="col-xs-12">
 								<h1 id='pin' class="qqq-h1 text-muted qqq-margin0" style="overflow:hidden;height: 1em;text-align: center;"></h1>
-							</div>
-							<div class="col-xs-2">
-								<h1 id="leftSeconds" class="qqq-h1 text-danger pull-left">60</h1>
-								<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
 							</div>
 						</div>
 					</div>
