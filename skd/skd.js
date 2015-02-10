@@ -90,12 +90,12 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                         if (alarmOnOff) {
                             sAlarmOnOff = 1;
                         }
-                        console.log("Send to python: 1|" + doorSt + int(alarmSt) + int(alarmOnOff) + currentUsr);
+                        console.log("Send to python: 1|" + doorSt + alarmSetf + sAlarmOnOff + currentUsr);
                         client.write("1" + doorSt + alarmSetf + sAlarmOnOff + currentUsr, function () {
                             client.destroy();
                         });
                     }
-                    catch (error) { console.log("Ошыбка " + error); }
+                    catch (error) { }
                 }, 0);
             });
         client.on('error', function (data) {
