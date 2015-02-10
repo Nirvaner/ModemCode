@@ -102,7 +102,7 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
             client.end();
         });
     }
-    catch (error) { }
+    catch (error) { console.log("Ошыбка" + error); }
 }
 
 var gpio11 = gpio.export(17, {
