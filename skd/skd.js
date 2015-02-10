@@ -95,7 +95,7 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                             client.destroy();
                         });
                     }
-                    catch (error) { }
+                    catch (error) { console.log("Ошыбка " + error); }
                 }, 0);
             });
         client.on('error', function (data) {
