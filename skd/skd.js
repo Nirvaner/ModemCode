@@ -76,15 +76,11 @@ function unBlinkLight() {
 }
 
 function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
-    console.log("Sending to python");
     try {
         var client = net.connect({ port: 10002, host: "localhost" },
            function (c) {
                setTimeout(function () {
                     try {
-                        console.log(doorSt);
-                        console.log(alarmSt);
-                        console.log(alarmOnOff);
                         var alarmSetf = 0;
                         if (alarmSt) {
                             alarmSetf = 1;
@@ -93,7 +89,7 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                         if (alarmOnOff) {
                             sAlarmOnOff = 1;
                         }
-                        console.log("Send to python: 1|" + doorSt + "" + alarmSetf + "" + sAlarmOnOff + "" + currentUsr);
+                        console.log("Send to python: 1|" + doorSt + int(alarmSt) + int(alarmOnOff) + currentUsr);
                         client.write("1" + doorSt + alarmSetf + sAlarmOnOff + currentUsr, function () {
                             client.destroy();
                         });
@@ -175,19 +171,13 @@ var tcpserver = net.createServer(function (c) {
             SetSignal(true);
         }
         else if (sData[0] == '2') {
-            console.log("Получили настройки!");
-            console.log(sData.substring(1));
-
+            console.log("Получили настройки СКД!");
             var arr = JSON.parse(sData.substring(1));
             objectName = arr[0].Value + " " + arr[1].Value;
-            console.log("Имя объекта: " + objectName);
         }
         else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
-            console.log(sData.substring(1));
-
             var arr = JSON.parse(sData.substring(1));
-
             _.each(arr, function (elem) {
                 if (elem.IsDeleted) {
                     skdUsers = _.reject(skdUsers, function (subElem) {
@@ -206,9 +196,6 @@ var tcpserver = net.createServer(function (c) {
                         skdUsers.push(elem);
                     }
                 }
-            });
-            _.each(skdUsers, function (elem) {
-                console.log("Имя: " + elem.FirstName + "|Ид: " + elem.Id);
             });
         }
     });
