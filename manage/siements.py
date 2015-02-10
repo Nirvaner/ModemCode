@@ -41,6 +41,8 @@ isSet = False
 isNeedWriteToSiements = False
 writeToSiementsStartPosition = 0
 writeToSiementsData = 0
+skdSiementsStartPosition = 0
+skdSiementsBitPosition = 0
 
 q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
@@ -90,7 +92,11 @@ def SetSkdState(state):
                 skdState = skdState & 3
         else:
                 skdState = skdState | 4
-        print state
+        print "New skdState is " + str(skdState)
+        if ((state[0] == "0") and (state[1] == "1")) or (state[2] == "1"):
+                print "1"
+        else
+                print "0"
 
 def EventsReceiver(skdState):
         server = socket.socket()
@@ -99,21 +105,16 @@ def EventsReceiver(skdState):
         while True:
                 try:
                         skdSock, addr = server.accept()
-                        print "Client connect to EventsReceiver in SiementsPY"
                         command = skdSock.recv(512).strip('\0')
                         skdSock.close()
-                        print "Command is: " + command[0]
                         if command[0] == "0":
-                                print "SetSettings"
                                 SetSettings(command[1:])
                         elif command[0] == "1":
-                                print "SetSkdState"
                                 SetSkdState(command[1:])
                         elif command[0] == "2":
                                 global writeToSiementsStartPosition
                                 global writeToSiementsData
                                 global isNeedWriteToSiements
-                                print "WriteToSiements"
                                 writeArr = command[2:].split("|")
                                 writeToSiementsStartPosition = writeArr[0]
                                 writeToSiementsData = writeArr[1]
@@ -145,7 +146,6 @@ def ReadFromQueue(q):
                         obj = q.get()
                         if not(SendBufferToServer(obj)):
                                 q.put(obj)
-                        print "time sleep"
                         time.sleep(0.01)
 
 def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
@@ -196,7 +196,6 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         pass
                         sys.exc_clear()
                         print error
-                        print 'Waiting 3 sec'
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
                                 #Suda nado chto nit' dopisat'
