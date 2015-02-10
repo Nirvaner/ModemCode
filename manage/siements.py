@@ -95,7 +95,7 @@ def SetSkdState(state):
         print "New skdState is " + str(skdState)
         if ((state[0] == "0") and (state[1] == "1")) or (state[2] == "1"):
                 print "1"
-        else
+        else:
                 print "0"
 
 def EventsReceiver(skdState):
