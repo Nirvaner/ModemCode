@@ -78,8 +78,9 @@ function unBlinkLight() {
 function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
     try {
         var client = net.connect({ port: 10002, host: "localhost" },
-           function (c) {
-               setTimeout(function () {
+            function (c) {
+                console.log("Send To packet")
+                setTimeout(function () {
                     try {
                         var alarmSetf = 0;
                         if (alarmSt) {
@@ -102,7 +103,7 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
             client.end();
         });
     }
-    catch (error) { console.log("Ошыбка" + error); }
+    catch (error) { }
 }
 
 var gpio11 = gpio.export(17, {
