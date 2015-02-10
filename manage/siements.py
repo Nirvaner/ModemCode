@@ -94,9 +94,9 @@ def SetSkdState(state):
                 skdState = skdState | 4
         print "New skdState is " + str(skdState)
         if ((state[0] == "0") and (state[1] == "1")) or (state[2] == "1"):
-                print "1"
+                print "SkdStateToSiements 1"
         else:
-                print "0"
+                print "SkdStateToSiements 0"
 
 def EventsReceiver(skdState):
         server = socket.socket()
@@ -187,7 +187,6 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
                                 qs = q.qsize()
-                                print qs
                                 if qs > 1000:
                                         c = q.get()
                                 q.put(firstArrayFromPLC)
