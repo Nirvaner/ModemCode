@@ -116,7 +116,7 @@ def WriteToController(db, start, bit, data, command):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:
                         print "DBRead params " + str(db) + str(start)
-                        value = struct.unpack("B", str(plcClient.db_read(db, start, 1)))
+                        value = int(struct.unpack("B", str(plcClient.db_read(db, start, 1)))[0])
                         if command:
                                 value = value or data
                         else:
