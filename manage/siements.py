@@ -132,7 +132,7 @@ def WriteToController(db, start, bit, data, command):
                         dvalue = bytearray(struct.pack("H", value))
                 elif sys.getsizeof(value) == 4:
                         dvalue = bytearray(struct.pack("L", value))
-                plcClient.as_db_write(db, start, value)
+                plcClient.as_db_write(db, start, dvalue)
                 return True
                 print "Write to siements succesfull"
         #except Exception as error:
