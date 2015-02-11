@@ -146,7 +146,7 @@ def EventsReceiver(skdState):
         server.bind(("", 10002))
         server.listen(3)
         while True:
-                try:
+                #try:
                         skdSock, addr = server.accept()
                         command = skdSock.recv(512).strip('\0')
                         skdSock.close()
@@ -163,10 +163,10 @@ def EventsReceiver(skdState):
                                 writeToSiementsData = writeArr[1]
                                 isNeedWriteToSiements = True
 
-                except Exception as error:
-                        pass
-                        sys.exc_clear()
-                        print error
+                #except Exception as error:
+                        #pass
+                        #sys.exc_clear()
+                        #print error
 
 def SendBufferToServer(buf):
         try:
