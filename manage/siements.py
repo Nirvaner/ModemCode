@@ -25,28 +25,30 @@ def SetStrInFile(path,s):
 modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
 serverPort = 10102
 
-writeInPLC = (bytearray(), 0)
-
 serverAddress = "0.0.0.0"
 ipAddress = "0.0.0.0"
 plcAddress = "0.0.0.0"
 db = 0
-db_recv = 7
 size = 0
 lightRead = 0
 hardRead = 0
-skdState = 0
 bytesToCheck = {0,1,2};
+skdState = 0
+skdDb = 0
+skdStartPos = 0
+skdBitPos = 0
 isSet = False
-isNeedWriteToSiements = False
-writeToSiementsStartPosition = 0
-writeToSiementsData = 0
-skdSiementsStartPosition = 0
-skdSiementsBitPosition = 0
+
+wsDb = 0
+wsStartPos = 0
+wsBitPos = 0
+wsData = 0
 
 q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
+
+plcClient = snap7.client.Client()
 
 def SetSettings(s):
         print "SetSettings: " + s
@@ -59,17 +61,14 @@ def SetSettings(s):
         global lightRead
         global hardRead
         global bytesToCheck
-        global isSet
-        global firstArrayFromPLC
-        global secondArrayForCheck
-        isSet = True
+        global skdDb
+        global skdStartPos
+        global skdBitPos
         serverAddress = setArr[0]
         ipAddress = setArr[1]
         plcAddress = setArr[2]
         db = int(setArr[3])
         size = int(setArr[4])
-        firstArrayFromPLC = bytearray(size)
-        secondArrayForCheck = bytearray(size)
         lightRead = int(setArr[5]) * 1000
         hardRead = float(setArr[6]) / 1000
         keyArr = setArr[7].split(',')
@@ -77,6 +76,16 @@ def SetSettings(s):
                 bytesToCheck.pop()
         for it in keyArr:
                 bytesToCheck.add(int(it))
+        skd = setArr[8].split(',')
+        skdDb = skd[0]
+        skdStartPos = skd[1]
+        skdBitPos = skd[2]
+        global isSet
+        global firstArrayFromPLC
+        global secondArrayForCheck
+        firstArrayFromPLC = bytearray(size)
+        secondArrayForCheck = bytearray(size)
+        isSet = True
 
 def SetSkdState(state):
         global skdState
@@ -94,9 +103,37 @@ def SetSkdState(state):
                 skdState = skdState | 4
         print "New skdState is " + str(skdState)
         if ((state[0] == "0") and (state[1] == "1")) or (state[2] == "1"):
-                print "SkdStateToSiements 1"
+                WriteToController(skdDb, skdStartPos, skdBitPos, 1, True)
         else:
-                print "SkdStateToSiements 0"
+                WriteToController(skdDb, skdStartPos, skdBitPos, int("11111110", 2), False)   
+
+def WriteToController(db, start, bit, data, command):
+        try:
+                global plcClient
+                print "WriteToSiements"
+                if not(plcClient.get_connected()):
+                        plcClient.connect(plcAddress, 0, 0)
+                if bit > -1:
+                        value = struct.unpack("B", str(plcClient.db_read(db, start, len(data))))
+                        if command:
+                                value = value or data
+                        else:
+                                value = value and data
+                else:
+                        value = data
+                if len(value) == 1:
+                        dvalue = bytearray(struct.pack("B", value))
+                elif len(value) == 2:
+                        dvalue = bytearray(struct.pack("H", value))
+                elif len(value) == 4:
+                        dvalue = bytearray(struct.pack("L", value))
+                plcClient.db_write(db, start, value)
+                return True
+        except Exception as error:
+                pass
+                sys.exc_clear()
+                print error
+                return False
 
 def EventsReceiver(skdState):
         server = socket.socket()
@@ -155,24 +192,18 @@ def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
         return False
 
 def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
-        client = snap7.client.Client()
+        global plcClient
         currentMillis=0
         lastMillis=0
         readPLCErrors=0
         while True:
                 try:
                         global isNeedWriteToSiements
-                        if not(client.get_connected()):
-                                client.connect(plcAddress, 0,0)
-                        if isNeedWriteToSiements:
-                                print "WriteToSiements"
-                                value = struct.unpack("B", str(client.db_read(dbRecv, writeToSiementsStartPosition, 1)))
-                                value = value & writeToSiementsData
-                                client.db_write(dbRecv, writeToSiementsStartPosition, bytearray(struct.pack("B", value)))
-                                isNeedWriteToSiements = False
+                        if not(plcClient.get_connected()):
+                                plcClient.connect(plcAddress, 0, 0)
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
                         firstArrayFromPLC += bytearray(struct.pack("b",skdState))
-                        firstArrayFromPLC += client.db_read(db, 0, size)
+                        firstArrayFromPLC += plcClient.db_read(db, 0, size)
                         readPLCErrors = 0
                         currentMillis = int(round(time.time()*1000))
                         if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) | (currentMillis-lastMillis>lightRead)):
