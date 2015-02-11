@@ -235,8 +235,6 @@
 
 			function turnOn() {
 				socket.emit('alarmOn', $('#pin').html());
-				showingPinEnter = false;
-				isTurnOn = false;
 				$('#pin').html("");
 			}
 			
@@ -279,6 +277,7 @@
 					$('#mainScreen').show();
 					$('#waitDoor').hide();
 					showingPinEnter = false;
+					isTurnOn=false;
 				}
 
 				$('#leftSeconds').html(data.timeLeft);
@@ -327,6 +326,7 @@
 					$("#alarmOffIcon").show();
 					manualTurnOff = false;
 					showingPinEnter = false;
+					isTurnOn=false;
 				}
 				if(data.isWaitingForInput){
 					$("#isWaitingCountdown").show();
