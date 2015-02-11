@@ -235,13 +235,11 @@
 
 			function turnOn() {
 				socket.emit('alarmOn', $('#pin').html());
+				showingPinEnter = false;
+				isTurnOn = false;
 				$('#pin').html("");
 			}
 			
-			socket.on('turnOnSuccess', function(){
-				showingPinEnter = false;
-				isTurnOn = false;
-			});
 			
 			socket.on('pinerror', function(){
 				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Неверный пинкод</h1>");
