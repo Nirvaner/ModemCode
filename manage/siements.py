@@ -117,10 +117,14 @@ def WriteToController(db, start, bit, data, size, command):
                 if bit > -1:
                         print "DBRead params " + str(db) + str(start)
                         value = int(struct.unpack("B", str(plcClient.db_read(db, start, 1)))[0])
+                        print "Value of DB " + str(value)
+                        print "Command " + str(command)
+                        print "Data " + str(data)
                         if command:
                                 value = value or data
                         else:
                                 value = value and data
+                        print "Value before command " + str(value)
                 else:
                         value = data
                 dvalue = bytearray({0,})
