@@ -260,7 +260,7 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('alarmOn', function (pin) {
+    socket.on('alarmOn', function (data) {
         var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
