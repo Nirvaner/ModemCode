@@ -90,98 +90,100 @@
 			</div>
 		</div>
 		
-		<div id="mainScreen" class="container" style="display:none;">
+		<div id="mainScreen" class="container-fluid" style="display:none;">
 			<div class="row">
+				<div class="col-xs-12" style="background-color: #3c3c3c;">
+					<div style="padding: 10px 15px;">
+							<div class="container">
+								<div class="row">
+									<div class="col-xs-10">
+										<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="objectName">Неизвестно</span></h1>
+										<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0; display:none;" id="userNameWrap">Пользователь: <span id="userName">Неизвестно</span></h1>
+									</div>
+									<div class="col-xs-2 text-right">
+										<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
 				<div class="col-xs-12">
-					<div class="panel panel-default" style="margin-bottom:0;">
-						<div class="panel-heading">
 						
-							<div style="overflow:hidden;">
-							</div>
-							<div class="row">
-								<div class="col-xs-10">
-									<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="objectName">Неизвестно</span></h1>
-									<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0; display:none;" id="userNameWrap">Пользователь: <span id="userName">Неизвестно</span></h1>
-								</div>
-								<div class="col-xs-2 text-right">
-									<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
-								</div>
-							</div>
-						</div>
 						<div id="panelBody1" class="panel-body" style="padding:1em;">
-						
-							<div class="row">
-								<div class="col-xs-6">
-									<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
-										<p class="" style="margin:0;">Отключить сигнализацию</p>
-									</button>
-									<button id='btnAlarmOn' onclick="turnOn2()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
-										<p class="" style="margin:0;">Включить сигнализацию</p>
-									</button>
+							<div class="container">
+								<div class="row">
+									<div class="col-xs-6">
+										<button id='btnAlarmOff' onclick='manualOff()'  class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
+											<p class="" style="margin:0;">Отключить сигнализацию</p>
+										</button>
+										<button id='btnAlarmOn' onclick="turnOn2()"  class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit">
+											<p class="" style="margin:0;">Включить сигнализацию</p>
+										</button>
+									</div>
+									<div class="col-xs-6">
+										<button id='showDetails' onclick="showDetails()"  class="btn btn-default btn-lg btn-block btn-info qqq-btn" type="submit">
+											<p class="" style="margin:0;">Подробнее</p>
+										</button>
+									</div>
 								</div>
-								<div class="col-xs-6">
-									<button id='showDetails' onclick="showDetails()"  class="btn btn-default btn-lg btn-block btn-info qqq-btn" type="submit">
-										<p class="" style="margin:0;">Подробнее</p>
-									</button>
+								
+								
+								<div class="row qqq-row text-center">
+									<div class="col-xs-6 qqq-row-left">
+										<h1 class="qqq-h1">Состояние двери:</h1>
+										<h1 class="qqq-h1"><mark id='doorState'>Неизвестно</mark></h1>
+										<img id="doorOpenIcon" src="img/openDoor.png" style="display:none; height:10em;"/>
+										<img id="doorCloseIcon" src="img/closedDoor.png" style="display:none; height:10em;"/>
+									</div>
+									<div class="col-xs-6 qqq-row-right">
+										<h1 class="qqq-h1">Состояние сигнализации:</h1>
+										<h1 class="qqq-h1"><mark id='alarmState'>Неизвестно</mark></h1>
+										<img id="alarmOnIcon" src="img/alarmOn.png" style="display:none; height:10em;"/>
+										<img id="alarmOffIcon" src="img/alarmOff.png" style="display:none; height:10em;"/>
+									</div>
 								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<h1 class="" style="display:none;">Состояние ввода: <mark id='isWaitingForInput'></mark></h1>
+									</div>
+									<div class="col-xs-12">
+										<h1 class="" style="display:none;">Ожидание закрытия двери: <mark id='doorWaiting'></mark></h1>
+									</div>
+									<div class="col-xs-12">
+										<h1 class="" style="display:none;">Времени до закрытия двери: <mark id='doorCloseTimeLeft'></mark></h1>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-12">&nbsp;</div>
+								</div>
+								
 							</div>
-							
-							
-							<div class="row qqq-row text-center">
-								<div class="col-xs-6 qqq-row-left">
-									<h1 class="qqq-h1">Состояние двери:</h1>
-									<h1 class="qqq-h1"><mark id='doorState'>Неизвестно</mark></h1>
-									<img id="doorOpenIcon" src="img/openDoor.png" style="display:none; height:10em;"/>
-									<img id="doorCloseIcon" src="img/closedDoor.png" style="display:none; height:10em;"/>
-								</div>
-								<div class="col-xs-6 qqq-row-right">
-									<h1 class="qqq-h1">Состояние сигнализации:</h1>
-									<h1 class="qqq-h1"><mark id='alarmState'>Неизвестно</mark></h1>
-									<img id="alarmOnIcon" src="img/alarmOn.png" style="display:none; height:10em;"/>
-									<img id="alarmOffIcon" src="img/alarmOff.png" style="display:none; height:10em;"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-12">
-									<h1 class="" style="display:none;">Состояние ввода: <mark id='isWaitingForInput'></mark></h1>
-								</div>
-								<div class="col-xs-12">
-									<h1 class="" style="display:none;">Ожидание закрытия двери: <mark id='doorWaiting'></mark></h1>
-								</div>
-								<div class="col-xs-12">
-									<h1 class="" style="display:none;">Времени до закрытия двери: <mark id='doorCloseTimeLeft'></mark></h1>
-								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-xs-12">&nbsp;</div>
-							</div>
-							
-							
 						</div>
 						
 						<div id="panelBody2" class="panel-body" style="padding:1em; display:none;">
-							<div class="row">
-								<div class="col-xs-12">&nbsp;</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-12">
-									<h1>Страница находится на этапе разработки</h1>
+							<div class="container">
+								<div class="row">
+									<div class="col-xs-12">&nbsp;</div>
 								</div>
-								<div class="col-xs-3">
+								<div class="row">
+									<div class="col-xs-12">
+										<h1>Страница находится на этапе разработки</h1>
+									</div>
+									<div class="col-xs-3">
+									</div>
+									<div class="col-xs-6">
+										<button onclick="hideDetails()" class="btn btn-default btn-lg btn-block qqq-btn btn-info" >Вернуться назад</button>
+									</div>
+									<div class="col-xs-6">
+									</div>
 								</div>
-								<div class="col-xs-6">
-									<button onclick="hideDetails()" class="btn btn-default btn-lg btn-block qqq-btn btn-info" >Вернуться назад</button>
+								<div class="row">
+									<div class="col-xs-12">&nbsp;</div>
 								</div>
-								<div class="col-xs-6">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-12">&nbsp;</div>
 							</div>
 						</div>
 						
-					</div>
 				</div>
 			</div>
 		</div>
