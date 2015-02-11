@@ -119,7 +119,7 @@ def WriteToController(db, start, bit, data, command):
                 if not(plcClient.get_connected()):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:
-                        value = struct.unpack("B", str(plcClient.db_read(db, start, 1)))
+                        value = struct.unpack("B", str(plcClient.as_db_read(db, start, 1)))
                         if command:
                                 value = value or data
                         else:
@@ -132,7 +132,7 @@ def WriteToController(db, start, bit, data, command):
                         dvalue = bytearray(struct.pack("H", value))
                 elif sys.getsizeof(value) == 4:
                         dvalue = bytearray(struct.pack("L", value))
-                plcClient.db_write(db, start, value)
+                plcClient.as_db_write(db, start, value)
                 return True
                 print "Write to siements succesfull"
         #except Exception as error:
