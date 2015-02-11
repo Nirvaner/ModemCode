@@ -121,9 +121,9 @@ def WriteToController(db, start, bit, data, size, command):
                         print "Command " + str(command)
                         print "Data " + str(data)
                         if command:
-                                value = value or data
+                                value = value | data
                         else:
-                                value = value and data
+                                value = value & data
                         print "Value before command " + str(value)
                 else:
                         value = data
