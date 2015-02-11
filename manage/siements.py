@@ -123,7 +123,7 @@ def WriteToController(db, start, bit, data, size, command):
                                 value = value and data
                 else:
                         value = data
-                dvalue = bytearray({0,1,2})
+                dvalue = bytearray({0,})
                 if size == 1:
                         dvalue = bytearray(struct.pack("B", value))
                 elif size == 2:
