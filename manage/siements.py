@@ -111,6 +111,11 @@ def WriteToController(db, start, bit, data, command):
         #try:
                 global plcClient
                 print "WriteToSiements"
+                print db
+                print start
+                print bit
+                print data
+                print command
                 if not(plcClient.get_connected()):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:

@@ -1,4 +1,4 @@
-var net = require('net');
+ var net = require('net');
 var gpio = require("gpio");
 var express = require('express');
 var _ = require('underscore')._;
@@ -284,6 +284,7 @@ io.on('connection', function (socket) {
                         }
                         else {
                             SetSignal(true);
+                            socket.emit("turnOnSuccess", 123);
                         }
                     }
                 }, 1000);
