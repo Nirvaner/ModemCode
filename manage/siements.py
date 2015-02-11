@@ -75,9 +75,9 @@ def SetSettings(s):
         for it in keyArr:
                 bytesToCheck.add(int(it))
         skd = setArr[8].split(',')
-        skdDb = skd[0]
-        skdStartPos = skd[1]
-        skdBitPos = skd[2]
+        skdDb = int(skd[0])
+        skdStartPos = int(skd[1])
+        skdBitPos = int(skd[2])
         global isSet
         global firstArrayFromPLC
         global secondArrayForCheck
@@ -115,6 +115,7 @@ def WriteToController(db, start, bit, data, command):
                 if not(plcClient.get_connected()):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:
+                        print "DBRead params " + str(db) + str(start)
                         value = struct.unpack("B", str(plcClient.db_read(db, start, 1)))
                         if command:
                                 value = value or data
