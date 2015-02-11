@@ -260,24 +260,34 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('alarmOn', function () {
-        doorCloseTimeLeft = 60;
-        if (!startedAlarmOnInterval) {
-            startedAlarmOnInterval = true;
-            blinkLight();
-            waitingForDoorCloseInterval = setInterval(function () {
-                doorCloseTimeLeft--;
-                if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
-                if (doorCloseTimeLeft < 1) {
-                    if (doorState == "0"){
-                        socket.emit("unableToSetSignal", 123);
-                        SetSignal(false);
+    socket.on('alarmOn', function (pin) {
+        var userPin = _.find(skdUsers, function (subElem) {
+            return subElem.Pin == data;
+        });
+        if (userPin == null) {
+            console.log("Неверный пин");
+            socket.emit("pinerror",123);
+            return;
+        }
+        else{
+            doorCloseTimeLeft = 60;
+            if (!startedAlarmOnInterval) {
+                startedAlarmOnInterval = true;
+                blinkLight();
+                waitingForDoorCloseInterval = setInterval(function () {
+                    doorCloseTimeLeft--;
+                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
+                    if (doorCloseTimeLeft < 1) {
+                        if (doorState == "0"){
+                            socket.emit("unableToSetSignal", 123);
+                            SetSignal(false);
+                        }
+                        else {
+                            SetSignal(true);
+                        }
                     }
-                    else {
-                        SetSignal(true);
-                    }
-                }
-            }, 1000);
+                }, 1000);
+            }
         }
     });
 
