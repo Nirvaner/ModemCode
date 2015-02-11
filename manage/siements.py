@@ -124,6 +124,7 @@ def WriteToController(db, start, bit, data, command):
                 else:
                         value = data
                 print "Value size is " + str(sys.getsizeof(value))
+                print "Value is " + str(value)
                 if sys.getsizeof(value) == 1:
                         dvalue = bytearray(struct.pack("B", value))
                 elif sys.getsizeof(value) == 2:
