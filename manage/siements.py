@@ -101,11 +101,11 @@ def SetSkdState(state):
                 skdState = skdState | 4
         print "New skdState is " + str(skdState)
         if ((state[0] == "0") and (state[1] == "1")) or (state[2] == "1"):
-                WriteToController(skdDb, skdStartPos, skdBitPos, 1, True)
+                WriteToController(skdDb, skdStartPos, skdBitPos, 1, 1, True)
         else:
-                WriteToController(skdDb, skdStartPos, skdBitPos, int("11111110", 2), False)   
+                WriteToController(skdDb, skdStartPos, skdBitPos, int("11111110", 2), 1, False)   
 
-def WriteToController(db, start, bit, data, command):
+def WriteToController(db, start, bit, data, size, command):
         #try:
                 global plcAddress
                 plcClient = snap7.client.Client()
@@ -123,14 +123,12 @@ def WriteToController(db, start, bit, data, command):
                                 value = value and data
                 else:
                         value = data
-                print "Value size is " + str(sys.getsizeof(value))
-                print "Value is " + str(value)
                 dvalue = bytearray({0,1,2})
-                if sys.getsizeof(value) == 1:
+                if size == 1:
                         dvalue = bytearray(struct.pack("B", value))
-                elif sys.getsizeof(value) == 2:
+                elif size == 2:
                         dvalue = bytearray(struct.pack("H", value))
-                elif sys.getsizeof(value) == 4:
+                elif size == 4:
                         dvalue = bytearray(struct.pack("L", value))
                 plcClient.db_write(db, start, dvalue)
                 return True
