@@ -25,7 +25,7 @@
 					volume: 1.0
 				});
 				
-				$('#myModal').modal({backdrop: 'static'});
+				
 
 
 			});
@@ -240,12 +240,12 @@
 			
 			socket.on('pinerror', function(){
 				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Неверный пинкод</h1>");
-				$('#myModal').modal('show');
+				$('#myModal').modal({backdrop: 'static'});
 			});
 			
 			socket.on('unableToSetSignal', function(){
 				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Невозможно установить сигнализацию</h1><h1 class='qqq-h1 text-center'>Закройте дверь!</h1>");
-				$('#myModal').modal('show');
+				$('#myModal').modal({backdrop: 'static'});
 			});
 
 			socket.on('time', function (data) {
