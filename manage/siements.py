@@ -48,8 +48,6 @@ q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
-plcClient = snap7.client.Client()
-
 def SetSettings(s):
         print "SetSettings: " + s
         setArr = s.split('|')
@@ -109,13 +107,10 @@ def SetSkdState(state):
 
 def WriteToController(db, start, bit, data, command):
         #try:
-                global plcClient
+                plcClient = snap7.client.Client()
+                if not(plcClient.get_connected()):
+                                plcClient.connect(plcAddress, 0, 0)
                 print "WriteToSiements"
-                print db
-                print start
-                print bit
-                print data
-                print command
                 if not(plcClient.get_connected()):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:
@@ -136,6 +131,7 @@ def WriteToController(db, start, bit, data, command):
                 plcClient.db_write(db, start, dvalue)
                 return True
                 print "Write to siements succesfull"
+                plcClient.disconnect()
         #except Exception as error:
                 #pass
                 #sys.exc_clear()
@@ -199,7 +195,7 @@ def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
         return False
 
 def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
-        global plcClient
+        plcClient = snap7.client.Client()
         currentMillis=0
         lastMillis=0
         readPLCErrors=0
