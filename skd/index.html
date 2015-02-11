@@ -56,7 +56,7 @@
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Внимание!</h4>
+				<h4 class="modal-title text-center" id="myModalLabel">Внимание!</h4>
 			  </div>
 			  <div class="modal-body">
 				...
@@ -225,6 +225,8 @@
 			
 			function manualOffCancel(){
 				manualTurnOff = false;
+				showingPinEnter = false;
+				isTurnOn = false;
 			}
 
 			function turnOn() {
@@ -235,12 +237,12 @@
 			}
 			
 			socket.on('pinerror', function(){
-				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1'>Неверный пинкод</h1>");
+				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Неверный пинкод</h1>");
 				$('#myModal').modal('show');
 			});
 			
 			socket.on('unableToSetSignal', function(){
-				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1'>Невозможно установить сигнализацию</h1><h1 class='qqq-h1'>Закройте дверь!</h1>");
+				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Невозможно установить сигнализацию</h1><h1 class='qqq-h1 text-center'>Закройте дверь!</h1>");
 				$('#myModal').modal('show');
 			});
 
@@ -324,9 +326,11 @@
 				}
 				if(data.isWaitingForInput){
 					$("#isWaitingCountdown").show();
+					$("#enterPincodeTitle").hide();
 				}
 				else{
 					$("#isWaitingCountdown").hide();
+					$("#enterPincodeTitle").show();
 				}
 				$('#isWaitingForInput').html(data.isWaitingForInput);
 				if (data.doorWaiting) {
@@ -364,6 +368,11 @@
 					<h1 class="qqq-h1 text-danger pull-left">Дверь была открыта, введите пинкод. Осталось: </h1>
 					<h1 id="leftSeconds" class="qqq-h1 text-danger pull-left">60</h1>
 					<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
+				</div>
+			</div>
+			<div id="enterPincodeTitle" class="row">
+				<div class="col-xs-12">
+					<h1 class="qqq-h1 text-danger text-center">Введите пинкод </h1>
 				</div>
 			</div>
 			<div class="row">
