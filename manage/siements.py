@@ -106,7 +106,7 @@ def SetSkdState(state):
                 WriteToController(skdDb, skdStartPos, skdBitPos, int("11111110", 2), 1, False)   
 
 def WriteToController(db, start, bit, data, size, command):
-        #try:
+        try:
                 global plcAddress
                 plcClient = snap7.client.Client()
                 if not(plcClient.get_connected()):
@@ -138,18 +138,18 @@ def WriteToController(db, start, bit, data, size, command):
                 return True
                 print "Write to siements succesfull"
                 plcClient.disconnect()
-        #except Exception as error:
-                #pass
-                #sys.exc_clear()
-                #print error
-                #return False
+        except Exception as error:
+                pass
+                sys.exc_clear()
+                print error
+                return False
 
 def EventsReceiver(skdState):
         server = socket.socket()
         server.bind(("", 10002))
         server.listen(3)
         while True:
-                #try:
+                try:
                         skdSock, addr = server.accept()
                         command = skdSock.recv(512).strip('\0')
                         skdSock.close()
@@ -166,10 +166,10 @@ def EventsReceiver(skdState):
                                 writeToSiementsData = writeArr[1]
                                 isNeedWriteToSiements = True
 
-                #except Exception as error:
-                        #pass
-                        #sys.exc_clear()
-                        #print error
+                except Exception as error:
+                        pass
+                        sys.exc_clear()
+                        print error
 
 def SendBufferToServer(buf):
         try:
