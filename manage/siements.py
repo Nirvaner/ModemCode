@@ -108,7 +108,7 @@ def SetSkdState(state):
                 WriteToController(skdDb, skdStartPos, skdBitPos, int("11111110", 2), False)   
 
 def WriteToController(db, start, bit, data, command):
-        try:
+        #try:
                 global plcClient
                 print "WriteToSiements"
                 if not(plcClient.get_connected()):
@@ -129,11 +129,12 @@ def WriteToController(db, start, bit, data, command):
                         dvalue = bytearray(struct.pack("L", value))
                 plcClient.db_write(db, start, value)
                 return True
-        except Exception as error:
-                pass
-                sys.exc_clear()
-                print error
-                return False
+                print "Write to siements succesfull"
+        #except Exception as error:
+                #pass
+                #sys.exc_clear()
+                #print error
+                #return False
 
 def EventsReceiver(skdState):
         server = socket.socket()
