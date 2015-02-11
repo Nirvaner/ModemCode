@@ -107,6 +107,7 @@ def SetSkdState(state):
 
 def WriteToController(db, start, bit, data, command):
         #try:
+                global plcAddress
                 plcClient = snap7.client.Client()
                 if not(plcClient.get_connected()):
                                 plcClient.connect(plcAddress, 0, 0)
