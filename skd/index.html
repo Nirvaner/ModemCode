@@ -16,6 +16,11 @@
 		<script src="js/ion.sound.js"></script>
 		
 		<script>
+				var clickOrTouch = '';
+				
+		</script>
+		
+		<script>
 			
 			var socket = io();
 			
@@ -27,7 +32,7 @@
 				console.log('data.doorState - '+data.doorState);
 				console.log('data.alarmState - '+data.alarmState);
 				console.log('data.facilityName - '+data.facilityName);
-				
+				setDoorState(data.doorState);
 			});
 			
 			socket.on('enterPin',function(){
@@ -94,8 +99,7 @@
 			$(document).ready(function(){
 				
 				hideAllWidgets();
-				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
-				console.log("program selected - "+clickOrTouch);
+				defineDevice();
 			
 				ion.sound({
 					sounds: [
@@ -166,6 +170,48 @@
 				$('#countdown-widget').hide();
 			}
 			
+			function defineDevice(){
+				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
+				console.log("program selected - "+clickOrTouch);
+			}
+			
+			function setDoorState(state){
+				console.log('setDoorState - '+state);
+				if(state==1){
+					//Тут закрыто
+					$('#doorStateLabel1').html('Закрыта');
+					$('#doorOpenIcon1').hide();
+					$('#doorCloseIcon1').show();
+					$('#doorUndefinedIcon1').hide();
+					$('#doorStateLabel2').html('Закрыта');
+					$('#doorOpenIcon2').hide();
+					$('#doorCloseIcon2').show();
+					$('#doorUndefinedIcon2').hide();
+				}
+				else if(state==0){
+					//Тут открыто
+					$('#doorStateLabel1').html('Открыта');
+					$('#doorOpenIcon1').show();
+					$('#doorCloseIcon1').hide();
+					$('#doorUndefinedIcon1').hide();
+					$('#doorStateLabel2').html('Открыта');
+					$('#doorOpenIcon2').show();
+					$('#doorCloseIcon2').hide();
+					$('#doorUndefinedIcon2').hide();
+				}
+				else{
+					//Тут непонятно
+					$('#doorStateLabel1').html('Не определено');
+					$('#doorOpenIcon1').show();
+					$('#doorCloseIcon1').hide();
+					$('#doorUndefinedIcon1').hide();
+					$('#doorStateLabel2').html('Не определено');
+					$('#doorOpenIcon2').show();
+					$('#doorCloseIcon2').hide();
+					$('#doorUndefinedIcon2').hide();
+				}
+			}
+			
 			
 		</script>
 		
@@ -207,10 +253,10 @@
 				<div class="row qqq-row text-center">
 					<div class="col-xs-6 qqq-row-left">
 						<h1 class="qqq-h1">Состояние двери:</h1>
-						<h1 class="qqq-h1"><mark id='__'>Неизвестно</mark></h1>
-						<img id="doorOpenIcon" src="img/openDoor.png" style="height:10em;"/>
-						<img id="doorCloseIcon" src="img/closedDoor.png" style="height:10em;"/>
-						<img id="doorUndefinedIcon" src="img/warning.png" style="height:10em;"/>
+						<h1 class="qqq-h1"><mark id='doorStateLabel1'>Неизвестно</mark></h1>
+						<img id="doorOpenIcon1" src="img/openDoor.png" style="height:10em;"/>
+						<img id="doorCloseIcon1" src="img/closedDoor.png" style="height:10em;"/>
+						<img id="doorUndefinedIcon1" src="img/warning.png" style="height:10em;"/>
 					</div>
 					<div class="col-xs-6 qqq-row-right">
 						<h1 class="qqq-h1">Состояние сигнализации:</h1>
@@ -322,10 +368,10 @@
 					</div>
 					<div class="col-xs-12">
 						<h1 class="qqq-h1">Состояние двери:</h1>
-						<h1 class="qqq-h1"><mark id='__'>Неизвестно</mark></h1>
-						<img id="doorOpenIcon1" src="img/openDoor.png" style="height:10em;"/>
-						<img id="doorCloseIcon1" src="img/closedDoor.png" style="height:10em;"/>
-						<img id="doorUndefinedIcon1" src="img/warning.png" style="height:10em;"/>
+						<h1 class="qqq-h1"><mark id='doorStateLabel2'>Неизвестно</mark></h1>
+						<img id="doorOpenIcon2" src="img/openDoor.png" style="height:10em;"/>
+						<img id="doorCloseIcon2" src="img/closedDoor.png" style="height:10em;"/>
+						<img id="doorUndefinedIcon2" src="img/warning.png" style="height:10em;"/>
 					</div>
 					<div class="col-xs-6">
 						<button id="__" class="btn btn-default btn-lg btn-block btn-danger qqq-btn">Отмена</button>
