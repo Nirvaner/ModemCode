@@ -42,6 +42,10 @@
 			
 			socket.on('enterPin',function(){
 				//Сервер требует пинкод
+				hideAllWidgets();
+				$('#pincode-widget').show();
+				$('#pinWarningMessage').hide();
+				$('#pinEnterMessage').show();
 			});
 			
 			socket.on('pinFalse',function(){
@@ -74,16 +78,19 @@
 			
 			function turnAlarmOn(){
 				//Запрос на активацию сигнализации
+				console.log('turnAlarmOn()');
 				socket.emit('turnAlarmOn',123);
 			}
 			
 			function turnAlarmOff(){
 				//Запрос на деактивацию сигнализации
+				console.log('turnAlarmOff()');
 				socket.emit('turnAlarmOff',123);
 			}
 			
 			function submitPin(data){
 				//Запрос на проверку пинкода DATA - пинкод
+				console.log('submitPin()');
 				socket.emit('submitPin',data);
 			}
 			
@@ -127,10 +134,12 @@
 				
 				$('#turnOffAlarmButton').on(clickOrTouch, function(){
 					//Нажата кнопка деактивации сигнализации
+					turnAlarmOff();
 				});
 				
 				$('#turnOnAlarmButton').on(clickOrTouch, function(){
 					//Нажата кнопка активации сигнализации
+					turnAlarmOn();
 				});
 				
 				$('#clearPinButton').on(clickOrTouch, function(){
@@ -342,14 +351,14 @@
 		
 		<div id="pincode-widget" style="padding: 1em;">
 			<div class="container">
-				<div id="__" class="row">
+				<div id="pinWarningMessage" class="row">
 					<div class="col-xs-12">
 						<h1 class="qqq-h1 text-danger pull-left">Дверь была открыта, введите пинкод. Осталось: </h1>
 						<h1 id="__" class="qqq-h1 text-danger pull-left">60</h1>
 						<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
 					</div>
 				</div>
-				<div id="__" class="row">
+				<div id="pinEnterMessage" class="row">
 					<div class="col-xs-12">
 						<h1 class="qqq-h1 text-danger text-center">Введите пинкод </h1>
 					</div>
