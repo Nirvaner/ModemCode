@@ -224,6 +224,12 @@ io.on('connection', function (socket) {
 		alarmState: alarmSet,
 		facilityName: objectName
 	});
+	socket.on('turnAlarmOn', {
+		socket.emit('enterPin',123);
+	});
+	socket.on('turnAlarmOff', {
+		socket.emit('enterPin',123);
+	});
 	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
