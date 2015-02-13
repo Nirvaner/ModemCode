@@ -224,10 +224,10 @@ io.on('connection', function (socket) {
 		alarmState: alarmSet,
 		facilityName: objectName
 	});
-	socket.on('turnAlarmOn', {
+	socket.on('turnAlarmOn', function(){
 		socket.emit('enterPin',123);
 	});
-	socket.on('turnAlarmOff', {
+	socket.on('turnAlarmOff', function(){
 		socket.emit('enterPin',123);
 	});
 	/*/My codes*/
