@@ -29,9 +29,7 @@
 				//data.doorState (1 - закрыто | 0 - открыто | undefined)
 				//data.alarmState (false - деактивирована | true - активирована)
 				//data.facilityName
-				console.log('data.doorState - '+data.doorState);
-				console.log('data.alarmState - '+data.alarmState);
-				console.log('data.facilityName - '+data.facilityName);
+				console.log('socket.on(currentState,...)');
 				setDoorState(data.doorState);
 				setAlarmState(data.alarmState);
 				setFacilityName(data.facilityName);
@@ -42,6 +40,7 @@
 			
 			socket.on('enterPin',function(){
 				//Сервер требует пинкод
+				console.log('socket.on(enterPin)');
 				hideAllWidgets();
 				$('#pincode-widget').show();
 				$('#pinWarningMessage').hide();
@@ -50,6 +49,7 @@
 			
 			socket.on('pinFalse',function(){
 				//Значит пинкод неверный
+				console.log('socket.on(pinFalse)');
 				$('#pincodeValue').html('');
 				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Неверный пинкод</h1>");
 				$('#myModal').modal({backdrop: 'static'});
@@ -57,7 +57,7 @@
 			
 			socket.on('alarmDeactivated',function(data){
 				//Сигнализация деактивирована DATA - userName
-				console.log(data);
+				console.log('socket.on(alarmDeactivated, "'+data+'")');
 				hideAllWidgets();
 				setAlarmState(false);
 				$('#header-widget').show();
@@ -70,7 +70,7 @@
 			
 			socket.on('alarmActivateAfter',function(data){
 				//Сигнализация активируется через DATA секунд
-				console.log(data);
+				console.log('socket.on(alarmActivateAfter, "'+data+'")');
 				hideAllWidgets();
 				$('#countdown-widget').show();
 				$('#alarmActivationTime').html(data);
@@ -78,7 +78,7 @@
 			
 			socket.on('alarmActivated',function(){
 				//Сигнализация активирована
-				console.log('alarm activated');
+				console.log('socket.on(alarmActivated)');
 				hideAllWidgets();
 				setAlarmState(true);
 				$('#header-widget').show();
@@ -88,7 +88,7 @@
 			
 			socket.on('alarmActivationFailed',function(){
 				//Сигнализация не активирована
-				console.log(data);
+				console.log('socket.on(alarmActivationFailed)');
 				hideAllWidgets();
 				$('#header-widget').show();
 				$('#body-widget').show();
@@ -122,17 +122,19 @@
 			
 			function submitPin(data){
 				//Запрос на проверку пинкода DATA - пинкод
-				console.log('submitPin()');
+				console.log('submitPin("'+data+'")');
 				socket.emit('submitPin',data);
 			}
 			
 			function cancelAlarmActivation(){
 				//Запрос отмены активации сигнализации
+				console.log('cancelAlarmActivation()');
 				socket.emit('cancelAlarmActivation',123);
 			}
 			
 			function forcedAlarmActivation(){
 				//Запрос немедленной активации сигнализации
+				console.log('forcedAlarmActivation()');
 				socket.emit('forcedAlarmActivation',123);
 			}
 			
@@ -144,7 +146,7 @@
 				
 				hideAllWidgets();
 				defineDevice();
-			
+				
 				ion.sound({
 					sounds: [
 						{name: "water_droplet"}
@@ -156,36 +158,43 @@
 				
 				$('.btn').on(clickOrTouch, function(){
 					//Нажата любая кнопка
+					console.log('$(".btn").on(clickOrTouch())');
 					ion.sound.play("water_droplet");
 				});
 				
 				$('.digit').on(clickOrTouch, function(){
 					//Нажата цифра
+					console.log('$(".digit").on(clickOrTouch())');
 					$('#pincodeValue').append($(this).html().trim());
 				});
 				
 				$('#turnOffAlarmButton').on(clickOrTouch, function(){
 					//Нажата кнопка деактивации сигнализации
+					console.log('$("#turnOffAlarmButton").on(clickOrTouch())');
 					turnAlarmOff();
 				});
 				
 				$('#turnOnAlarmButton').on(clickOrTouch, function(){
 					//Нажата кнопка активации сигнализации
+					console.log('$("#turnOnAlarmButton").on(clickOrTouch())');
 					turnAlarmOn();
 				});
 				
 				$('#clearPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка очистки пинкода
+					console.log('$("#clearPinButton").on(clickOrTouch())');
 					$('#pincodeValue').html('');
 				});
 				
 				$('#backspacePinButton').on(clickOrTouch, function(){
 					//Нажата кнопка удаления последнего символа пинкода
+					console.log('$("#backspacePinButton").on(clickOrTouch())');
 					$('#pincodeValue').html($('#pincodeValue').html().slice(0,-1));
 				});
 				
 				$('#cancelPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка отмены ввода пинкода
+					console.log('$("#cancelPinButton").on(clickOrTouch())');
 					$('#pincodeValue').html('');
 					hideAllWidgets();
 					$('#header-widget').show();
@@ -194,6 +203,7 @@
 				
 				$('#okPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка подтверждения пинкода
+					console.log('$("#okPinButton").on(clickOrTouch())');
 					var pin = $('#pincodeValue').html();
 					submitPin(pin);
 					$('#pincodeValue').html('');
@@ -201,10 +211,12 @@
 				
 				$('#cancelAlarmActivationButton').on(clickOrTouch, function(){
 					//Нажата кнопка отмены активации сигнализации
+					console.log('$("#cancelAlarmActivationButton").on(clickOrTouch())');
 				});
 				
 				$('#forcedAlarmActivationButton').on(clickOrTouch, function(){
 					//Нажата кнопка немедленной активации сигнализации
+					console.log('$("#forcedAlarmActivationButton").on(clickOrTouch())');
 				});
 				
 				
@@ -222,11 +234,11 @@
 			
 			function defineDevice(){
 				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
-				console.log("defineDevice() - "+clickOrTouch);
+				console.log('defineDevice("'+clickOrTouch+'")');
 			}
 			
 			function setDoorState(state){
-				console.log('setDoorState() - '+state);
+				console.log('setDoorState("'+state+'")');
 				if(state==1){
 					//Тут закрыто
 					$('#doorStateLabel1').html('Закрыта');
@@ -263,7 +275,7 @@
 			}
 			
 			function setAlarmState(state){
-				console.log('setAlarmState() - '+state);
+				console.log('setAlarmState("'+state+'")');
 				if(state){
 					//Тут активирована
 					$('#alarmStateLabel1').html('Установлена');
@@ -297,10 +309,9 @@
 			}
 			
 			function setFacilityName(facilityName){
-				console.log('setFacilityName() - '+facilityName);
+				console.log('setFacilityName("'+facilityName+'")');
 				$('#facilityName').html(facilityName);
 			}
-			
 			
 			
 		</script>
