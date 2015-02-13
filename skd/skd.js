@@ -234,11 +234,14 @@ io.on('connection', function (socket) {
 		var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
-        if (userPin == null) {
+        if(userPin == null){
             console.log("Неверный пин");
-			socket.emit("pinFalse",123);
+			socket.broadcast.emit("pinFalse",123);
             return;
         }
+		else if(){
+			
+		}
 		
 	});
 	/*/My codes*/
@@ -259,7 +262,7 @@ io.on('connection', function (socket) {
         clearInterval(showWaitingTimer);
     });
 
-    socket.on('pin', function (data) {
+    socket.on('pin', function (data) {//Здесь Мы Выключаем Сигналку
         var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
@@ -285,7 +288,7 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('alarmOn', function (data) {
+    socket.on('alarmOn', function (data) {//Здесь Мы Включаем Сигналку
         var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
