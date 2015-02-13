@@ -116,6 +116,11 @@ var gpio11 = gpio.export(17, {
         }
         gpio11.on("change", function (val) {
             doorState = val;
+			/*My Codes*/
+			if (savedSocket) {
+				savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
+			}
+			/*/My Codes*/
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (val == 0) {
                 console.log("Открыли дверь");
@@ -287,9 +292,13 @@ io.on('connection', function (socket) {
 	});
 	socket.on('cancelAlarmActivation', function(){
 		SetSignal(false);
+		socket.emit('alarmActivationCancelled', 123);
+		socket.broadcast.emit('alarmActivationCancelled', 123);
 	});
 	socket.on('forcedAlarmActivation', function(){
 		SetSignal(true);
+		socket.emit('alarmActivated', 123);
+		socket.broadcast.emit('alarmActivated', 123);
 	});
 	/*/My codes*/
 
