@@ -34,6 +34,7 @@
 				console.log('data.facilityName - '+data.facilityName);
 				setDoorState(data.doorState);
 				setAlarmState(data.alarmState);
+				setFacilityName(data.facilityName);
 			});
 			
 			socket.on('enterPin',function(){
@@ -247,6 +248,11 @@
 				}
 			}
 			
+			function setFacilityName(facilityName){
+				console.log('setFacilityName() - '+facilityName);
+				$('#facilityName').html(facilityName);
+			}
+			
 		</script>
 		
 	</head>
@@ -256,7 +262,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="__">Неизвестно</span></h1>
+						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="facilityName">Неизвестно</span></h1>
 						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="userNameH1">Пользователь: <span id="__">Неизвестно</span></h1>
 					</div>
 					<div class="col-xs-2 text-right">
