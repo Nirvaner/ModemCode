@@ -50,6 +50,9 @@
 			
 			socket.on('pinFalse',function(){
 				//Значит пинкод неверный
+				$('#pincodeValue').html('');
+				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Неверный пинкод</h1>");
+				$('#myModal').modal({backdrop: 'static'});
 			});
 			
 			socket.on('alarmDeactivated',function(data){
@@ -154,6 +157,7 @@
 				
 				$('#cancelPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка отмены ввода пинкода
+					$('#pincodeValue').html('');
 					hideAllWidgets();
 					$('#header-widget').show();
 					$('#body-widget').show();
@@ -161,6 +165,7 @@
 				
 				$('#okPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка подтверждения пинкода
+					submitPin($('#pincodeValue').html());
 				});
 				
 				$('#cancelAlarmActivationButton').on(clickOrTouch, function(){
@@ -409,7 +414,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-4" ><button class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Ok</button></div>
+					<div class="col-xs-4" ><button id="okPinButton" class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Ok</button></div>
 				</div>
 			</div>
 		</div>

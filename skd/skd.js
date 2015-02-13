@@ -230,6 +230,17 @@ io.on('connection', function (socket) {
 	socket.on('turnAlarmOff', function(){
 		socket.emit('enterPin',123);
 	});
+	socket.on('submitPin', function(data){
+		var userPin = _.find(skdUsers, function (subElem) {
+            return subElem.Pin == data;
+        });
+        if (userPin == null) {
+            console.log("Неверный пин");
+			socket.emit("pinFalse",123);
+            return;
+        }
+		
+	});
 	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
