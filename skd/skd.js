@@ -217,6 +217,14 @@ server.listen(port, function () {
 io.on('connection', function (socket) {
     console.log('Connected client');
     savedSocket = socket;
+	
+	/*My codes*/
+	socket.emit('currentState', {
+		doorState: doorState,
+		alarmState: alarmSet,
+		facilityName: objectName
+	});
+	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
         socket.emit('time', {

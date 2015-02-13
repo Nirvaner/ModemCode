@@ -24,6 +24,10 @@
 				//data.doorState
 				//data.alarmState
 				//data.facilityName
+				console.log('data.doorState - '+data.doorState);
+				console.log('data.alarmState - '+data.alarmState);
+				console.log('data.facilityName - '+data.facilityName);
+				
 			});
 			
 			socket.on('enterPin',function(){
@@ -89,6 +93,7 @@
 			
 			$(document).ready(function(){
 				
+				hideAllWidgets();
 				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
 				console.log("program selected - "+clickOrTouch);
 			
