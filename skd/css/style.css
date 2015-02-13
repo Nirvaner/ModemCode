@@ -1,8 +1,6 @@
 .qqq-btn{
 	font-size: 2.5em;
-}
-.qqq-btn2{
-	font-size: 2.15em;
+	padding: 0.4em;
 }
 .qqq-h1{
 	font-size: 2.5em;
@@ -19,7 +17,7 @@
 	border-right: 1px solid black;
 }
 .qqq-well{
-	padding:20px;
+	padding: 1.42em;
 }
 @media screen and (max-width: 640px) {
 	body{
