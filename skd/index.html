@@ -26,13 +26,14 @@
 			
 			socket.on('currentState',function(data){
 				//Получение первичных настроек, при подключении к серверу
-				//data.doorState (1 - закрыто | 0 - открыто)
+				//data.doorState (1 - закрыто | 0 - открыто | undefined)
 				//data.alarmState (false - деактивирована | true - активирована)
 				//data.facilityName
 				console.log('data.doorState - '+data.doorState);
 				console.log('data.alarmState - '+data.alarmState);
 				console.log('data.facilityName - '+data.facilityName);
 				setDoorState(data.doorState);
+				setAlarmState(data.alarmState);
 			});
 			
 			socket.on('enterPin',function(){
@@ -212,6 +213,39 @@
 				}
 			}
 			
+			function setAlarmState(state){
+				console.log('setAlarmState() - '+state);
+				if(state){
+					//Тут активирована
+					$('#alarmStateLabel1').html('Установлена');
+					$('#alarmOnIcon1').show();
+					$('#alarmOffIcon1').hide();
+					$('#alarmUndefinedIcon1').hide();
+					$('#turnOnAlarmButton').hide();
+					$('#turnOffAlarmButton').show();
+					$('#userNameH1').hide();
+				}
+				else if(!state){
+					//Тут деактивирована
+					$('#alarmStateLabel1').html('Снято');
+					$('#alarmOnIcon1').hide();
+					$('#alarmOffIcon1').show();
+					$('#alarmUndefinedIcon1').hide();
+					$('#turnOnAlarmButton').show();
+					$('#turnOffAlarmButton').hide();
+					$('#userNameH1').show();
+				}
+				else{
+					//Тут непонятно
+					$('#alarmStateLabel1').html('Не определено');
+					$('#alarmOnIcon1').hide();
+					$('#alarmOffIcon1').hide();
+					$('#alarmUndefinedIcon1').show();
+					$('#turnOnAlarmButton').hide();
+					$('#turnOffAlarmButton').hide();
+					$('#userNameH1').hide();
+				}
+			}
 			
 		</script>
 		
@@ -223,7 +257,7 @@
 				<div class="row">
 					<div class="col-xs-10">
 						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="__">Неизвестно</span></h1>
-						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="__">Пользователь: <span id="__">Неизвестно</span></h1>
+						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="userNameH1">Пользователь: <span id="__">Неизвестно</span></h1>
 					</div>
 					<div class="col-xs-2 text-right">
 						<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
@@ -236,10 +270,10 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-6">
-						<button id='__' class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
+						<button id='turnOffAlarmButton' class="btn btn-default btn-lg btn-block btn-danger qqq-btn" type="submit">
 							<p style="margin:0;">Отключить сигнализацию</p>
 						</button>
-						<button id='__' class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit" style="margin-top: 0px;">
+						<button id='turnOnAlarmButton' class="btn btn-default btn-lg btn-block btn-success qqq-btn" type="submit" style="margin-top: 0px;">
 							<p style="margin:0;">Включить сигнализацию</p>
 						</button>
 					</div>
@@ -260,10 +294,10 @@
 					</div>
 					<div class="col-xs-6 qqq-row-right">
 						<h1 class="qqq-h1">Состояние сигнализации:</h1>
-						<h1 class="qqq-h1"><mark id='__'>Неизвестно</mark></h1>
-						<img id="alarmOnIcon" src="img/alarmOn.png" style="height:10em;"/>
-						<img id="alarmOffIcon" src="img/alarmOff.png" style="height:10em;"/>
-						<img id="alarmUndefinedIcon" src="img/warning.png" style="height:10em;"/>
+						<h1 class="qqq-h1"><mark id='alarmStateLabel1'>Неизвестно</mark></h1>
+						<img id="alarmOnIcon1" src="img/alarmOn.png" style="height:10em;"/>
+						<img id="alarmOffIcon1" src="img/alarmOff.png" style="height:10em;"/>
+						<img id="alarmUndefinedIcon1" src="img/warning.png" style="height:10em;"/>
 					</div>
 				</div>
 			</div>
