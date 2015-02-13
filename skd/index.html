@@ -16,8 +16,7 @@
 		<script src="js/ion.sound.js"></script>
 		
 		<script>
-				var clickOrTouch = '';
-				
+			var clickOrTouch = '';
 		</script>
 		
 		<script>
@@ -45,6 +44,7 @@
 				$('#pincode-widget').show();
 				$('#pinWarningMessage').hide();
 				$('#pinEnterMessage').show();
+				$('#cancelPinButton').removeAttr("disabled","disabled");
 			});
 			
 			socket.on('pinFalse',function(){
@@ -99,16 +99,26 @@
 			socket.on('alarmActivationCancelled',function(){
 				//Активация сигнализации отменена
 				console.log('socket.on("alarmActivationCancelled")');
+				hideAllWidgets();
+				$('#header-widget').show();
+				$('#body-widget').show();
 			});
 			
 			socket.on('doorIsClosed',function(data){
 				//Состояние двери изменилось DATA - TRUE/FALSE
 				console.log('socket.on("doorIsClosed", "'+data+'")');
+				setDoorState(data);
 			});
 			
 			socket.on('dieAfter',function(data){
 				//Запуск сирены через DATA секунд
 				console.log('socket.on("dieAfter", "'+data+'")');
+				hideAllWidgets();
+				$('#pincode-widget').show();
+				$('#pinWarningMessage').show();
+				$('#pinEnterMessage').hide();
+				$('#dieAfterTime').html(data);
+				$('#cancelPinButton').attr("disabled","disabled");
 			});
 			
 			function turnAlarmOn(){
@@ -216,11 +226,13 @@
 				$('#cancelAlarmActivationButton').on(clickOrTouch, function(){
 					//Нажата кнопка отмены активации сигнализации
 					console.log('$("#cancelAlarmActivationButton").on(clickOrTouch())');
+					cancelAlarmActivation();
 				});
 				
 				$('#forcedAlarmActivationButton').on(clickOrTouch, function(){
 					//Нажата кнопка немедленной активации сигнализации
 					console.log('$("#forcedAlarmActivationButton").on(clickOrTouch())');
+					forcedAlarmActivation();
 				});
 				
 				
@@ -405,7 +417,7 @@
 				<div id="pinWarningMessage" class="row">
 					<div class="col-xs-12">
 						<h1 class="qqq-h1 text-danger pull-left">Дверь была открыта, введите пинкод. Осталось: </h1>
-						<h1 id="__" class="qqq-h1 text-danger pull-left">60</h1>
+						<h1 id="dieAfterTime" class="qqq-h1 text-danger pull-left">60</h1>
 						<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
 					</div>
 				</div>
@@ -479,10 +491,10 @@
 						<img id="doorUndefinedIcon2" src="img/warning.png" style="height:10em;"/>
 					</div>
 					<div class="col-xs-6">
-						<button id="__" class="btn btn-default btn-lg btn-block btn-danger qqq-btn">Отмена</button>
+						<button id="cancelAlarmActivationButton" class="btn btn-default btn-lg btn-block btn-danger qqq-btn">Отмена</button>
 					</div>
 					<div class="col-xs-6">
-						<button id="__" class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
+						<button id="forcedAlarmActivationButton" class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
 					</div>
 				</div>
 			</div>

@@ -285,6 +285,12 @@ io.on('connection', function (socket) {
 		}
 		
 	});
+	socket.on('cancelAlarmActivation', function(){
+		SetSignal(false);
+	});
+	socket.on('forcedAlarmActivation', function(){
+		SetSignal(true);
+	});
 	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
