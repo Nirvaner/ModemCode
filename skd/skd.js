@@ -119,6 +119,7 @@ var gpio11 = gpio.export(17, {
 			/*My Codes*/
 			if (savedSocket) {
 				savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
+				savedSocket.emit('doorIsClosed', gpio11.value);
 			}
 			/*/My Codes*/
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
