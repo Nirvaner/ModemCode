@@ -57,14 +57,43 @@
 			
 			socket.on('alarmDeactivated',function(data){
 				//Сигнализация деактивирована DATA - userName
+				console.log(data);
+				hideAllWidgets();
+				setAlarmState(false);
+				$('#header-widget').show();
+				$('#body-widget').show();
+				if(data!=null){
+					//Устанавливаем имя
+					$('#userName').html(data);
+				}
 			});
 			
 			socket.on('alarmActivateAfter',function(data){
 				//Сигнализация активируется через DATA секунд
+				console.log(data);
+				hideAllWidgets();
+				$('#countdown-widget').show();
+				$('#alarmActivationTime').html(data);
 			});
 			
 			socket.on('alarmActivated',function(){
 				//Сигнализация активирована
+				console.log('alarm activated');
+				hideAllWidgets();
+				setAlarmState(false);
+				$('#header-widget').show();
+				$('#body-widget').show();
+				$('#userName').html('');
+			});
+			
+			socket.on('alarmActivationFailed',function(){
+				//Сигнализация не активирована
+				console.log(data);
+				hideAllWidgets();
+				$('#header-widget').show();
+				$('#body-widget').show();
+				$('#myModal').find('.modal-body').html("<h1 class='qqq-h1 text-center'>Невозможно установить сигнализацию</h1><h1 class='qqq-h1 text-center'>Закройте дверь!</h1>");
+				$('#myModal').modal({backdrop: 'static'});
 			});
 			
 			socket.on('alarmActivationCancelled',function(){
@@ -165,7 +194,9 @@
 				
 				$('#okPinButton').on(clickOrTouch, function(){
 					//Нажата кнопка подтверждения пинкода
-					submitPin($('#pincodeValue').html());
+					var pin = $('#pincodeValue').html();
+					submitPin(pin);
+					$('#pincodeValue').html('');
 				});
 				
 				$('#cancelAlarmActivationButton').on(clickOrTouch, function(){
@@ -282,7 +313,7 @@
 				<div class="row">
 					<div class="col-xs-10">
 						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="facilityName">Неизвестно</span></h1>
-						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="userNameH1">Пользователь: <span id="__">Неизвестно</span></h1>
+						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="userNameH1">Пользователь: <span id="userName">Неизвестно</span></h1>
 					</div>
 					<div class="col-xs-2 text-right">
 						<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
@@ -423,7 +454,7 @@
 			<div class="container">
 				<div class="row text-center">
 					<div class="col-xs-12">
-						<h1 class="qqq-h1"><mark id='__'></mark> секунд до включения сигнализации</h1>
+						<h1 class="qqq-h1"><mark id='alarmActivationTime'></mark> секунд до включения сигнализации</h1>
 					</div>
 					<div class="col-xs-12">
 						<h1 class="qqq-h1">Состояние двери:</h1>

@@ -236,12 +236,53 @@ io.on('connection', function (socket) {
         });
         if(userPin == null){
             console.log("Неверный пин");
-			socket.broadcast.emit("pinFalse",123);
+			socket.emit("pinFalse",123);
             return;
         }
-		/*else if(){
-			
-		}*/
+		else if(alarmSet){//Активирована
+			//Выключаем
+			currentUser = userPin.Id;
+            SetSignal(false);
+            var userFullName = "";
+            if (currentUser != null){
+                userFullName = userPin.LastName;
+                if (userPin.FirstName != ""){
+                    userFullName += " " + userPin.FirstName[0] + ".";
+                }
+                if (userPin.FatherName != ""){
+                    userFullName += " " + userPin.FatherName[0] + ".";
+                }
+            }
+            socket.emit("alarmDeactivated", userFullName);
+            socket.broadcast.emit("alarmDeactivated", null);
+		}
+		else if(!alarmSet){//Дективирована
+			//Включаем
+			doorCloseTimeLeft = 60;
+            if (!startedAlarmOnInterval) {
+                startedAlarmOnInterval = true;
+                blinkLight();
+                waitingForDoorCloseInterval = setInterval(function () {
+                    doorCloseTimeLeft--;
+                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
+                    if (doorCloseTimeLeft < 1) {
+                        if (doorState == "0"){
+                            socket.emit("alarmActivationFailed", 123);
+                            SetSignal(false);
+                        }
+                        else {
+                            SetSignal(true);
+                            socket.emit("alarmActivated", 123);
+							socket.broadcast.emit('alarmActivated', 123);
+                        }
+                    }
+					else{
+						socket.emit('alarmActivateAfter', doorCloseTimeLeft);
+						socket.broadcast.emit('alarmActivateAfter', doorCloseTimeLeft);
+					}
+                }, 1000);
+            }
+		}
 		
 	});
 	/*/My codes*/
