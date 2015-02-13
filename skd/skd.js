@@ -239,9 +239,9 @@ io.on('connection', function (socket) {
 			socket.broadcast.emit("pinFalse",123);
             return;
         }
-		else if(){
+		/*else if(){
 			
-		}
+		}*/
 		
 	});
 	/*/My codes*/
