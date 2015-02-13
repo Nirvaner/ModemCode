@@ -172,7 +172,7 @@
 			
 			function defineDevice(){
 				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
-				console.log("program selected - "+clickOrTouch);
+				console.log("defineDevice - "+clickOrTouch);
 			}
 			
 			function setDoorState(state){
@@ -202,13 +202,13 @@
 				else{
 					//Тут непонятно
 					$('#doorStateLabel1').html('Не определено');
-					$('#doorOpenIcon1').show();
+					$('#doorOpenIcon1').hide();
 					$('#doorCloseIcon1').hide();
-					$('#doorUndefinedIcon1').hide();
+					$('#doorUndefinedIcon1').show();
 					$('#doorStateLabel2').html('Не определено');
-					$('#doorOpenIcon2').show();
+					$('#doorOpenIcon2').hide();
 					$('#doorCloseIcon2').hide();
-					$('#doorUndefinedIcon2').hide();
+					$('#doorUndefinedIcon2').show();
 				}
 			}
 			
