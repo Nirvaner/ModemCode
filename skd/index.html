@@ -35,6 +35,9 @@
 				setDoorState(data.doorState);
 				setAlarmState(data.alarmState);
 				setFacilityName(data.facilityName);
+				$('#header-widget').show();
+				$('#body-widget').show();
+				
 			});
 			
 			socket.on('enterPin',function(){
@@ -252,6 +255,8 @@
 				console.log('setFacilityName() - '+facilityName);
 				$('#facilityName').html(facilityName);
 			}
+			
+			
 			
 		</script>
 		
