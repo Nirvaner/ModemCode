@@ -162,7 +162,7 @@
 			});
 			
 			function hideAllWidgets(){
-				console.log('HideAllWidgets');
+				console.log('HideAllWidgets()');
 				$('#header-widget').hide();
 				$('#body-widget').hide();
 				$('#info-widget').hide();
@@ -172,11 +172,11 @@
 			
 			function defineDevice(){
 				clickOrTouch = (navigator.userAgent.toLowerCase().indexOf("android") != -1) ? 'touchend' : 'click';
-				console.log("defineDevice - "+clickOrTouch);
+				console.log("defineDevice() - "+clickOrTouch);
 			}
 			
 			function setDoorState(state){
-				console.log('setDoorState - '+state);
+				console.log('setDoorState() - '+state);
 				if(state==1){
 					//Тут закрыто
 					$('#doorStateLabel1').html('Закрыта');
