@@ -401,6 +401,8 @@ setInterval(function () {
                     if (timeLeft < 1) {
                         enableSound();
                     }
+					savedSocket.emit('dieAfter', timeLeft);
+					savedSocket.broadcast.emit('dieAfter', timeLeft);
                 }
             }, 1000);
         }
