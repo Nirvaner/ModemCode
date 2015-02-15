@@ -301,6 +301,9 @@ io.on('connection', function (socket) {
 		socket.emit('alarmActivated', 123);
 		socket.broadcast.emit('alarmActivated', 123);
 	});
+	socket.on('getFacilityDetails', function(){
+		socket.emit('facilityDetails', 123);
+	});
 	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
