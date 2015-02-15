@@ -311,6 +311,7 @@ io.on('connection', function (socket) {
 	});
 	/*/My codes*/
 
+	/*
     var showWaitingTimer = setInterval(function () {
         socket.emit('time', {
             objectName: objectName,
@@ -391,7 +392,7 @@ io.on('connection', function (socket) {
 
     socket.on("alarmEnablingForced", function () {
         SetSignal(true);
-    });
+    });*/
 });
 
 setInterval(function () {
