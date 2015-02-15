@@ -266,6 +266,7 @@
 					$('#doorOpenIcon2').hide();
 					$('#doorCloseIcon2').show();
 					$('#doorUndefinedIcon2').hide();
+					$('#forcedAlarmActivationButton').removeAttr("disabled","disabled");
 				}
 				else if(state==0){
 					//Тут открыто
@@ -277,6 +278,7 @@
 					$('#doorOpenIcon2').show();
 					$('#doorCloseIcon2').hide();
 					$('#doorUndefinedIcon2').hide();
+					$('#forcedAlarmActivationButton').attr("disabled","disabled");
 				}
 				else{
 					//Тут непонятно
@@ -288,6 +290,7 @@
 					$('#doorOpenIcon2').hide();
 					$('#doorCloseIcon2').hide();
 					$('#doorUndefinedIcon2').show();
+					$('#forcedAlarmActivationButton').attr("disabled","disabled");
 				}
 			}
 			
