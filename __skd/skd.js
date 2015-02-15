@@ -116,12 +116,6 @@ var gpio11 = gpio.export(17, {
         }
         gpio11.on("change", function (val) {
             doorState = val;
-			/*My Codes*/
-			if (savedSocket) {
-				savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
-				savedSocket.emit('doorIsClosed', gpio11.value);
-			}
-			/*/My Codes*/
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (val == 0) {
                 console.log("Открыли дверь");
@@ -223,85 +217,6 @@ server.listen(port, function () {
 io.on('connection', function (socket) {
     console.log('Connected client');
     savedSocket = socket;
-	
-	/*My codes*/
-	socket.emit('currentState', {
-		doorState: doorState,
-		alarmState: alarmSet,
-		facilityName: objectName
-	});
-	socket.on('turnAlarmOn', function(){
-		socket.emit('enterPin',123);
-	});
-	socket.on('turnAlarmOff', function(){
-		socket.emit('enterPin',123);
-	});
-	socket.on('submitPin', function(data){
-		var userPin = _.find(skdUsers, function (subElem) {
-            return subElem.Pin == data;
-        });
-        if(userPin == null){
-            console.log("Неверный пин");
-			socket.emit("pinFalse",123);
-            return;
-        }
-		else if(alarmSet){//Активирована
-			//Выключаем
-			currentUser = userPin.Id;
-            SetSignal(false);
-            var userFullName = "";
-            if (currentUser != null){
-                userFullName = userPin.LastName;
-                if (userPin.FirstName != ""){
-                    userFullName += " " + userPin.FirstName[0] + ".";
-                }
-                if (userPin.FatherName != ""){
-                    userFullName += " " + userPin.FatherName[0] + ".";
-                }
-            }
-            socket.emit("alarmDeactivated", userFullName);
-            socket.broadcast.emit("alarmDeactivated", null);
-		}
-		else if(!alarmSet){//Дективирована
-			//Включаем
-			doorCloseTimeLeft = 60;
-            if (!startedAlarmOnInterval) {
-                startedAlarmOnInterval = true;
-                blinkLight();
-                waitingForDoorCloseInterval = setInterval(function () {
-                    doorCloseTimeLeft--;
-                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
-                    if (doorCloseTimeLeft < 1) {
-                        if (doorState == "0"){
-                            socket.emit("alarmActivationFailed", 123);
-                            SetSignal(false);
-                        }
-                        else {
-                            SetSignal(true);
-                            socket.emit("alarmActivated", 123);
-							socket.broadcast.emit('alarmActivated', 123);
-                        }
-                    }
-					else{
-						socket.emit('alarmActivateAfter', doorCloseTimeLeft);
-						socket.broadcast.emit('alarmActivateAfter', doorCloseTimeLeft);
-					}
-                }, 1000);
-            }
-		}
-		
-	});
-	socket.on('cancelAlarmActivation', function(){
-		SetSignal(false);
-		socket.emit('alarmActivationCancelled', 123);
-		socket.broadcast.emit('alarmActivationCancelled', 123);
-	});
-	socket.on('forcedAlarmActivation', function(){
-		SetSignal(true);
-		socket.emit('alarmActivated', 123);
-		socket.broadcast.emit('alarmActivated', 123);
-	});
-	/*/My codes*/
 
     var showWaitingTimer = setInterval(function () {
         socket.emit('time', {
@@ -319,7 +234,7 @@ io.on('connection', function (socket) {
         clearInterval(showWaitingTimer);
     });
 
-    socket.on('pin', function (data) {//Здесь Мы Выключаем Сигналку
+    socket.on('pin', function (data) {
         var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
@@ -345,7 +260,7 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('alarmOn', function (data) {//Здесь Мы Включаем Сигналку
+    socket.on('alarmOn', function (data) {
         var userPin = _.find(skdUsers, function (subElem) {
             return subElem.Pin == data;
         });
