@@ -65,6 +65,7 @@
 				if(data!=null){
 					//Устанавливаем имя
 					$('#userName').html(data);
+					$('#userNameH1').show();
 				}
 			});
 			
@@ -310,7 +311,7 @@
 					$('#alarmUndefinedIcon1').hide();
 					$('#turnOnAlarmButton').show();
 					$('#turnOffAlarmButton').hide();
-					$('#userNameH1').show();
+					$('#userNameH1').hide();
 				}
 				else{
 					//Тут непонятно
@@ -335,12 +336,12 @@
 	</head>
 	<body>
 	
-		<div id="header-widget" style="background-color: #3c3c3c; padding: 1em;">
+		<div id='header-widget' style="background-color: #3c3c3c; padding: 1em;">
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id="facilityName">Неизвестно</span></h1>
-						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id="userNameH1">Пользователь: <span id="userName">Неизвестно</span></h1>
+						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" >Объект: <span id='facilityName'>Неизвестно</span></h1>
+						<h1 class="qqq-h1 qqq-margin0" style="margin:10px 0;" id='userNameH1'>Пользователь: <span id='userName'>Неизвестно</span></h1>
 					</div>
 					<div class="col-xs-2 text-right">
 						<img src="img/logo.png" style="height:7em; margin-bottom: 10px;"/>
@@ -349,7 +350,7 @@
 			</div>
 		</div>
 		
-		<div id="body-widget" style="padding: 1em;">
+		<div id='body-widget' style="padding: 1em;">
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-6">
@@ -371,22 +372,22 @@
 					<div class="col-xs-6 qqq-row-left">
 						<h1 class="qqq-h1">Состояние двери:</h1>
 						<h1 class="qqq-h1"><mark id='doorStateLabel1'>Неизвестно</mark></h1>
-						<img id="doorOpenIcon1" src="img/openDoor.png" style="height:10em;"/>
-						<img id="doorCloseIcon1" src="img/closedDoor.png" style="height:10em;"/>
-						<img id="doorUndefinedIcon1" src="img/warning.png" style="height:10em;"/>
+						<img id='doorOpenIcon1' src="img/openDoor.png" style="height:10em;"/>
+						<img id='doorCloseIcon1' src="img/closedDoor.png" style="height:10em;"/>
+						<img id='doorUndefinedIcon1' src="img/warning.png" style="height:10em;"/>
 					</div>
 					<div class="col-xs-6 qqq-row-right">
 						<h1 class="qqq-h1">Состояние сигнализации:</h1>
 						<h1 class="qqq-h1"><mark id='alarmStateLabel1'>Неизвестно</mark></h1>
-						<img id="alarmOnIcon1" src="img/alarmOn.png" style="height:10em;"/>
-						<img id="alarmOffIcon1" src="img/alarmOff.png" style="height:10em;"/>
-						<img id="alarmUndefinedIcon1" src="img/warning.png" style="height:10em;"/>
+						<img id='alarmOnIcon1' src="img/alarmOn.png" style="height:10em;"/>
+						<img id='alarmOffIcon1' src="img/alarmOff.png" style="height:10em;"/>
+						<img id='alarmUndefinedIcon1' src="img/warning.png" style="height:10em;"/>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div id="info-widget" style="padding: 1em;">
+		<div id='info-widget' style="padding: 1em;">
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12">&nbsp;</div>
@@ -402,7 +403,7 @@
 				<div class="row">
 					<div class="col-xs-3">&nbsp;</div>
 					<div class="col-xs-6">
-						<button id="__" class="btn btn-default btn-lg btn-block qqq-btn btn-info" >Вернуться назад</button>
+						<button id='__' class="btn btn-default btn-lg btn-block qqq-btn btn-info" >Вернуться назад</button>
 					</div>
 					<div class="col-xs-3">&nbsp;</div>
 				</div>
@@ -412,16 +413,16 @@
 			</div>
 		</div>
 		
-		<div id="pincode-widget" style="padding: 1em;">
+		<div id='pincode-widget' style="padding: 1em;">
 			<div class="container">
-				<div id="pinWarningMessage" class="row">
+				<div id='pinWarningMessage' class="row">
 					<div class="col-xs-12">
 						<h1 class="qqq-h1 text-danger pull-left">Дверь была открыта, введите пинкод. Осталось: </h1>
-						<h1 id="dieAfterTime" class="qqq-h1 text-danger pull-left">60</h1>
+						<h1 id='dieAfterTime' class="qqq-h1 text-danger pull-left">60</h1>
 						<h1 class="qqq-h1 text-danger pull-left">&nbsp;сек.</h1>
 					</div>
 				</div>
-				<div id="pinEnterMessage" class="row">
+				<div id='pinEnterMessage' class="row">
 					<div class="col-xs-12">
 						<h1 class="qqq-h1 text-danger text-center">Введите пинкод </h1>
 					</div>
@@ -472,12 +473,12 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-4" ><button id="okPinButton" class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Ok</button></div>
+					<div class="col-xs-4" ><button id='okPinButton' class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Ok</button></div>
 				</div>
 			</div>
 		</div>
 		
-		<div id="countdown-widget" style="padding: 1em;">
+		<div id='countdown-widget' style="padding: 1em;">
 			<div class="container">
 				<div class="row text-center">
 					<div class="col-xs-12">
@@ -486,26 +487,26 @@
 					<div class="col-xs-12">
 						<h1 class="qqq-h1">Состояние двери:</h1>
 						<h1 class="qqq-h1"><mark id='doorStateLabel2'>Неизвестно</mark></h1>
-						<img id="doorOpenIcon2" src="img/openDoor.png" style="height:10em;"/>
-						<img id="doorCloseIcon2" src="img/closedDoor.png" style="height:10em;"/>
-						<img id="doorUndefinedIcon2" src="img/warning.png" style="height:10em;"/>
+						<img id='doorOpenIcon2' src="img/openDoor.png" style="height:10em;"/>
+						<img id='doorCloseIcon2' src="img/closedDoor.png" style="height:10em;"/>
+						<img id='doorUndefinedIcon2' src="img/warning.png" style="height:10em;"/>
 					</div>
 					<div class="col-xs-6">
-						<button id="cancelAlarmActivationButton" class="btn btn-default btn-lg btn-block btn-danger qqq-btn">Отмена</button>
+						<button id='cancelAlarmActivationButton' class="btn btn-default btn-lg btn-block btn-danger qqq-btn">Отмена</button>
 					</div>
 					<div class="col-xs-6">
-						<button id="forcedAlarmActivationButton" class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
+						<button id='forcedAlarmActivationButton' class="btn btn-default btn-lg btn-block btn-success qqq-btn" >Включить сейчас</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade" id='myModal' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title text-center" id="myModalLabel">Внимание!</h4>
+						<h4 class="modal-title text-center" id='myModalLabel'>Внимание!</h4>
 					</div>
 					<div class="modal-body">
 						...
