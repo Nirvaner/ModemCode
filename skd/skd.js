@@ -292,14 +292,18 @@ io.on('connection', function (socket) {
 		
 	});
 	socket.on('cancelAlarmActivation', function(){
-		SetSignal(false);
-		socket.emit('alarmActivationCancelled', 123);
-		socket.broadcast.emit('alarmActivationCancelled', 123);
+		if(startedAlarmOnInterval){
+			SetSignal(false);
+			socket.emit('alarmActivationCancelled', 123);
+			socket.broadcast.emit('alarmActivationCancelled', 123);
+		}
 	});
 	socket.on('forcedAlarmActivation', function(){
-		SetSignal(true);
-		socket.emit('alarmActivated', 123);
-		socket.broadcast.emit('alarmActivated', 123);
+		if(startedAlarmOnInterval){
+			SetSignal(true);
+			socket.emit('alarmActivated', 123);
+			socket.broadcast.emit('alarmActivated', 123);
+		}
 	});
 	socket.on('getFacilityDetails', function(){
 		socket.emit('facilityDetails', 123);
