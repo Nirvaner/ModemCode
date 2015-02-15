@@ -274,6 +274,7 @@ io.on('connection', function (socket) {
                     if (doorCloseTimeLeft < 1) {
                         if (doorState == "0"){
                             socket.emit("alarmActivationFailed", 123);
+                            socket.broadcast.emit("alarmActivationFailed", 123);
                             SetSignal(false);
                         }
                         else {
