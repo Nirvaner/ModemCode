@@ -173,9 +173,21 @@ var tcpserver = net.createServer(function (c) {
         var sData = data.toString();
         if (sData[0] == '0') {
             SetSignal(false);
+			/*My Codes*/
+			if (savedSocket) {
+				savedSocket.broadcast.emit('alarmDeactivated', null);
+				savedSocket.emit('alarmDeactivated', null);
+			}
+			/*/My Codes*/
         }
         else if (sData[0] == '1') {
             SetSignal(true);
+			/*My Codes*/
+			if (savedSocket) {
+				savedSocket.broadcast.emit('alarmActivated', 123);
+				savedSocket.emit('alarmActivated', 123);
+			}
+			/*/My Codes*/
         }
         else if (sData[0] == '2') {
             console.log("Получили настройки СКД!");
