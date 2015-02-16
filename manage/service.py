@@ -73,7 +73,7 @@ serverPort = 10101
 siementsSub = None
 skdSub = None
 
-pingIsLife = False
+pingIsLife = True
 
 print "Service started, updated with git!!!"
 
@@ -81,12 +81,12 @@ ConnectToServer()
 
 def PingCheck():
         while True:
+                time.sleep(60)
                 global pingIsLife
                 if pingIsLife:
                         pingIsLife = False
                 else:
                         ConnectToServer()
-                time.sleep(60)
 
 tPingCheck = threading.Thread(target=PingCheck)
 tPingCheck.daemon = True
