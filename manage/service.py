@@ -138,6 +138,7 @@ while True:
                                 skdSub = None
                         tcpClient.send("0")
                         subprocess.Popen(["sudo","-u","root","-p","root","bash","/devir/gitpull.sh"])
+                        print "Git pull"
                         exit()
                 elif response[0:6] == "update":
                         pathUpdate = "/devir/ModemCode/"
