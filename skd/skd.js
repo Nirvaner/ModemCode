@@ -231,21 +231,25 @@ io.on('connection', function (socket) {
 		facilityName: objectName
 	});
 	socket.on('turnAlarmOn', function(){
-		socket.emit('enterPin',123);
+		requirePincode(2);
 	});
 	socket.on('turnAlarmOff', function(){
-		socket.emit('enterPin',123);
+		requirePincode(1);
 	});
 	socket.on('submitPin', function(data){
+		
+		var pinValue = data.pinValue;
+		var code = data.code;
+	
 		var userPin = _.find(skdUsers, function (subElem) {
-            return subElem.Pin == data;
+            return subElem.Pin == pinValue;
         });
         if(userPin == null){
             console.log("Неверный пин");
 			socket.emit("pinFalse",123);
             return;
         }
-		else if(alarmSet){//Активирована
+		else if(code==1){//Активирована
 			//Выключаем
 			currentUser = userPin.Id;
             SetSignal(false);
@@ -262,7 +266,7 @@ io.on('connection', function (socket) {
             socket.emit("alarmDeactivated", userFullName);
             socket.broadcast.emit("alarmDeactivated", null);
 		}
-		else if(!alarmSet){//Дективирована
+		else if(code==2){//Дективирована
 			//Включаем
 			doorCloseTimeLeft = 60;
             if (!startedAlarmOnInterval) {
@@ -290,6 +294,9 @@ io.on('connection', function (socket) {
                 }, 1000);
             }
 		}
+		else if(code==3){
+			socket.emit('facilityDetails', 123);
+		}
 		
 	});
 	socket.on('cancelAlarmActivation', function(){
@@ -307,9 +314,24 @@ io.on('connection', function (socket) {
 		}
 	});
 	socket.on('getFacilityDetails', function(){
-		socket.emit('facilityDetails', 123);
+		if(alarmSet){
+			requirePincode(3);
+		}
+		else{
+			socket.emit('facilityDetails', 123);
+		}
 	});
+	
+	function requirePincode(code){
+		//Запросить пинкод у клиента
+		//code (1 - Деактивировать сигнал. | 2 - Активировать сигнал. | 3 - Вкладка подробнее)
+		socket.emit('enterPin',{
+			code: code
+		});
+	}
 	/*/My codes*/
+	
+	
 
 	/*
     var showWaitingTimer = setInterval(function () {
@@ -393,6 +415,7 @@ io.on('connection', function (socket) {
     socket.on("alarmEnablingForced", function () {
         SetSignal(true);
     });*/
+	
 });
 
 setInterval(function () {
