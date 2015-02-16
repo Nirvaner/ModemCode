@@ -76,7 +76,7 @@ skdSub = None
 
 pingInterval = 60
 
-print "Service started"
+print "Service started, updated with git!!!"
 
 ConnectToServer()
 
