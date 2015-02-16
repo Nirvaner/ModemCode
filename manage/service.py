@@ -129,7 +129,7 @@ while True:
                                 tcpClient.send("0")
                         else:
                                 tcpClient.send("1")
-                elif response[] == "gitpull":
+                elif response[0:7] == "gitpull":
                         if siementsSub:
                                 siementsSub.terminate()
                                 siementsSub = None
