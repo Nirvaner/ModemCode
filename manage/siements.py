@@ -142,6 +142,7 @@ def WriteToController(db, start, bit, data, size, command):
                 pass
                 sys.exc_clear()
                 print error
+                plcClient.disconnect()
                 return False
 
 def EventsReceiver(skdState):
@@ -176,10 +177,8 @@ def SendBufferToServer(buf):
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress, serverPort))
                 tcpClient.send(buf)
-                response = tcpClient.recv(4)
                 tcpClient.close()
-                if response[0] == "0":
-                        return True
+                return True
         except Exception as error:
                 print error
                 pass
