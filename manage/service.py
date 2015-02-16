@@ -72,15 +72,29 @@ serverPort = 10101
 siementsSub = None
 skdSub = None
 
-pingInterval = 60
+pingIsLife = False
 
 print "Service started, updated with git!!!"
 
 ConnectToServer()
 
+def PingCheck():
+        while True:
+                global pingIsLife
+                if pingIsLife:
+                        pingIsLife = False
+                else:
+                        ConnectToServer()
+                time.sleep(60)
+
+tPingCheck = threading.Thread(target=PingCheck)
+tPingCheck.daemon = True
+tPingCheck.start()
+
 while True:
         try:
                 response = tcpClient.recv(1024).strip('\0')
+                pingIsLife = True
                 if response == "":
                         ConnectToServer()
                 elif response[0] == "0":
