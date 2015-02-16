@@ -117,6 +117,7 @@
 				//Запуск сирены через DATA секунд
 				console.log('socket.on("dieAfter", "'+data+'")');
 				hideAllWidgets();
+				setPinRequestCode(1);
 				$('#pincode-widget').show();
 				$('#pinWarningMessage').show();
 				$('#pinEnterMessage').hide();
