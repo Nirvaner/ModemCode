@@ -36,7 +36,7 @@ def ConnectToServer():
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send(info)
         except Exception as error:
-                print error
+                print "Service>ConnectToServer: " + str(error)
                 pass
                 sys.exc_clear()
 def SendToSiementsPY(s):
@@ -47,8 +47,7 @@ def SendToSiementsPY(s):
                 siementsClient.close()
                 return True
         except Exception as error:
-                print "Exception in SendToSiementsPY"
-                print error
+                print "Service>SendToSiementsPY: " + str(error)
                 pass
                 sys.exc_clear()
                 return False
@@ -60,8 +59,7 @@ def SendToSkdJS(s):
                 skdClient.close()
                 return True
         except Exception as error:
-                print "Exception in SendToSkdJS"
-                print error
+                print "Service>SendToSkdJS: " + str(error)
                 pass
                 sys.exc_clear()
                 return False
@@ -175,7 +173,7 @@ while True:
                                         if os.exists(CurDir + "service"):
                                                 exit()
         except Exception as error:
-                print error
+                print "Service: " + str(error)
                 pass
                 sys.exc_clear()
                 ConnectToServer()

@@ -141,7 +141,7 @@ def WriteToController(db, start, bit, data, size, command):
         except Exception as error:
                 pass
                 sys.exc_clear()
-                print error
+                print "Siements>WriteToController: " + str(error)
                 plcClient.disconnect()
                 return False
 
@@ -170,7 +170,7 @@ def EventsReceiver(skdState):
                 except Exception as error:
                         pass
                         sys.exc_clear()
-                        print error
+                        print "Siements>EventsReceiver: " + str(error)
 
 def SendBufferToServer(buf):
         try:
@@ -180,7 +180,7 @@ def SendBufferToServer(buf):
                 tcpClient.close()
                 return True
         except Exception as error:
-                print error
+                print "Siements>SendBufferToServer: " + str(error)
                 pass
                 sys.exc_clear()
         return False
@@ -233,7 +233,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                 except Exception as error:
                         pass
                         sys.exc_clear()
-                        print error
+                        print "Siements>ReadFromPLC: " + str(error)
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
                                 #Suda nado chto nit' dopisat'
