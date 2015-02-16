@@ -129,6 +129,16 @@ while True:
                                 tcpClient.send("0")
                         else:
                                 tcpClient.send("1")
+                elif response[] == "gitpull":
+                        if siementsSub:
+                                siementsSub.terminate()
+                                siementsSub = None
+                        if skdSub:
+                                skdSub.terminate()
+                                skdSub = None
+                        tcpClient.send("0")
+                        subprocess.Popen(["sudo","-u","root","-p","root","bash","/devir/gitpull.sh"])
+                        exit()
                 elif response[0:6] == "update":
                         pathUpdate = "/devir/ModemCode/"
                         while True:
