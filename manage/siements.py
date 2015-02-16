@@ -191,6 +191,7 @@ def ReadFromQueue(q):
                         obj = q.get()
                         if not(SendBufferToServer(obj)):
                                 q.put(obj)
+                                time.sleep(1)
                         time.sleep(0.01)
 
 def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
