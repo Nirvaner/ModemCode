@@ -16,8 +16,8 @@
 		<script src="js/ion.sound.js"></script>
 		
 		<script>
-			var clickOrTouch = '';
-			var pinRequestCode = 0;
+			var clickOrTouch = ''; //Event type for devices ("click","touchend")
+			var pinRequestCode = 0; //Причина запроса пинкода
 		</script>
 		
 		<script>
@@ -131,6 +131,10 @@
 				hideAllWidgets();
 				$('#header-widget').show();
 				$('#info-widget').show();
+			});
+			
+			socket.on('facilityName',function(data){
+				setFacilityName(data);
 			});
 			
 			function turnAlarmOn(){
@@ -363,7 +367,12 @@
 			
 			function setFacilityName(facilityName){
 				console.log('setFacilityName("'+facilityName+'")');
-				$('#facilityName').html(facilityName);
+				if(facilityName==""){
+					$('#facilityName').html("Загрузка...");
+				}
+				else{
+					$('#facilityName').html(facilityName);
+				}
 			}
 			
 			function setPinRequestCode(code){

@@ -193,6 +193,12 @@ var tcpserver = net.createServer(function (c) {
             console.log("Получили настройки СКД!");
             var arr = JSON.parse(sData.substring(1));
             objectName = arr[0].Value + " " + arr[1].Value;
+			/*My Codes*/
+			if (savedSocket) {
+				savedSocket.broadcast.emit('facilityName', objectName);
+				savedSocket.emit('facilityName', objectName);
+			}
+			/*/My Codes*/
         }
         else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
