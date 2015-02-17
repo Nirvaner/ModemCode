@@ -88,6 +88,8 @@ def PingCheck():
                         pingIsLife = False
                 else:
                         tcpClient.close()
+                        pingIsLife = True
+                        time.sleep(30)
 
 tPingCheck = threading.Thread(target=PingCheck)
 tPingCheck.daemon = True
