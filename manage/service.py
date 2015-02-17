@@ -31,14 +31,13 @@ def SetServerAddress(address):
         content = '|'.join(arrContent)
         SetStrInFile(path,content)
 def ConnectToServer():
-        global pingIsLife
-        pingIsLife = True
         print "Connect to server"
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         #subprocess.call(["sudo","-u","root","-p","root","bash","/devir/scripts/rebind.sh"])
         global tcpClient
         try:
                 tcpClient = socket.socket()
+                tcpClient.settimeout(30)
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send(info)
         except Exception as error:
