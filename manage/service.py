@@ -29,6 +29,8 @@ def SetServerAddress(address):
         content = '|'.join(arrContent)
         SetStrInFile(path,content)
 def ConnectToServer():
+        global pingIsLife
+        pingIsLife = True
         print "Connect to server"
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
