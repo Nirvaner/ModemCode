@@ -80,13 +80,14 @@ print "Service started, updated with git!!!"
 ConnectToServer()
 
 def PingCheck():
+        global tcpClient
+        global pingIsLife
         while True:
                 time.sleep(60)
-                global pingIsLife
                 if pingIsLife:
                         pingIsLife = False
                 else:
-                        ConnectToServer()
+                        tcpClient.close()
 
 tPingCheck = threading.Thread(target=PingCheck)
 tPingCheck.daemon = True
