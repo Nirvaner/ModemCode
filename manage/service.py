@@ -35,7 +35,6 @@ def ConnectToServer():
         global tcpClient
         try:
                 tcpClient = socket.socket()
-                tcpClient.settimeout(60)
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send(info)
         except Exception as error:
@@ -81,7 +80,9 @@ ConnectToServer()
 
 while True:
         try:
+                tcpClient.settimeout(60)
                 response = tcpClient.recv(1024).strip('\0')
+                tcpClient.settimeout(None)
                 if response == "":
                         ConnectToServer()
                 elif response[0] == "0":
