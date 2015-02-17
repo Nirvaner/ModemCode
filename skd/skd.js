@@ -111,13 +111,13 @@ var gpio11 = gpio.export(17, {
     interval: 200,
     ready: function (val) {
         doorState = val;
-		console.log("I AM INSIDE gpio.export(17,...) and val = "+val);
+		console.log("I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
         if (savedSocket) {
             savedSocket.broadcast.emit('doorState', gpio11.value);
 			/*My Codes*/
 			savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
 			savedSocket.emit('doorIsClosed', gpio11.value);
-			console.log("I AM INSIDE if(savedSocket)");
+			console.log("I AM INSIDE if(savedSocket) and gpio11.value = "+gpio11.value);
 			/*/My Codes*/
         }
         gpio11.on("change", function (val) {
