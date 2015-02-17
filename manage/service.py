@@ -9,8 +9,6 @@ CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
 
 tcpClient = socket.socket()
-tcpClient.settimeout(30)
-print tcpClient.gettimeout()
 
 def SystemReboot():
         subprocess.popen(["sudo","-u","root","-p","root","reboot"])
@@ -37,7 +35,7 @@ def ConnectToServer():
         global tcpClient
         try:
                 tcpClient = socket.socket()
-                tcpClient.settimeout(30)
+                tcpClient.settimeout(60)
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.send(info)
         except Exception as error:
