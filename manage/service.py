@@ -9,6 +9,7 @@ CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
 
 tcpClient = socket.socket()
+tcpClient.settimeout(60)
 
 def SystemReboot():
         subprocess.popen(["sudo","-u","root","-p","root","reboot"])
@@ -76,32 +77,13 @@ serverPort = 10101
 siementsSub = None
 skdSub = None
 
-pingIsLife = True
-
 print "Service started"
 
 ConnectToServer()
 
-def PingCheck():
-        global tcpClient
-        global pingIsLife
-        while True:
-                time.sleep(60)
-                if pingIsLife:
-                        pingIsLife = False
-                else:
-                        tcpClient.close()
-                        pingIsLife = True
-                        time.sleep(30)
-
-tPingCheck = threading.Thread(target=PingCheck)
-tPingCheck.daemon = True
-tPingCheck.start()
-
 while True:
         try:
                 response = tcpClient.recv(1024).strip('\0')
-                pingIsLife = True
                 if response == "":
                         ConnectToServer()
                 elif response[0] == "0":
