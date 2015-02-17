@@ -75,7 +75,7 @@ skdSub = None
 
 pingIsLife = True
 
-print "Service started, updated with git!!!"
+print "Service started"
 
 ConnectToServer()
 
