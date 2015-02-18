@@ -112,6 +112,8 @@ var gpio11 = gpio.export(17, {
     ready: function (val) {
         doorState = val;
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
+		console.log("I AM INSIDE gpio.export(17,...) and gpio11.PATH.VALUE = "+gpio11.PATH.VALUE);
+		console.log("I AM INSIDE gpio.export(17,...) and gpio11.currVal = "+gpio11.currVal);
         if (savedSocket) {
             savedSocket.broadcast.emit('doorState', gpio11.value);
 			/*My Codes*/
