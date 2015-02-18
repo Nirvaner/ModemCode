@@ -111,7 +111,7 @@ var gpio11 = gpio.export(17, {
     interval: 200,
     ready: function () {
         //doorState = val;
-		console.log("I AM INSIDE gpio.export(17,...) and val = "+val);
+		console.log("I AM INSIDE gpio.export(17,...) and val = ");
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.val = "+gpio11.val);
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.PATH.VALUE = "+gpio11.PATH.VALUE);
