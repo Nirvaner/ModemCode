@@ -250,7 +250,10 @@ server.listen(port, function () {
 
 io.on('connection', function (socket) {
     console.log('Connected client');
-	console.log("OKOK - "+gpio11.value);
+		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
+		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.val = "+gpio11.val);
+		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.PATH.VALUE = "+gpio11.PATH.VALUE);
+		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.currVal = "+gpio11.currVal);
     savedSocket = socket;
 	
 	/*My codes*/
