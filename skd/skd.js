@@ -31,7 +31,7 @@ fs.readFile('/sys/class/gpio/gpio17/value', "utf-8", function(err, data) {
 		err.action = 'read';
 		console.log(err);
 	} else {
-		doorState = data;
+		doorState = parseInt(data, 10);
 		console.log('fs doorState - '+doorState);
 	}
 });
