@@ -109,8 +109,8 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
 var gpio11 = gpio.export(17, {
     direction: "in",
     interval: 200,
-    ready: function (val) {
-        doorState = val;
+    ready: function () {
+        //doorState = val;
 		console.log("I AM INSIDE gpio.export(17,...) and val = "+val);
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
 		console.log("I AM INSIDE gpio.export(17,...) and gpio11.val = "+gpio11.val);
