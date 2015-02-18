@@ -1,4 +1,5 @@
  var net = require('net');
+ var fs = require('fs');
 var gpio = require("gpio");
 var express = require('express');
 var _ = require('underscore')._;
@@ -22,6 +23,20 @@ var alarmWorking = false;
 var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
+
+/*My Codes*/
+fs.readFile('/sys/class/gpio/gpio17/value', "utf-8", function(err, data) {
+	if(err) {
+		err.path = file;
+		err.action = 'read';
+		console.log(err);
+	} else {
+		doorState = data;
+		console.log('fs doorState - '+doorState);
+	}
+});
+
+/*/My Codes*/
 
 var gpio23 = gpio.export(23, {
     direction: "out",
@@ -111,17 +126,11 @@ var gpio11 = gpio.export(17, {
     interval: 200,
     ready: function () {
         //doorState = val;
-		console.log("I AM INSIDE gpio.export(17,...) and val = ");
-		console.log("I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
-		console.log("I AM INSIDE gpio.export(17,...) and gpio11.val = "+gpio11.val);
-		console.log("I AM INSIDE gpio.export(17,...) and gpio11.PATH.VALUE = "+gpio11.PATH.VALUE);
-		console.log("I AM INSIDE gpio.export(17,...) and gpio11.currVal = "+gpio11.currVal);
         if (savedSocket) {
             savedSocket.broadcast.emit('doorState', gpio11.value);
 			/*My Codes*/
 			savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
 			savedSocket.emit('doorIsClosed', gpio11.value);
-			console.log("I AM INSIDE if(savedSocket) and gpio11.value = "+gpio11.value);
 			/*/My Codes*/
         }
         gpio11.on("change", function (val) {
@@ -250,10 +259,6 @@ server.listen(port, function () {
 
 io.on('connection', function (socket) {
     console.log('Connected client');
-		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.value = "+gpio11.value);
-		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.val = "+gpio11.val);
-		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.PATH.VALUE = "+gpio11.PATH.VALUE);
-		console.log("2 I AM INSIDE gpio.export(17,...) and gpio11.currVal = "+gpio11.currVal);
     savedSocket = socket;
 	
 	/*My codes*/
