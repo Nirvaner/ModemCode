@@ -250,6 +250,7 @@ server.listen(port, function () {
 
 io.on('connection', function (socket) {
     console.log('Connected client');
+	console.log("OKOK - "+gpio11.value);
     savedSocket = socket;
 	
 	/*My codes*/
