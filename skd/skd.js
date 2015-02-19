@@ -125,14 +125,6 @@ var gpio11 = gpio.export(17, {
     direction: "in",
     interval: 200,
     ready: function () {
-        //doorState = val;
-        if (savedSocket) {
-            savedSocket.broadcast.emit('doorState', gpio11.value);
-			/*My Codes*/
-			savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
-			savedSocket.emit('doorIsClosed', gpio11.value);
-			/*/My Codes*/
-        }
         gpio11.on("change", function (val) {
             doorState = val;
 			/*My Codes*/
