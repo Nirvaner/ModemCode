@@ -1,5 +1,5 @@
- var net = require('net');
- var fs = require('fs');
+var net = require('net');
+var fs = require('fs');
 var gpio = require("gpio");
 var express = require('express');
 var _ = require('underscore')._;
@@ -24,20 +24,6 @@ var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
 
-/*My Codes*/
-fs.readFile('/sys/class/gpio/gpio17/value', "utf-8", function(err, data) {
-	if(err) {
-		err.path = '/sys/class/gpio/gpio17/value';
-		err.action = 'read';
-		console.log(err);
-	} else {
-		doorState = parseInt(data, 10);
-		console.log('fs doorState - '+doorState);
-	}
-});
-
-/*/My Codes*/
-
 var gpio23 = gpio.export(23, {
     direction: "out",
     ready: function () {
@@ -55,13 +41,11 @@ var gpio22 = gpio.export(22, {
 function enableSound() {
     gpio23.set(1);
     alarmWorking = true;
-    // sendToPython();
 }
 
 function disableSound() {
     gpio23.set(0);
     alarmWorking = false;
-    // sendToPython();
 }
 
 function enableLight() {
@@ -127,12 +111,10 @@ var gpio11 = gpio.export(17, {
     ready: function () {
         gpio11.on("change", function (val) {
             doorState = val;
-			/*My Codes*/
 			if (savedSocket) {
 				savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
 				savedSocket.emit('doorIsClosed', gpio11.value);
 			}
-			/*/My Codes*/
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (val == 0) {
                 console.log("Открыли дверь");
@@ -140,6 +122,17 @@ var gpio11 = gpio.export(17, {
                 console.log("Закрыли дверь");
             }
         });
+    }
+});
+
+fs.readFile('/sys/class/gpio/gpio17/value', "utf-8", function(err, data) {
+    if(err) {
+        err.path = '/sys/class/gpio/gpio17/value';
+        err.action = 'read';
+        console.log(err);
+    } else {
+        doorState = parseInt(data, 10);
+        console.log('fs doorState - ' + doorState);
     }
 });
 
@@ -184,32 +177,26 @@ var tcpserver = net.createServer(function (c) {
         var sData = data.toString();
         if (sData[0] == '0') {
             SetSignal(false);
-			/*My Codes*/
 			if (savedSocket) {
 				savedSocket.broadcast.emit('alarmDeactivated', null);
 				savedSocket.emit('alarmDeactivated', null);
 			}
-			/*/My Codes*/
         }
         else if (sData[0] == '1') {
             SetSignal(true);
-			/*My Codes*/
 			if (savedSocket) {
 				savedSocket.broadcast.emit('alarmActivated', 123);
 				savedSocket.emit('alarmActivated', 123);
 			}
-			/*/My Codes*/
         }
         else if (sData[0] == '2') {
             console.log("Получили настройки СКД!");
             var arr = JSON.parse(sData.substring(1));
             objectName = arr[0].Value + " " + arr[1].Value;
-			/*My Codes*/
 			if (savedSocket) {
 				savedSocket.broadcast.emit('facilityName', objectName);
 				savedSocket.emit('facilityName', objectName);
 			}
-			/*/My Codes*/
         }
         else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
@@ -237,23 +224,16 @@ var tcpserver = net.createServer(function (c) {
     });
 });
 
-SetSignal(false);
-
 tcpserver.listen(10003, function () {
     console.log('TCP server created');
 });
 
-app.use(express.static(__dirname));
-
-server.listen(port, function () {
-    console.log('Server listening at port %d', port);
-});
+SetSignal(false);
 
 io.on('connection', function (socket) {
     console.log('Connected client');
     savedSocket = socket;
 	
-	/*My codes*/
 	socket.emit('currentState', {
 		doorState: doorState,
 		alarmState: alarmSet,
@@ -278,8 +258,7 @@ io.on('connection', function (socket) {
 			socket.emit("pinFalse",123);
             return;
         }
-		else if(code==1){//Активирована
-			//Выключаем
+		else if(code==1){
 			currentUser = userPin.Id;
             SetSignal(false);
             var userFullName = "";
@@ -295,8 +274,7 @@ io.on('connection', function (socket) {
             socket.emit("alarmDeactivated", userFullName);
             socket.broadcast.emit("alarmDeactivated", null);
 		}
-		else if(code==2){//Дективирована
-			//Включаем
+		else if(code==2){
 			doorCloseTimeLeft = 60;
             if (!startedAlarmOnInterval) {
                 startedAlarmOnInterval = true;
@@ -358,93 +336,6 @@ io.on('connection', function (socket) {
 			code: code
 		});
 	}
-	/*/My codes*/
-	
-	
-
-	/*
-    var showWaitingTimer = setInterval(function () {
-        socket.emit('time', {
-            objectName: objectName,
-            timeLeft: timeLeft,
-            doorState: doorState,
-            alarmState: alarmSet,
-            isWaitingForInput: isWaitingForInput,
-            doorWaiting: startedAlarmOnInterval,
-            doorCloseTime: doorCloseTimeLeft
-        });
-    }, 1000);
-
-    socket.on('disconnect', function () {
-        clearInterval(showWaitingTimer);
-    });
-
-    socket.on('pin', function (data) {//Здесь Мы Выключаем Сигналку
-        var userPin = _.find(skdUsers, function (subElem) {
-            return subElem.Pin == data;
-        });
-        if (userPin == null) {
-            console.log("Неверный пин");
-			socket.emit("pinerror",123);
-            return;
-        }
-        else {
-            currentUser = userPin.Id;
-            SetSignal(false);
-            var userFullName = "";
-            if (currentUser != null){
-                userFullName = userPin.LastName;
-                if (userPin.FirstName != ""){
-                    userFullName += " " + userPin.FirstName[0] + ".";
-                }
-                if (userPin.FatherName != ""){
-                    userFullName += " " + userPin.FatherName[0] + ".";
-                }
-            }
-            socket.emit("userName", userFullName);
-        }
-    });
-
-    socket.on('alarmOn', function (data) {//Здесь Мы Включаем Сигналку
-        var userPin = _.find(skdUsers, function (subElem) {
-            return subElem.Pin == data;
-        });
-        if (userPin == null) {
-            console.log("Неверный пин");
-            socket.emit("pinerror",123);
-            return;
-        }
-        else{
-            doorCloseTimeLeft = 60;
-            if (!startedAlarmOnInterval) {
-                startedAlarmOnInterval = true;
-                blinkLight();
-                waitingForDoorCloseInterval = setInterval(function () {
-                    doorCloseTimeLeft--;
-                    if (doorCloseTimeLeft < 0) doorCloseTimeLeft = 0;
-                    if (doorCloseTimeLeft < 1) {
-                        if (doorState == "0"){
-                            socket.emit("unableToSetSignal", 123);
-                            SetSignal(false);
-                        }
-                        else {
-                            SetSignal(true);
-                            socket.emit("turnOnSuccess", 123);
-                        }
-                    }
-                }, 1000);
-            }
-        }
-    });
-
-    socket.on("alarmEnablingCancel", function () {
-        SetSignal(false);
-    });
-
-    socket.on("alarmEnablingForced", function () {
-        SetSignal(true);
-    });*/
-	
 });
 
 setInterval(function () {
