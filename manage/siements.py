@@ -251,7 +251,7 @@ print "tEventsReceiver is started"
 
 while True:
         if not(isSet):
-                time.sleep(0)
+                time.sleep(1)
         else:
                 break
 
