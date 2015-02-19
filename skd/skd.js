@@ -27,7 +27,7 @@ var currentUser = '0';
 /*My Codes*/
 fs.readFile('/sys/class/gpio/gpio17/value', "utf-8", function(err, data) {
 	if(err) {
-		err.path = file;
+		err.path = '/sys/class/gpio/gpio17/value';
 		err.action = 'read';
 		console.log(err);
 	} else {
