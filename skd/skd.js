@@ -1,6 +1,6 @@
  var net = require('net');
  var fs = require('fs');
-var gpio = require("gpio");
+var gpio = require("rpi-gpio");
 var express = require('express');
 var _ = require('underscore')._;
 
