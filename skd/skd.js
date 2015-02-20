@@ -18,7 +18,6 @@ var isWaitingForInput = false;
 var inputWaitingTimer = null;
 var waitingForDoorCloseInterval = null;
 var startedAlarmOnInterval = false;
-var savedSocket = null;
 var alarmWorking = false;
 var objectName = '';
 var skdUsers = [];
@@ -111,10 +110,7 @@ var gpio11 = gpio.export(17, {
     ready: function () {
         gpio11.on("change", function (val) {
             doorState = val;
-			if (savedSocket) {
-				savedSocket.broadcast.emit('doorIsClosed', gpio11.value);
-				savedSocket.emit('doorIsClosed', gpio11.value);
-			}
+			io.sockets.emit('doorIsClosed', gpio11.value);
             sendToPython(doorState, alarmSet, alarmWorking, currentUser);
             if (val == 0) {
                 console.log("Открыли дверь");
@@ -177,26 +173,17 @@ var tcpserver = net.createServer(function (c) {
         var sData = data.toString();
         if (sData[0] == '0') {
             SetSignal(false);
-			if (savedSocket) {
-				savedSocket.broadcast.emit('alarmDeactivated', null);
-				savedSocket.emit('alarmDeactivated', null);
-			}
+			io.sockets.emit('alarmDeactivated', null);
         }
         else if (sData[0] == '1') {
             SetSignal(true);
-			if (savedSocket) {
-				savedSocket.broadcast.emit('alarmActivated', 123);
-				savedSocket.emit('alarmActivated', 123);
-			}
+			io.sockets.emit('alarmActivated', 123);
         }
         else if (sData[0] == '2') {
             console.log("Получили настройки СКД!");
             var arr = JSON.parse(sData.substring(1));
             objectName = arr[0].Value + " " + arr[1].Value;
-			if (savedSocket) {
-				savedSocket.broadcast.emit('facilityName', objectName);
-				savedSocket.emit('facilityName', objectName);
-			}
+			io.sockets.emit('facilityName', objectName);
         }
         else if (sData[0] == '3') {
             console.log("Получили CRUD операцию пользователей");
@@ -232,7 +219,6 @@ SetSignal(false);
 
 io.on('connection', function (socket) {
     console.log('Connected client');
-    savedSocket = socket;
 	
 	socket.emit('currentState', {
 		doorState: doorState,
@@ -353,8 +339,7 @@ setInterval(function () {
                     if (timeLeft < 1) {
                         enableSound();
                     }
-					savedSocket.emit('dieAfter', timeLeft);
-					savedSocket.broadcast.emit('dieAfter', timeLeft);
+					io.sockets.emit('dieAfter', timeLeft);
                 }
             }, 1000);
         }

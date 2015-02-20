@@ -201,13 +201,14 @@ def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
         return False
 
 def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
+        global skdState
+        global modemNumber
         plcClient = snap7.client.Client()
         currentMillis=0
         lastMillis=0
         readPLCErrors=0
         while True:
                 try:
-                        global isNeedWriteToSiements
                         if not(plcClient.get_connected()):
                                 plcClient.connect(plcAddress, 0, 0)
                         firstArrayFromPLC = bytearray(struct.pack("h",modemNumber))
@@ -227,6 +228,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
                                 qs = q.qsize()
+                                print qs
                                 if qs > 1000:
                                         c = q.get()
                                 q.put(firstArrayFromPLC)
