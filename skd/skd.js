@@ -23,6 +23,12 @@ var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
 
+app.use(express.static(__dirname));
+
+server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+});
+
 var gpio23 = gpio.export(23, {
     direction: "out",
     ready: function () {
