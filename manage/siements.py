@@ -72,7 +72,9 @@ def SetSettings(s):
         keyArr = setArr[7].split(',')
         while len(bytesToCheck) > 0:
                 bytesToCheck.pop()
+        print "Bytes to check"
         for it in keyArr:
+                print int(it)
                 bytesToCheck.add(int(it) + 2)
         skd = setArr[8].split(',')
         skdDb = int(skd[0])
