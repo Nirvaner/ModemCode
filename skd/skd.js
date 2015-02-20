@@ -77,7 +77,6 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
     try {
         var client = net.connect({ port: 10002, host: "localhost" },
             function (c) {
-                console.log("Send To packet")
                 setTimeout(function () {
                     try {
                         var alarmSetf = 0;
@@ -88,7 +87,6 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                         if (alarmOnOff) {
                             sAlarmOnOff = 1;
                         }
-                        console.log("Send to python: 1|" + doorSt + alarmSetf + sAlarmOnOff + currentUsr);
                         client.write("1" + doorSt + alarmSetf + sAlarmOnOff + currentUsr, function () {
                             client.destroy();
                         });
@@ -97,7 +95,6 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                 }, 0);
             });
         client.on('error', function (data) {
-            console.log(data.toString());
             client.end();
         });
     }
