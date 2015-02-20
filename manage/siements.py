@@ -113,15 +113,10 @@ def WriteToController(db, start, bit, data, size, command):
                 plcClient = snap7.client.Client()
                 if not(plcClient.get_connected()):
                                 plcClient.connect(plcAddress, 0, 0)
-                print "WriteToSiements"
                 if not(plcClient.get_connected()):
                         plcClient.connect(plcAddress, 0, 0)
                 if bit > -1:
-                        print "DBRead params " + str(db) + str(start)
                         value = int(struct.unpack("B", str(plcClient.db_read(db, start, 1)))[0])
-                        print "Value of DB " + str(value)
-                        print "Command " + str(command)
-                        print "Data " + str(data)
                         if command:
                                 value = value | data
                         else:
@@ -138,7 +133,6 @@ def WriteToController(db, start, bit, data, size, command):
                         dvalue = bytearray(struct.pack("L", value))
                 plcClient.db_write(db, start, dvalue)
                 return True
-                print "Write to siements succesfull"
                 plcClient.disconnect()
         except Exception as error:
                 pass
