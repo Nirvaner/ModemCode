@@ -32,7 +32,8 @@ db = 0
 size = 0
 lightRead = 0
 hardRead = 0
-bytesToCheck = {0,1,2};
+urgentBytes = {0, 1}
+delayBytes = {0, 1}
 skdState = 0
 skdDb = 0
 skdStartPos = 0
@@ -48,6 +49,8 @@ q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
+isUrgentBytes = False
+
 def SetSettings(s):
         print "SetSettings: " + s
         setArr = s.split('|')
@@ -58,7 +61,8 @@ def SetSettings(s):
         global size
         global lightRead
         global hardRead
-        global bytesToCheck
+        global urgentBytes
+        global delayBytes
         global skdDb
         global skdStartPos
         global skdBitPos
@@ -69,17 +73,20 @@ def SetSettings(s):
         size = int(setArr[4])
         lightRead = int(setArr[5]) * 1000
         hardRead = float(setArr[6]) / 1000
-        keyArr = setArr[7].split(',')
-        while len(bytesToCheck) > 0:
-                bytesToCheck.pop()
-        print "Bytes to check"
+        urgentArr = setArr[7].split(',')
+        while len(urgentBytes) > 0:
+                urgentBytes.pop()
+        for it in urgentArr:
+                urgentBytes.add(int(it) + 2)
+        delayArr = setArr[8].split(',')
+        while len(delayBytes) > 0:
+                delayBytes.pop()
         for it in keyArr:
-                print int(it)
-                bytesToCheck.add(int(it) + 2)
-        skd = setArr[8].split(',')
-        skdDb = int(skd[0])
-        skdStartPos = int(skd[1])
-        skdBitPos = int(skd[2])
+                delayBytes.add(int(it) + 2)
+        skdArr = setArr[9].split(',')
+        skdDb = int(skdArr[0])
+        skdStartPos = int(skdArr[1])
+        skdBitPos = int(skdArr[2])
         global isSet
         global firstArrayFromPLC
         global secondArrayForCheck
@@ -182,23 +189,36 @@ def SendBufferToServer(buf):
         return False
 
 def ReadFromQueue(q):
+        global isUrgentBytes
+        currentMillis=0
+        lastMillis=0
         while True:
-                if q.qsize()>0:
+                currentMillis = int(round(time.time()*1000))
+                if (isUrgentBytes or (currentMillis-lastMillis>lightRead)):
+                        isUrgentBytes = False
+                        lastMillis = currentMillis
+                        qs = q.qsize()
                         obj = q.get()
+                        if qs != 0:
+                                for it in qs:
+                                        obj += q.get()
                         if not(SendBufferToServer(obj)):
                                 q.put(obj)
                                 time.sleep(1)
                         time.sleep(0.01)
 
-def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck):
-        for item in bytesToCheck:
+def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, checkBytes):
+        for item in checkBytes:
                 if(firstArrayFromPLC[int(item)] != secondArrayForCheck[int(item)]):
                         return True
         return False
 
-def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
+def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,delayBytes):
         global skdState
         global modemNumber
+        global lightRead
+        global hardRead
+        global isUrgentBytes
         plcClient = snap7.client.Client()
         currentMillis=0
         lastMillis=0
@@ -212,7 +232,10 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                         firstArrayFromPLC += plcClient.db_read(db, 0, size)
                         readPLCErrors = 0
                         currentMillis = int(round(time.time()*1000))
-                        if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, bytesToCheck)) or (currentMillis-lastMillis>lightRead)):
+                        isUrgentBytesNeed = False
+                        if CheckBuffer(firstArrayFromPLC, secondArrayForCheck, urgentBytes):
+                                isUrgentBytesNeed = True
+                        if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, delayBytes)) or (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
                                 date = datetime.datetime.now()
@@ -225,10 +248,12 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck):
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
                                 qs = q.qsize()
                                 print qs
-                                if qs > 1000:
+                                if qs > 10000:
                                         c = q.get()
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
+                        if isUrgentBytesNeed:
+                                isUrgentBytes = True
                 except Exception as error:
                         pass
                         sys.exc_clear()
@@ -253,7 +278,7 @@ while True:
         else:
                 break
 
-tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,bytesToCheck))
+tReadFromPLC = threading.Thread(target=ReadFromPLC, args = (q,firstArrayFromPLC,secondArrayForCheck,delayBytes))
 tReadFromPLC.daemon = True
 tReadFromPLC.start()
 print "tReadFromPLC is started"
