@@ -175,19 +175,6 @@ def EventsReceiver(skdState):
                         sys.exc_clear()
                         print "Siements>EventsReceiver: " + str(error)
 
-def SendBufferToServer(buf):
-        try:
-                tcpClient = socket.socket()
-                tcpClient.connect((serverAddress, serverPort))
-                tcpClient.send(buf)
-                tcpClient.close()
-                return True
-        except Exception as error:
-                print "Siements>SendBufferToServer: " + str(error)
-                pass
-                sys.exc_clear()
-        return False
-
 def ReadFromQueue(q):
         global isUrgentBytes
         currentMillis=0
@@ -197,15 +184,19 @@ def ReadFromQueue(q):
                 if (isUrgentBytes or (currentMillis-lastMillis>lightRead)):
                         isUrgentBytes = False
                         lastMillis = currentMillis
-                        qs = q.qsize()
-                        obj = q.get()
-                        if qs != 0:
-                                for it in qs:
-                                        obj += q.get()
-                        if not(SendBufferToServer(obj)):
-                                q.put(obj)
-                                time.sleep(1)
-                        time.sleep(0.01)
+                        try:
+                                tcpClient = socket.socket()
+                                tcpClient.connect((serverAddress, serverPort))
+                                while q.qsize() != 0:
+                                        tcpClient.send(q.get())
+                                tcpClient.close()
+                                time.sleep(0.01)
+
+                        except Exception as error:
+                                pass
+                                sys.exc_clear()
+                                print "Siements>SendBufferToServer: " + str(error)
+                                time.sleep(10)
 
 def CheckBuffer(firstArrayFromPLC, secondArrayForCheck, checkBytes):
         for item in checkBytes:
