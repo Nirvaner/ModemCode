@@ -81,7 +81,7 @@ def SetSettings(s):
         delayArr = setArr[8].split(',')
         while len(delayBytes) > 0:
                 delayBytes.pop()
-        for it in keyArr:
+        for it in delayArr:
                 delayBytes.add(int(it) + 2)
         skdArr = setArr[9].split(',')
         skdDb = int(skdArr[0])
