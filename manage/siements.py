@@ -189,6 +189,7 @@ def ReadFromQueue(q):
                                 tcpClient.connect((serverAddress, serverPort))
                                 while q.qsize() != 0:
                                         tcpClient.send(q.get())
+                                tcpClient.send(struct.pack("b", 0))
                                 tcpClient.close()
                                 time.sleep(0.01)
 
