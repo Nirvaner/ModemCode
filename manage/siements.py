@@ -226,7 +226,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,delayBytes):
                         isUrgentBytesNeed = False
                         if CheckBuffer(firstArrayFromPLC, secondArrayForCheck, urgentBytes):
                                 isUrgentBytesNeed = True
-                        if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, delayBytes)) or (currentMillis-lastMillis>lightRead)):
+                        if ((CheckBuffer(firstArrayFromPLC, secondArrayForCheck, delayBytes)) or isUrgentBytes or (currentMillis-lastMillis>lightRead)):
                                 lastMillis = currentMillis
                                 secondArrayForCheck = firstArrayFromPLC
                                 date = datetime.datetime.now()
