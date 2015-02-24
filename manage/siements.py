@@ -181,7 +181,7 @@ def ReadFromQueue(q):
         lastMillis=0
         while True:
                 currentMillis = int(round(time.time()*1000))
-                if (isUrgentBytes or (currentMillis-lastMillis>lightRead)):
+                if True:#(isUrgentBytes or (currentMillis-lastMillis>lightRead)):
                         isUrgentBytes = False
                         lastMillis = currentMillis
                         try:
