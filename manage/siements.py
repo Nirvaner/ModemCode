@@ -187,9 +187,9 @@ def ReadFromQueue(q):
                         try:
                                 tcpClient = socket.socket()
                                 tcpClient.connect((serverAddress, serverPort))
+                                tcpClient.send(bytearray(struct.pack("H", size + 14)))
                                 while q.qsize() > 0:
                                         tcpClient.send(q.get())
-                                        time.sleep(0.1)
                                 tcpClient.send(struct.pack("b", 0))
                                 tcpClient.close()
                         except Exception as error:
@@ -239,7 +239,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,delayBytes):
                                 firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
                                 qs = q.qsize()
                                 print qs
-                                if qs > 10000:
+                                if qs > 1000:
                                         c = q.get()
                                 q.put(firstArrayFromPLC)
                                 time.sleep(hardRead)
