@@ -189,7 +189,7 @@ def ReadFromQueue(q):
                                 tcpClient.connect((serverAddress, serverPort))
                                 tcpClient.send(bytearray(struct.pack("H", size + 14)))
                                 while q.qsize() > 0:
-                                        tcpClient.send(q.get())
+                                        tcpClient.sendall(q.get())
                                 tcpClient.send(struct.pack("b", 0))
                                 tcpClient.close()
                         except Exception as error:
