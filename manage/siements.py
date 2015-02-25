@@ -189,7 +189,7 @@ def ReadFromQueue(q):
                         try:
                                 tcpClient = socket.socket()
                                 tcpClient.connect((serverAddress, serverPort))
-                                if !packet:
+                                if packet == None:
                                         packet = q.get()
                                         while q.qsize() > 0:
                                                 packet += q.get()
