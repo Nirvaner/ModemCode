@@ -185,14 +185,17 @@ def ReadFromQueue(q):
                 if (isUrgentBytes or (currentMillis-lastMillis>lightRead)) and (q.qsize() > 0):
                         lastMillis = currentMillis
                         isUrgentBytes = False
+                        obj = None
                         try:
                                 while q.qsize() > 0:
+                                        obj = q.get()
                                         tcpClient.connect((serverAddress, serverPort))
-                                        tcpClient.sendall(q.get())
+                                        tcpClient.sendall(obj)
                                         tcpClient.close()
                         except Exception as error:
                                 pass
                                 sys.exc_clear()
+                                q.put(obj)
                                 print "Siements>SendBufferToServer: " + str(error)
                                 time.sleep(10)
 
