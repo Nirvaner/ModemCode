@@ -194,7 +194,7 @@ def ReadFromQueue(q):
                                         while q.qsize() > 0:
                                                 packet += q.get()
                                         isUrgentBytes = False
-                                tcpClient.send(packet)
+                                tcpClient.sendall(packet)
                                 tcpClient.close()
                                 packet = None
                         except Exception as error:
