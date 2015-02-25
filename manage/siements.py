@@ -241,7 +241,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,delayBytes):
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.hour)))
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.minute)))
                                 firstArrayFromPLC += bytearray(struct.pack("b",int(date.second)))
-                                firstArrayFromPLC += bytearray(struct.pack("i",int(date.microsecond)))
+                                firstArrayFromPLC += bytearray(struct.pack("I",int(date.microsecond)))
                                 qs = q.qsize()
                                 print qs
                                 if qs > 1000:
