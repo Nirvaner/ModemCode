@@ -186,7 +186,7 @@ def ReadFromQueue(q):
                         isUrgentBytes = False
                         try:
                                 while q.qsize() > 0:
-                                        socket.sendto(q.get(), (serverAddress, serverPort))
+                                        socket.socket.sendto(q.get(), (serverAddress, serverPort))
                         except Exception as error:
                                 pass
                                 sys.exc_clear()
