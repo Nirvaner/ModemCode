@@ -186,6 +186,7 @@ def ReadFromQueue(q):
                 currentMillis = int(round(time.time()*1000))
                 if (isUrgentBytes or (currentMillis-lastMillis>lightRead)) and (q.qsize() > 0):
                         lastMillis = currentMillis
+                        isUrgentBytes = True
                         try:
                                 tcpClient = socket.socket()
                                 tcpClient.connect((serverAddress, serverPort))
@@ -194,7 +195,7 @@ def ReadFromQueue(q):
                                         while q.qsize() > 0:
                                                 packet += q.get()
                                         isUrgentBytes = False
-                                tcpClient.send(packet)
+                                tcpClient.sendall(packet)
                                 tcpClient.close()
                                 packet = None
                         except Exception as error:
