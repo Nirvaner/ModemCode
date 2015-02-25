@@ -49,8 +49,6 @@ q = Queue.Queue()
 firstArrayFromPLC = bytearray(size)
 secondArrayForCheck = bytearray(size)
 
-packet = None
-
 isUrgentBytes = False
 
 def SetSettings(s):
@@ -178,7 +176,6 @@ def EventsReceiver(skdState):
                         print "Siements>EventsReceiver: " + str(error)
 
 def ReadFromQueue(q):
-        global packet
         global isUrgentBytes
         currentMillis=0
         lastMillis=0
@@ -186,16 +183,12 @@ def ReadFromQueue(q):
                 currentMillis = int(round(time.time()*1000))
                 if (isUrgentBytes or (currentMillis-lastMillis>lightRead)) and (q.qsize() > 0):
                         lastMillis = currentMillis
-                        isUrgentBytes = True
+                        isUrgentBytes = False
                         try:
                                 tcpClient = socket.socket()
                                 tcpClient.connect((serverAddress, serverPort))
                                 if packet == None:
-                                        packet = q.get()
-                                        while q.qsize() > 0:
-                                                packet += q.get()
-                                        isUrgentBytes = False
-                                tcpClient.sendall(packet)
+                                        tcpClient.sendall(q.get())
                                 tcpClient.close()
                                 packet = None
                         except Exception as error:
