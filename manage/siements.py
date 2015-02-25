@@ -187,7 +187,7 @@ def ReadFromQueue(q):
                         isUrgentBytes = False
                         try:
                                 while q.qsize() > 0:
-                                        tcpClient.sendto(q.get(), (serverAddress, serverPort))
+                                        tcpClient.sendto(q.get(), serverAddress + serverPort)
                                 packet = None
                         except Exception as error:
                                 pass
