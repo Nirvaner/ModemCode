@@ -187,7 +187,7 @@ def ReadFromQueue(q):
                         try:
                                 tcpClient = socket.socket()
                                 tcpClient.connect((serverAddress, serverPort))
-                                if packet == None:
+                                while q.qsize() > 0:
                                         tcpClient.sendall(q.get())
                                 tcpClient.close()
                                 packet = None
