@@ -177,6 +177,7 @@ def EventsReceiver(skdState):
 
 def ReadFromQueue(q):
         global isUrgentBytes
+        tcpClient = socket.socket()
         currentMillis=0
         lastMillis=0
         while True:
@@ -186,7 +187,9 @@ def ReadFromQueue(q):
                         isUrgentBytes = False
                         try:
                                 while q.qsize() > 0:
-                                        socket.socket().sendto(q.get(), (serverAddress, serverPort))
+                                        tcpClient.connect((serverAddress, serverPort))
+                                        tcpClient.sendall(q.get())
+                                        tcpClient.close()
                         except Exception as error:
                                 pass
                                 sys.exc_clear()
