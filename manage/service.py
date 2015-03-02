@@ -8,7 +8,7 @@ import threading
 CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
 
-tcpClient = socket.socket()
+tcpClient = None
 
 def SystemReboot():
         subprocess.popen(["sudo","-u","root","-p","root","reboot"])
@@ -78,7 +78,8 @@ print "Service started"
 
 while True:
         try:
-                tcpClient.close()
+                if tcpClient:
+                        tcpClient.close()
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress,serverPort))
                 tcpClient.settimeout(60)
