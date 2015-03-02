@@ -80,6 +80,9 @@ ConnectToServer()
 
 while True:
         try:
+                tcpClient.close()
+                tcpClient = socket.socket()
+                tcpClient.connect((serverAddress,serverPort))
                 tcpClient.settimeout(60)
                 response = tcpClient.recv(1024).strip('\0')
                 tcpClient.settimeout(None)
