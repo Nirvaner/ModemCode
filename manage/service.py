@@ -76,8 +76,6 @@ skdSub = None
 
 print "Service started"
 
-ConnectToServer()
-
 while True:
         try:
                 tcpClient.close()
