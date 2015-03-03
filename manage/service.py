@@ -99,6 +99,7 @@ while True:
                 elif response[0:8] == "settings":
                         if siementsSub:
                                 siementsSub.terminate()
+                                time.sleep(5)
                         siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                         i = 0
                         while True:
