@@ -28,7 +28,7 @@ def SetServerAddress(address):
         arrContent[-1] = address
         content = '|'.join(arrContent)
         SetStrInFile(path,content)
-def ConnectToServer():
+def ConnectToServer(isFirstConnect):
         print "Connect to server"
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         #subprocess.call(["sudo","-u","root","-p","root","bash","/devir/scripts/rebind.sh"])
@@ -36,7 +36,7 @@ def ConnectToServer():
         try:
                 tcpClient = socket.socket()
                 tcpClient.connect((serverAddress,serverPort))
-                tcpClient.send(info)
+                tcpClient.send(info + "|" + isFirstConnect)
         except Exception as error:
                 print "Service>ConnectToServer: " + str(error)
                 pass
@@ -76,7 +76,7 @@ skdSub = None
 
 print "Service started"
 
-ConnectToServer()
+ConnectToServer("1")
 
 while True:
         try:
@@ -178,4 +178,4 @@ while True:
                 print "Service: " + str(error)
                 pass
                 sys.exc_clear()
-                ConnectToServer()
+                ConnectToServer("0")
