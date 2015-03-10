@@ -179,7 +179,7 @@ while True:
                 print "Service: " + str(error)
                 pass
                 sys.exc_clear()
-                if siementsSub.poll == None:
-                        ConnectToServer("0")
-                else:
+                if siementsSub:
                         ConnectToServer("1")
+                else:
+                        ConnectToServer("0")
