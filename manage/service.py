@@ -30,8 +30,8 @@ def SetServerAddress(address):
         SetStrInFile(path,content)
 def ConnectToServer(isFirstConnect):
         print "Connect to server"
-        subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         #subprocess.call(["sudo","-u","root","-p","root","bash","/devir/scripts/rebind.sh"])
+        subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
         try:
                 tcpClient = socket.socket()
@@ -99,7 +99,7 @@ while True:
                 elif response[0:8] == "settings":
                         if siementsSub:
                                 siementsSub.terminate()
-                                time.sleep(5)
+                                siementsSub.wait()
                         siementsSub = subprocess.Popen(["sudo","-u","root","-p","root","python",CurDir + "siements.py"])
                         i = 0
                         while True:
@@ -179,4 +179,7 @@ while True:
                 print "Service: " + str(error)
                 pass
                 sys.exc_clear()
-                ConnectToServer("0")
+                if siementsSub:
+                        ConnectToServer("0")
+                else:
+                        ConnectToServer("1")
