@@ -30,8 +30,8 @@ def SetServerAddress(address):
         SetStrInFile(path,content)
 def ConnectToServer(isFirstConnect):
         print "Connect to server"
-        #subprocess.call(["sudo","-u","root","-p","root","bash","/devir/scripts/rebind.sh"])
-        subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
+        subprocess.call(["sudo","-u","root","-p","root","bash","/devir/scripts/rebind.sh"])
+        #subprocess.call(["sudo","-u","root","-p","root","sakis3g","reconnect","-console"])
         global tcpClient
         try:
                 tcpClient = socket.socket()
