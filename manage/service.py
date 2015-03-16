@@ -4,23 +4,27 @@ import sys
 import os
 import time
 import threading
+import RPi.GPIO as gpio
 
 CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
-
-tcpClient = None
+serverPort = 10101
+modemPin = 25
 
 def SystemReboot():
         subprocess.popen(["sudo","-u","root","-p","root","reboot"])
+
 def GetStrFromFile(path):
         f = open(path,"r")
         res = f.read()
         f.close()
         return res.strip('\n')
+
 def SetStrInFile(path,s):
         f = open(path,"w")
         f.write(s)
         f.close()
+
 def SetServerAddress(address):
         path = CurDir + "set"
         content = GetStrFromFile(path)
@@ -28,6 +32,15 @@ def SetServerAddress(address):
         arrContent[-1] = address
         content = '|'.join(arrContent)
         SetStrInFile(path,content)
+
+gpio.setmode(GPIO.BCM)
+gpio.output(modemPin, gpio.OUT)
+gpio.output(modemPin, True)
+def ModemReboot():
+        gpio.output(modemPin, False)
+        time.sleep(1)
+        gpio.output(modemPin, True)
+
 def ConnectToServer(isFirstConnect):
         print "Connect to server"
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","connect"])
@@ -40,6 +53,7 @@ def ConnectToServer(isFirstConnect):
                 print "Service>ConnectToServer: " + str(error)
                 pass
                 sys.exc_clear()
+
 def SendToSiementsPY(s):
         try:
                 siementsClient = socket.socket()
@@ -52,6 +66,7 @@ def SendToSiementsPY(s):
                 pass
                 sys.exc_clear()
                 return False
+
 def SendToSkdJS(s):
         try:
                 skdClient = socket.socket()
@@ -68,14 +83,14 @@ def SendToSkdJS(s):
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
 serverAddress = info.split('|')[2]
 
-serverPort = 10101
+print "Service started"
+
+tcpClient = None
+
+ConnectToServer("1")
 
 siementsSub = None
 skdSub = None
-
-print "Service started"
-
-ConnectToServer("1")
 
 while True:
         try:
