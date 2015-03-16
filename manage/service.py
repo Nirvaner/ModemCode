@@ -9,7 +9,7 @@ import RPi.GPIO as gpio
 CurDir = "/devir/ModemCode/manage/"
 DevirDir = "/devir/ModemCode/"
 serverPort = 10101
-modemPin = 25
+modemPin = 16
 
 def SystemReboot():
         subprocess.popen(["sudo","-u","root","-p","root","reboot"])
@@ -33,14 +33,14 @@ def SetServerAddress(address):
         content = '|'.join(arrContent)
         SetStrInFile(path,content)
 
-#gpio.setmode(GPIO.BCM)
-#gpio.output(modemPin, gpio.OUT)
-#gpio.output(modemPin, False)
+gpio.setmode(gpio.BCM)
+gpio.output(modemPin, gpio.OUT)
+gpio.output(modemPin, False)
 def ModemReboot():
-        #global gpio
-        #gpio.output(modemPin, True)
+        global gpio
+        gpio.output(modemPin, True)
         time.sleep(5)
-        #gpio.output(modemPin, False)
+        gpio.output(modemPin, False)
 
 ModemError = False
 def ConnectToServer(isFirstConnect):
