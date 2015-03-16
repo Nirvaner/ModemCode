@@ -34,7 +34,7 @@ def SetServerAddress(address):
         SetStrInFile(path,content)
 
 gpio.setmode(gpio.BCM)
-gpio.output(modemPin, gpio.OUT)
+gpio.setup(modemPin, gpio.OUT)
 gpio.output(modemPin, False)
 def ModemReboot():
         global gpio
