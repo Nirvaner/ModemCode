@@ -42,7 +42,7 @@ def ModemReboot():
         time.sleep(5)
         gpio.output(modemPin, False)
 
-ModemError = False
+ModemError = True
 def ConnectToServer(isFirstConnect):
         global ModemError
         global tcpClient
