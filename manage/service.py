@@ -35,14 +35,24 @@ def SetServerAddress(address):
 
 gpio.setmode(GPIO.BCM)
 gpio.output(modemPin, gpio.OUT)
-gpio.output(modemPin, True)
+gpio.output(modemPin, False)
 def ModemReboot():
-        gpio.output(modemPin, False)
-        time.sleep(1)
+        global gpio
         gpio.output(modemPin, True)
+        time.sleep(1)
+        gpio.output(modemPin, False)
 
+ModemError = False
 def ConnectToServer(isFirstConnect):
+        global ModemError
+        global tcpClient
         print "Connect to server"
+        if ModemError:
+                ModemReboot()
+                ModemError = False
+                time.sleep(5)
+        else:
+                ModemError = True
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","connect"])
         global tcpClient
         try:
