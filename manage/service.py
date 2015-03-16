@@ -39,7 +39,7 @@ gpio.output(modemPin, False)
 def ModemReboot():
         global gpio
         gpio.output(modemPin, True)
-        time.sleep(1)
+        time.sleep(5)
         gpio.output(modemPin, False)
 
 ModemError = False
@@ -50,7 +50,7 @@ def ConnectToServer(isFirstConnect):
         if ModemError:
                 ModemReboot()
                 ModemError = False
-                time.sleep(5)
+                time.sleep(10)
         else:
                 ModemError = True
         subprocess.call(["sudo","-u","root","-p","root","sakis3g","connect"])
@@ -107,6 +107,7 @@ while True:
                 tcpClient.settimeout(60)
                 response = tcpClient.recv(1024).strip('\0')
                 tcpClient.settimeout(None)
+                ModemError = False
                 if response == "":
                         ConnectToServer()
                 elif response[0] == "0":
