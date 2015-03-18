@@ -109,7 +109,7 @@ while True:
                 tcpClient.settimeout(None)
                 ModemError = False
                 if response == "":
-                        ConnectToServer()
+                        ConnectToServer("1")
                 elif response[0] == "0":
                         tcpClient.send("0")
                         print "Ping ok"
@@ -146,7 +146,7 @@ while True:
                         serverAddress = response[7:]
                         SetServerAddress(serverAddress)
                         tcpClient.send("0")
-                        ConnectToServer()
+                        ConnectToServer("1")
                 elif response[0:6] == "reboot":
                         tcpClient.send("0")
                         subprocess.Popen(["sudo","-u","root","-p","root","reboot"])
