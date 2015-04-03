@@ -129,13 +129,13 @@ while True:
                         i = 0
                         while True:
                                 if SendToSiementsPY(response[8:]):
+                                        tcpClient.send("0")
                                         break
                                 time.sleep(1)
                                 i = i + 1
                                 if i > 10:
                                         tcpClient.send("1")
                                         break
-                        tcpClient.send("0")
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
                         response = tcpClient.recv(int(response[3:]))
