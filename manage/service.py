@@ -134,6 +134,7 @@ while True:
                                 i = i + 1
                                 if i > 10:
                                         tcpClient.send("1")
+                                        break
                         tcpClient.send("0")
                 elif response[0:3] == "skd":
                         tcpClient.send(response[3:])
