@@ -35,12 +35,12 @@ def SetServerAddress(address):
 
 gpio.setmode(gpio.BCM)
 gpio.setup(modemPin, gpio.OUT)
-gpio.output(modemPin, False)
+gpio.output(modemPin, True)
 def ModemReboot():
         global gpio
-        gpio.output(modemPin, True)
-        time.sleep(5)
         gpio.output(modemPin, False)
+        time.sleep(5)
+        gpio.output(modemPin, True)
 
 ModemError = True
 def ConnectToServer(isFirstConnect):
