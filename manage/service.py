@@ -104,7 +104,7 @@ info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
 print "Service started"
 
 if not os.path.exists(CurDir + "service"):
-        SetStrInFile("89.218.66.54|devir.kz");
+        SetStrInFile(CurDir + "adresses", "89.218.66.54|devir.kz");
 serverAddresses = GetStrFromFile(CurDir + "addresses").split("|");
 currentServerAddress = serverAddresses[0];
 
