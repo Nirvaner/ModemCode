@@ -106,7 +106,7 @@ print "Service started"
 if not os.path.exists(CurDir + "addresses"):
         SetStrInFile(CurDir + "addresses", "89.218.66.54|devir.kz");
 serverAddresses = GetStrFromFile(CurDir + "addresses").split("|");
-currentServerAddress = serverAddresses[0];
+serverAddress = serverAddresses[0];
 
 tcpClient = None
 
