@@ -35,12 +35,21 @@ def SetServerAddress(address):
 
 gpio.setmode(gpio.BCM)
 gpio.setup(modemPin, gpio.OUT)
+
+# Transistor
 gpio.output(modemPin, True)
 def ModemReboot():
-        global gpio
-        gpio.output(modemPin, False)
-        time.sleep(5)
-        gpio.output(modemPin, True)
+         global gpio
+         gpio.output(modemPin, False)
+         time.sleep(5)
+         gpio.output(modemPin, True)
+
+# Rele
+#def ModemReboot():
+#        global gpio
+#        gpio.output(modemPin, True)
+#        time.sleep(5)
+#        gpio.output(modemPin, False)
 
 ModemError = True
 def ConnectToServer(isFirstConnect):
@@ -91,9 +100,13 @@ def SendToSkdJS(s):
                 return False
 
 info = GetStrFromFile(CurDir + "set").strip('\n').strip('\0')
-serverAddress = info.split('|')[2]
 
 print "Service started"
+
+if not os.path.exists(CurDir + "service"):
+        SetStrInFile("89.218.66.54|devir.kz");
+serverAddresses = GetStrFromFile(CurDir + "addresses").split("|");
+currentServerAddress = serverAddresses[0];
 
 tcpClient = None
 
