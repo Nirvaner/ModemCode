@@ -9,11 +9,12 @@ var netServer = net.Socket();
 
 var addressIndex = 0;
 function ConnectToServer(){
-    netServer.connect(config.ServicePort, config.Addresses[addressIndex], function () {
-        console.log('Connected: ' + config.Addresses[addressIndex] + ':' + config.ServicePort);
-        Manage();
-    });
+        netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
 }
+netServer.on('connect', function () {
+    console.log('Connected: ' + config.Addresses[addressIndex] + ':' + config.ServicePort);
+    Manage();
+});
 netServer.on('error', function () {
     console.log('Server not response: ' + config.Addresses[addressIndex]);
     if (addressIndex < config.Addresses.length - 1) {
