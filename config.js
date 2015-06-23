@@ -1,21 +1,10 @@
 var fs = require('fs');
-var modemNumber = 0;
-var version = 0;
-fs.readFile(rootPath + 'set', 'utf8', function (error, data) {
-    if (error){
-        console.log('GetModemNumberError: ' + error);
-    }else{
-        var arr = data.split('\n');
-        modemNumber = arr[0];
-        version = arr[1];
-    }
-});
-module.exports = {
-    ModemNumber: modemNumber,
-    Version: version,
+var config = {
+    ModemNumber: 0,
+    Version: 0,
     Addresses: [
-        '89.218.66.54',
-        'devir.kz',
+        //'89.218.66.54',
+        //'devir.kz',
         'localhost'
     ],
     ServicePort: 10001,
@@ -24,3 +13,16 @@ module.exports = {
     SoundPin: 15,
     LitePin: 16
 };
+module.exports = function(callback) {
+    fs.readFile(rootPath + 'set', 'utf8', function (error, data) {
+        if (error) {
+            console.log('GetModemNumberError: ' + error);
+        } else {
+            var arr = data.split('\n');
+            config.ModemNumber = arr[0];
+            config.Version = arr[1];
+            callback();
+        }
+    });
+    return config;
+}
