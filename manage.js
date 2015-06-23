@@ -72,7 +72,7 @@ netServer.on('data', function (data) {
 
 var netSiements = net.Socket();
 function SendToSiements(data) {
-    netSiements.connect({ port: 10010, host: 'localhost'}, function(){
+    netSiements.connect({ port: 10011, host: 'localhost'}, function(){
         netSiements.write(data, function(){
             netSiements.end();
             netServer.write('0');
@@ -86,7 +86,7 @@ function SendToSiements(data) {
 
 var netSkd = net.Socket();
 function SendToSKD(data) {
-    netSkd.connect({ port: 10011, host: 'localhost'}, function(){
+    netSkd.connect({ port: 10012, host: 'localhost'}, function(){
         netServer.write('0');
         netSkd.write(data, function(){
             netSkd.end();

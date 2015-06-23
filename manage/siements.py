@@ -23,7 +23,7 @@ def SetStrInFile(path,s):
         f.close()        
 
 modemNumber = int(GetStrFromFile(CurDir + "set").split('|')[0])
-serverPort = 10102
+serverPort = 10002
 
 serverAddress = "0.0.0.0"
 ipAddress = "0.0.0.0"
@@ -141,7 +141,7 @@ def WriteToController(db, start, bit, data, size, command):
 
 def EventsReceiver(skdState):
         server = socket.socket()
-        server.bind(("", 10002))
+        server.bind(("", 10011))
         server.listen(3)
         while True:
                 try:

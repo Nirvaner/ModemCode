@@ -81,7 +81,7 @@ function unBlinkLight() {
 
 function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
     try {
-        var client = net.connect({ port: 10002, host: "localhost" },
+        var client = net.connect({ port: 10011, host: "localhost" },
             function (c) {
                 setTimeout(function () {
                     try {
@@ -214,7 +214,7 @@ var tcpserver = net.createServer(function (c) {
     });
 });
 
-tcpserver.listen(10003, function () {
+tcpserver.listen(10012, function () {
     console.log('TCP server created');
 });
 
