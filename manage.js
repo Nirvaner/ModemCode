@@ -125,14 +125,14 @@ function SendToSKD(data) {
     netSkd.connect({port: 10012, host: 'localhost'});
     netSkd.on('connect', function () {
         netSkd.write(data, function () {
-            netSkd.removeAllListeners('connect');
             netSkd.end();
+            netSkd = net.Socket();
             netServer.write('0');
         });
     });
     netSkd.on('error', function () {
-        netSkd.removeAllListeners('connect');
         netSkd.end();
+        netSkd = net.Socket();
         if (isSkdError) {
             netServer.write('1');
             isSkdError = false;
