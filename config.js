@@ -5,13 +5,14 @@ var config = {
     Addresses: [
         //'89.218.66.54',
         //'devir.kz',
-        'localhost'
+        '192.168.66.100'
     ],
     ServicePort: 10001,
     PacketPort: 10002,
-    ModemPin: 36,
-    SoundPin: 15,
-    LitePin: 16
+    ModemPin: 16,
+    SoundPin: 22,
+    LightPin: 23,
+    DoorPin: 17
 };
 module.exports = function(callback) {
     fs.readFile(rootPath + 'set', 'utf8', function (error, data) {
@@ -25,4 +26,4 @@ module.exports = function(callback) {
         }
     });
     return config;
-}
+};
