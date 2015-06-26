@@ -9,6 +9,8 @@ var config = {
     ],
     ServicePort: 10001,
     PacketPort: 10002,
+    SkdPort: 10012,
+    ControllerPort: 10011,
     ModemPin: 16,
     SoundPin: 22,
     LightPin: 23,

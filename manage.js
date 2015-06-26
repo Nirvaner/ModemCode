@@ -13,7 +13,6 @@ function SysRestart() {
 
 var net = new require('net');
 var netServer = net.Socket();
-var netSkd = net.Socket();
 var netSiements = net.Socket();
 
 var addressIndex = 0;
@@ -67,7 +66,9 @@ netServer.on('data', function (data) {
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
             skd = spawn('node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
-            skd.on('exit', function(code){console.log('Skd exit with ' + code)});
+            skd.on('exit', function (code) {
+                console.log('Skd exit with ' + code)
+            });
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'skd') {
             console.log('skd');
@@ -104,8 +105,30 @@ netServer.on('data', function (data) {
     }
 });
 
-function SendToSKD(data){
-
+var isSkdError = false;
+function SendToSKD(data) {
+    console.log('Send to SKD');
+    var netSkd = net.connect({host: 'localhost', port: config.SkdPort}, function () {
+        setTimeout(function () {
+            netSkd.write(data);
+            isSkdError = false;
+            netSkd.destroy();
+            netServer.write('0');
+        }, 0);
+    });
+    netSkd.on('error', function () {
+        netSkd.end();
+        netSkd.destroy();
+        if (isSkdError) {
+            netServer.write('1');
+            isSkdError = false;
+        }else{
+            isSkdError = true;
+            setTimeout(function(){
+                SendToSKD(data);
+            }, 5000);
+        }
+    });
 }
 
 function SendToSiements(data) {
