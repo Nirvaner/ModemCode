@@ -67,7 +67,7 @@ netServer.on('data', function (data) {
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
             skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js']);
-            skd.stdout.on('data', function(data){
+            skd.stdout.on('data', function (data) {
                 console.log(data);
             });
             netServer.write('0');
@@ -89,18 +89,22 @@ netServer.on('data', function (data) {
                 siements.kill(0);
             }
             siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py']);
-            siements.stdout.on('data', function(data){
+            siements.stdout.on('data', function (data) {
                 console.log(data);
             });
             console.log('siements run');
             setTimeout(function () {
                 SendToSiements(strData.substring(8));
             }, 5000);
+        } else {
+            console.log('unresolved data: ' + strData);
         }
     } else {
         if (currentOperation == 'skd') {
             SendToSKD(strData);
             currentOperation = '';
+        } else {
+            console.log('unresolved data: ' + strData);
         }
     }
 });
@@ -120,9 +124,9 @@ function SendToSiements(data) {
             sendCount = 0;
             netServer.write('1');
             netSiements.end();
-        } else{
+        } else {
             sendCount++;
-            setTimeout(function(){
+            setTimeout(function () {
                 SendToSiements(data);
             }, 1000);
         }
