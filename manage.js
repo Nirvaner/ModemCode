@@ -66,7 +66,7 @@ netServer.on('data', function (data) {
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
-            skd = spawn('sudo -p root -u root node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
+            skd = spawn('node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
             skd.on('exit', function(code){console.log('Skd exit with ' + code)});
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'skd') {
