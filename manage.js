@@ -126,6 +126,7 @@ function SendToSKD(data) {
     });
 }
 
+var gpio = require('gpio');
 var modemPin;
 var config = rootRequire('config.js')(function () {
     modemPin = gpio.export(config.ModemPin, {
