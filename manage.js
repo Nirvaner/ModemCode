@@ -66,10 +66,7 @@ netServer.on('data', function (data) {
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
-            //skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js']);
-            //skd.stdout.on('data', function (data) {
-            //    console.log(data);
-            //});
+            skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js'], {stdio: 'inherit'});
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'skd') {
             console.log('skd');
@@ -88,10 +85,7 @@ netServer.on('data', function (data) {
                 console.log('siements kill');
                 siements.kill(0);
             }
-            //siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py']);
-            //siements.stdout.on('data', function (data) {
-            //    console.log(data);
-            //});
+            //siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
             console.log('siements run');
             setTimeout(function () {
                 SendToSiements(strData.substring(8));
@@ -119,8 +113,8 @@ function SendToSiements(data) {
         });
     });
     netSiements.on('error', function () {
-            netServer.write('1');
-            netSiements.end();
+        netServer.write('1');
+        netSiements.end();
     });
 }
 
