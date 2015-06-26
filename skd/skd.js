@@ -10,7 +10,7 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 80;
 
 var doorState = 0;
-var alarmOn = 0;
+//var alarmOn = 0;
 var timeLeft = 60;
 var doorCloseTimeLeft = 60;
 var alarmSet = false;
@@ -22,6 +22,8 @@ var alarmWorking = false;
 var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
+
+console.log('Skd started!!!!!!!!!!!!!!!!!!!!!!!!');
 
 app.use(express.static(__dirname));
 
@@ -82,7 +84,7 @@ function unBlinkLight() {
 function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
     try {
         var client = net.connect({ port: 10011, host: "localhost" },
-            function (c) {
+            function () {
                 setTimeout(function () {
                     try {
                         var alarmSetf = 0;
@@ -100,7 +102,7 @@ function sendToPython(doorSt, alarmSt, alarmOnOff, currentUsr) {
                     catch (error) { }
                 }, 0);
             });
-        client.on('error', function (data) {
+        client.on('error', function () {
             client.end();
         });
     }
@@ -169,7 +171,7 @@ SetSignal = function(SignalOn){
         }
         sendToPython(doorState, alarmSet, alarmWorking, currentUser);
     }
-}
+};
 
 var tcpserver = net.createServer(function (c) {
     c.on('data', function (data) {
