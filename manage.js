@@ -59,25 +59,40 @@ netServer.on('connect', function () {
 var currentOperation = '';
 netServer.on('data', function (data) {
     var strData = data.toString();
+    console.log('DataFromServer: ' + strData);
     if (currentOperation == '') {
         if (strData[0] == '0') {
+            console.log('ping');
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'run') {
+            console.log('run');
             skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js']);
+            skd.stdout.on(function(data){
+                console.log(data);
+            });
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'skd') {
+            console.log('skd');
             currentOperation = 'skd';
             netServer.write(s.substring(3));
         } else if (strData.substring(0, 6) == 'reboot') {
+            console.log('reboot');
             netServer.write('0');
             SysRestart();
         } else if (strData.substring(0, 8) == 'datetime') {
+            console.log('datetime');
             netServer.write('0');
         } else if (strData.substring(0, 8) == 'settings') {
+            console.log('settings');
             if (siements) {
+                console.log('siements kill');
                 siements.kill(0);
             }
             siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py']);
+            siements.stdout.on(function(data){
+                console.log(data);
+            });
+            console.log('siements run');
             setTimeout(function () {
                 SendToSiements(strData.substring(8));
             }, 5000);
@@ -92,6 +107,7 @@ netServer.on('data', function (data) {
 
 var sendCount = 0;
 function SendToSiements(data) {
+    console.log('send to siements');
     netSiements.connect({port: 10011, host: 'localhost'}, function () {
         netSiements.write(data, function () {
             netSiements.end();
