@@ -122,7 +122,8 @@ function SendToSiements(data) {
 var isSkdError = false;
 function SendToSKD(data) {
     console.log('SendToSkd data: ' + data);
-    netSkd.connect({port: 10012, host: 'localhost'}, function () {
+    netSkd.connect({port: 10012, host: 'localhost'});
+    netSkd.on('connect', function () {
         netSkd.write(data, function () {
             netSkd.end();
             netServer.write('0');
