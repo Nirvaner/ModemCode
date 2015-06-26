@@ -109,7 +109,6 @@ netServer.on('data', function (data) {
     }
 });
 
-var sendCount = 0;
 function SendToSiements(data) {
     console.log('send to siements');
     netSiements.connect({port: 10011, host: 'localhost'}, function () {
@@ -120,30 +119,21 @@ function SendToSiements(data) {
         });
     });
     netSiements.on('error', function () {
-        if (sendCount > 5) {
-            sendCount = 0;
             netServer.write('1');
             netSiements.end();
-        } else {
-            sendCount++;
-            netSiements.end();
-            setTimeout(function () {
-                SendToSiements(data);
-            }, 1000);
-        }
     });
 }
 
 function SendToSKD(data) {
     netSkd.connect({port: 10012, host: 'localhost'}, function () {
-        netServer.write('0');
         netSkd.write(data, function () {
             netSkd.end();
+            netServer.write('0');
         });
     });
     netSkd.on('error', function () {
-        netServer.write('1');
         netSkd.end();
+        netServer.write('1');
     });
 }
 
