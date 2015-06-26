@@ -60,7 +60,7 @@ var currentOperation = '';
 netServer.on('data', function (data) {
     var strData = data.toString();
     if (currentOperation == '') {
-        if (s[0] == '0') {
+        if (strData[0] == '0') {
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'run') {
             skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js']);
