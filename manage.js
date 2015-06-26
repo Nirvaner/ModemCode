@@ -74,7 +74,7 @@ netServer.on('data', function (data) {
         } else if (strData.substring(0, 3) == 'skd') {
             console.log('skd');
             currentOperation = 'skd';
-            netServer.write(s.substring(3));
+            netServer.write(strData.substring(3));
         } else if (strData.substring(0, 6) == 'reboot') {
             console.log('reboot');
             netServer.write('0');
