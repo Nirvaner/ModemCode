@@ -119,6 +119,7 @@ function SendToSiements(data) {
     });
 }
 
+var isSkdError = false;
 function SendToSKD(data) {
     netSkd.connect({port: 10012, host: 'localhost'}, function () {
         netSkd.write(data, function () {
@@ -128,7 +129,15 @@ function SendToSKD(data) {
     });
     netSkd.on('error', function () {
         netSkd.end();
-        netServer.write('1');
+        if (isSkdError) {
+            netServer.write('1');
+            isSkdError = false;
+        }else {
+            isSkdError = true;
+            setTimeout(function () {
+                SendToSKD(data);
+            }, 5000);
+        }
     });
 }
 
