@@ -143,7 +143,7 @@ function SendToController(data) {
             });
         }, 0);
     });
-    netSiements.on('error', function () {
+    netController.on('error', function () {
         netController.end();
         netController.destroy();
         if (isControllerError){
