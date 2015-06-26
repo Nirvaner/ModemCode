@@ -175,6 +175,7 @@ SetSignal = function(SignalOn){
 
 var tcpserver = net.createServer(function (c) {
     c.on('data', function (data) {
+        console.log('Data in SKD: ' + data);
         var sData = data.toString();
         if (sData[0] == '0') {
             SetSignal(false);
