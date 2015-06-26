@@ -10,6 +10,7 @@ import os
 import struct
 
 CurDir = "/devir/ModemCode/manage/"
+RootDir = "/devir/ModemCode/"
 
 def GetStrFromFile(path):
         f = open(path,"r")
@@ -22,7 +23,7 @@ def SetStrInFile(path,s):
         f.write(s)
         f.close()        
 
-modemNumber = int(GetStrFromFile(CurDir + "../set").split('|')[0])
+modemNumber = int(GetStrFromFile(RootDir + "../set").split('|')[0])
 serverPort = 10002
 
 serverAddress = "0.0.0.0"
