@@ -3,14 +3,13 @@ var fs = require('fs');
 var gpio = require("gpio");
 var express = require('express');
 var _ = require('underscore')._;
-//Ok
+
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 80;
 
 var doorState = 0;
-//var alarmOn = 0;
 var timeLeft = 60;
 var doorCloseTimeLeft = 60;
 var alarmSet = false;
@@ -23,7 +22,7 @@ var objectName = '';
 var skdUsers = [];
 var currentUser = '0';
 
-console.log('Skd started!!!!!!!!!!!!!!!!!!!!!!!!');
+console.log('Skd started');
 
 app.use(express.static(__dirname));
 

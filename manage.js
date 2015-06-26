@@ -104,6 +104,10 @@ netServer.on('data', function (data) {
     }
 });
 
+function SendToSKD(data){
+
+}
+
 function SendToSiements(data) {
     console.log('send to siements');
     netSiements.connect({port: 10011, host: 'localhost'}, function () {
@@ -116,32 +120,6 @@ function SendToSiements(data) {
     netSiements.on('error', function () {
         netServer.write('1');
         netSiements.end();
-    });
-}
-
-var isSkdError = false;
-function SendToSKD(data) {
-    console.log('SendToSkd data: ' + data);
-    netSkd.connect({port: 10012, host: 'localhost'});
-    netSkd.on('connect', function () {
-        netSkd.write(data, function () {
-            netSkd.end();
-            netSkd = net.Socket();
-            netServer.write('0');
-        });
-    });
-    netSkd.on('error', function () {
-        netSkd.end();
-        netSkd = net.Socket();
-        if (isSkdError) {
-            netServer.write('1');
-            isSkdError = false;
-        }else {
-            isSkdError = true;
-            setTimeout(function () {
-                SendToSKD(data);
-            }, 5000);
-        }
     });
 }
 
