@@ -126,6 +126,7 @@ function SendToSiements(data) {
             netSiements.end();
         } else {
             sendCount++;
+            netSiements.end();
             setTimeout(function () {
                 SendToSiements(data);
             }, 1000);
