@@ -23,7 +23,7 @@ def SetStrInFile(path,s):
         f.write(s)
         f.close()        
 
-modemNumber = int(GetStrFromFile(RootDir + "set").split('|')[0])
+modemNumber = int(GetStrFromFile(RootDir + "set").split('\n')[0])
 serverPort = 10002
 
 serverAddress = "0.0.0.0"
