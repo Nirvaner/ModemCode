@@ -98,14 +98,14 @@ netServer.on('data', function (data) {
             }, 5000);
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
-                spawn('kill', [skd.pid]);
+                spawn('kill', [skd.pid], {stdio: 'inherit'});
             }
             if (siements) {
-                spawn('kill', [siements.pid]);
+                spawn('kill', [siements.pid], {stdio: 'inherit'});
             }
             netServer.write('0');
             netServer.end();
-            spawn('bash', [rootPath + '../gitpull.sh']);
+            spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
             process.exit(0);
         } else {
             console.log('unresolved data: ' + strData);
