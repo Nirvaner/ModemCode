@@ -8,7 +8,7 @@ var siements;
 var skd;
 
 function SysRestart() {
-    spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot']);
+    spawn('sudo', ['-u', 'root', '-p', 'root', 'reboot'], {stdio: 'inherit'});
 }
 
 var net = new require('net');
@@ -29,7 +29,7 @@ netServer.on('error', function () {
             modemPin.set(0);
             setTimeout(function () {
                 modemPin.set(1);
-                var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect']);
+                var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
                 sakis.on('exit', function (code) {
                     console.log('Sakis exitCode: ' + code);
                     netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
@@ -38,7 +38,7 @@ netServer.on('error', function () {
         }
         else {
             isSakisReconnected = true;
-            var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect']);
+            var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
             sakis.on('exit', function (code) {
                 console.log('Sakis exitCode: ' + code);
                 netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
