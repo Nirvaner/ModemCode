@@ -86,18 +86,27 @@ netServer.on('data', function (data) {
                 siements.kill(0);
             }
             siements = spawn('python', [rootPath + 'manage/siements.py'], {stdio: 'inherit'});
-            siements.on('exit', function(code){
+            siements.on('exit', function (code) {
                 console.log('Siements exit with code ' + code);
             })
             console.log('Controller run');
             setTimeout(function () {
                 SendToController(strData.substring(8));
             }, 5000);
-        } else if (strData.substring(0, 7) == 'gitpull'){
-            skd.kill(0);
-            siements.kill(0);
-            spawn('bash', [rootPath + '../gitpull']);
-            process.exit(0);
+        } else if (strData.substring(0, 7) == 'gitpull') {
+            if (skd) {
+                console.log('Kill skd');
+                skd.kill(0);
+            }
+            if (siements) {
+                console.log('Kill siements');
+                siements.kill(0);
+            }
+            netServer.write('0');
+            setTimeout(function () {
+                spawn('bash', [rootPath + '../gitpull']);
+                process.exit(0);
+            });
         } else {
             console.log('unresolved data: ' + strData);
         }
@@ -116,7 +125,7 @@ function SendToSKD(data) {
     console.log('Send to SKD');
     var netSkd = net.connect({host: 'localhost', port: config.SkdPort}, function () {
         setTimeout(function () {
-            netSkd.write(data, function(){
+            netSkd.write(data, function () {
                 isSkdError = false;
                 netSkd.destroy();
                 netServer.write('0');
@@ -129,9 +138,9 @@ function SendToSKD(data) {
         if (isSkdError) {
             netServer.write('1');
             isSkdError = false;
-        }else{
+        } else {
             isSkdError = true;
-            setTimeout(function(){
+            setTimeout(function () {
                 SendToSKD(data);
             }, 10000);
         }
@@ -142,7 +151,7 @@ var isControllerError = false;
 function SendToController(data) {
     console.log('Send to controller');
     var netController = net.connect({host: 'localhost', port: config.ControllerPort}, function () {
-        setTimeout(function(){
+        setTimeout(function () {
             netController.write(data, function () {
                 isControllerError = false;
                 netController.destroy();
@@ -153,12 +162,12 @@ function SendToController(data) {
     netController.on('error', function () {
         netController.end();
         netController.destroy();
-        if (isControllerError){
+        if (isControllerError) {
             netServer.write('1');
             isControllerError = false;
-        }else{
+        } else {
             isControllerError = true;
-            setTimeout(function(){
+            setTimeout(function () {
                 SendToController(data);
             }, 5000);
         }
