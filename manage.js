@@ -85,9 +85,17 @@ netServer.on('data', function (data) {
             console.log('settings');
             if (siements) {
                 console.log('Siements kill');
+                siements.on('exit', function(){
+                    siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+                    siements.on('exit', function (code) {
+                        console.log('Siements exit with code ' + code);
+                        siements = null;
+                    });
+                    console.log('Controller run');
+                    SendToController(strData.substring(8));
+                });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
-            }
-            setTimeout(function () {
+            } else{
                 siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
                 siements.on('exit', function (code) {
                     console.log('Siements exit with code ' + code);
@@ -95,7 +103,7 @@ netServer.on('data', function (data) {
                 });
                 console.log('Controller run');
                 SendToController(strData.substring(8));
-            }, 10000);
+            }
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
