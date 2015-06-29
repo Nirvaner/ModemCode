@@ -28,17 +28,17 @@ serverPort = 10002
 
 serverAddress = "0.0.0.0"
 ipAddress = "0.0.0.0"
-plcAddress = "0.0.0.0"
-db = 0
-size = 0
-lightRead = 0
-hardRead = 0
+plcAddress = "192.168.66.100"
+db = 1
+size = 155
+lightRead = 20
+hardRead = 200
 checkBytes = {0, 1}
 skdState = 0
 skdDb = 0
 skdStartPos = 0
 skdBitPos = 0
-isSet = False
+isSet = True
 
 wsDb = 0
 wsStartPos = 0
