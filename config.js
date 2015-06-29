@@ -3,8 +3,8 @@ var config = {
     ModemNumber: 0,
     Version: 0,
     Addresses: [
-        //'89.218.66.54',
-        //'devir.kz',
+        '89.218.66.54',
+        'devir.kz',
         '192.168.66.100'
     ],
     ServicePort: 10001,
