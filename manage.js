@@ -194,7 +194,7 @@ var config = rootRequire('config.js')(function () {
         }
     });
     setTimeout(function(){
-        var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect']);
+        var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect'], {stdio: 'inherit'});
         sakis.on('exit', function(){
             netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
         });
