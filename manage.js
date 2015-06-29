@@ -64,8 +64,8 @@ netServer.on('data', function (data) {
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
             skd = spawn('node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
-            skd.on('exit', function (code) {
-                console.log('Skd exit with ' + code);
+            skd.on('exit', function () {
+                console.log('Skd exit');
                 skd = null;
             });
             netServer.write('0');
@@ -104,6 +104,9 @@ netServer.on('data', function (data) {
                 spawn('kill', [siements.pid]);
             }
             netServer.write('0');
+            netServer.end();
+            spawn('bash', [rootPath + '../gitpull.sh']);
+            process.exit(0);
         } else {
             console.log('unresolved data: ' + strData);
         }
