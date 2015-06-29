@@ -86,7 +86,7 @@ netServer.on('data', function (data) {
                 console.log('siements kill');
                 siements.kill(0);
             }
-            siements = spawn('node', [rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+            siements = spawn('python', [rootPath + 'manage/siements.py'], {stdio: 'inherit'});
             siements.on('exit', function(code){
                 console.log('Siements exit with code ' + code);
             })
