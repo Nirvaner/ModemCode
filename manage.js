@@ -193,8 +193,10 @@ var config = rootRequire('config.js')(function () {
             modemPin.set(1);
         }
     });
-    var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect']);
-    sakis.on('exit', function(){
-        netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
-    });
+    setTimeout(function(){
+        var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect']);
+        sakis.on('exit', function(){
+            netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
+        });
+    }, 5000);
 });
