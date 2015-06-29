@@ -87,6 +87,9 @@ netServer.on('data', function (data) {
                 siements.kill(0);
             }
             siements = spawn('node', [rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+            siements.on('exit', function(code){
+                console.log('Siements exit with code ' + code);
+            })
             console.log('Controller run');
             setTimeout(function () {
                 SendToController(strData.substring(8));
