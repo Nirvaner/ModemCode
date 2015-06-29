@@ -86,13 +86,15 @@ netServer.on('data', function (data) {
             if (siements) {
                 console.log('Siements kill');
                 siements.on('exit', function(){
-                    siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
-                    siements.on('exit', function (code) {
-                        console.log('Siements exit with code ' + code);
-                        siements = null;
-                    });
-                    console.log('Controller run');
-                    SendToController(strData.substring(8));
+                    setTimeout(function(){
+                        siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+                        siements.on('exit', function (code) {
+                            console.log('Siements exit with code ' + code);
+                            siements = null;
+                        });
+                        console.log('Controller run');
+                        SendToController(strData.substring(8));
+                    }, 1000);
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             } else{
@@ -191,5 +193,8 @@ var config = rootRequire('config.js')(function () {
             modemPin.set(1);
         }
     });
-    netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
+    var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect']);
+    sakis.on('exit', function(){
+        netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
+    });
 });
