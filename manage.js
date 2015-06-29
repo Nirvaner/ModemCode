@@ -95,7 +95,7 @@ netServer.on('data', function (data) {
                 });
                 console.log('Controller run');
                 SendToController(strData.substring(8));
-            }, 5000);
+            }, 10000);
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
