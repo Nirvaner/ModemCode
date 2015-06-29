@@ -57,7 +57,6 @@ netServer.on('connect', function () {
 var currentOperation = '';
 netServer.on('data', function (data) {
     var strData = data.toString();
-    console.log('DataFromServer: ' + strData);
     if (currentOperation == '') {
         if (strData[0] == '0') {
             console.log('ping');
@@ -94,6 +93,11 @@ netServer.on('data', function (data) {
             setTimeout(function () {
                 SendToController(strData.substring(8));
             }, 5000);
+        } else if (strData.substring(0, 7) == 'gitpull'){
+            skd.kill(0);
+            siements.kill(0);
+            spawn('bash', [rootPath + '../gitpull']);
+            process.terminate();
         } else {
             console.log('unresolved data: ' + strData);
         }
@@ -129,7 +133,7 @@ function SendToSKD(data) {
             isSkdError = true;
             setTimeout(function(){
                 SendToSKD(data);
-            }, 5000);
+            }, 10000);
         }
     });
 }
