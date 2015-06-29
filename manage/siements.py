@@ -38,7 +38,7 @@ skdState = 0
 skdDb = 0
 skdStartPos = 0
 skdBitPos = 0
-isSet = True
+isSet = False
 
 wsDb = 0
 wsStartPos = 0
