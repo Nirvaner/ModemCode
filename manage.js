@@ -98,22 +98,10 @@ netServer.on('data', function (data) {
             }, 5000);
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
-                skd.on('exit', function(){
-                    if (!siements){
-                        spawn('bash', [rootPath + '../gitpull']);
-                        process.exit(0);
-                    }
-                });
-                skd.kill(0);
+                spawn('kill', [skd.pid]);
             }
             if (siements) {
-                siements.on('exit', function(){
-                    if (!skd){
-                        spawn('bash', [rootPath + '../gitpull']);
-                        process.exit(0);
-                    }
-                });
-                siements.kill(0);
+                spawn('kill', [siements.pid]);
             }
             netServer.write('0');
         } else {
