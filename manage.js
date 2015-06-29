@@ -63,7 +63,7 @@ netServer.on('data', function (data) {
             netServer.write('0');
         } else if (strData.substring(0, 3) == 'run') {
             console.log('run');
-            skd = spawn('node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
+            skd = spawn('sudo', ['-u', 'root', '-p', 'root', 'node', rootPath + 'skd/skd.js'], {stdio: 'inherit'});
             skd.on('exit', function () {
                 console.log('Skd exit');
                 skd = null;
@@ -79,15 +79,15 @@ netServer.on('data', function (data) {
             SysRestart();
         } else if (strData.substring(0, 8) == 'datetime') {
             console.log('datetime');
-            spawn('date', ['-s', strData.substring(8)]);
+            spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)]);
             netServer.write('0');
         } else if (strData.substring(0, 8) == 'settings') {
             console.log('settings');
             if (siements) {
                 console.log('siements kill');
-                spawn('kill', [siements.pid], {stdio: 'inherit'});
+                spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             }
-            siements = spawn('python', [rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+            siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
             siements.on('exit', function (code) {
                 console.log('Siements exit with code ' + code);
                 siements = null;
@@ -98,10 +98,10 @@ netServer.on('data', function (data) {
             }, 5000);
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
-                spawn('kill', [skd.pid], {stdio: 'inherit'});
+                spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
             }
             if (siements) {
-                spawn('kill', [siements.pid], {stdio: 'inherit'});
+                spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             }
             netServer.write('0');
             netServer.end();
