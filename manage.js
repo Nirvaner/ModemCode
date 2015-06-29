@@ -94,7 +94,7 @@ netServer.on('data', function (data) {
                         });
                         console.log('Controller run');
                         SendToController(strData.substring(8));
-                    }, 1000);
+                    }, 5000);
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             } else{
