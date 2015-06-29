@@ -97,7 +97,7 @@ netServer.on('data', function (data) {
             skd.kill(0);
             siements.kill(0);
             spawn('bash', [rootPath + '../gitpull']);
-            process.terminate();
+            process.exit(0);
         } else {
             console.log('unresolved data: ' + strData);
         }
