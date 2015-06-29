@@ -65,7 +65,7 @@ netServer.on('data', function (data) {
             console.log('run');
             skd = spawn('node', [rootPath + 'skd/skd.js'], {stdio: 'inherit'});
             skd.on('exit', function (code) {
-                console.log('Skd exit with ' + code)
+                console.log('Skd exit with ' + code);
                 skd = null;
             });
             netServer.write('0');
@@ -91,25 +91,31 @@ netServer.on('data', function (data) {
             siements.on('exit', function (code) {
                 console.log('Siements exit with code ' + code);
                 siements = null;
-            })
+            });
             console.log('Controller run');
             setTimeout(function () {
                 SendToController(strData.substring(8));
             }, 5000);
         } else if (strData.substring(0, 7) == 'gitpull') {
             if (skd) {
-                console.log('Kill skd');
+                skd.on('exit', function(){
+                    if (!siements){
+                        spawn('bash', [rootPath + '../gitpull']);
+                        process.exit(0);
+                    }
+                });
                 skd.kill(0);
             }
             if (siements) {
-                console.log('Kill siements');
+                siements.on('exit', function(){
+                    if (!skd){
+                        spawn('bash', [rootPath + '../gitpull']);
+                        process.exit(0);
+                    }
+                });
                 siements.kill(0);
             }
             netServer.write('0');
-            setTimeout(function () {
-                spawn('bash', [rootPath + '../gitpull']);
-                process.exit(0);
-            }, 1000);
         } else {
             console.log('unresolved data: ' + strData);
         }
