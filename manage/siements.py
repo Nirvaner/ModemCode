@@ -26,18 +26,18 @@ def SetStrInFile(path,s):
 modemNumber = int(GetStrFromFile(RootDir + "set").split('\n')[0])
 serverPort = 10002
 
-serverAddress = "192.168.66.100"
-ipAddress = "192.168.66.200"
-plcAddress = "192.168.66.100"
-db = 1
-size = 155
-lightRead = 20
-hardRead = 200
+serverAddress = ""
+ipAddress = ""
+plcAddress = ""
+db = 0
+size = 0
+lightRead = 0
+hardRead = 0
 checkBytes = {0, 1}
 skdState = 0
-skdDb = 1
-skdStartPos = 1
-skdBitPos = 1
+skdDb = 0
+skdStartPos = 0
+skdBitPos = 0
 isSet = True
 
 wsDb = 0
@@ -256,10 +256,10 @@ tReadFromPLC.daemon = True
 tReadFromPLC.start()
 print "tReadFromPLC is started"
 
-#tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
-#tReadFromQueue.daemon = True
-#tReadFromQueue.start()
-#print "tReadFromQueue is started"
+tReadFromQueue = threading.Thread(target=ReadFromQueue, args = (q,))
+tReadFromQueue.daemon = True
+tReadFromQueue.start()
+print "tReadFromQueue is started"
 
 tReadFromPLC.join()
 tReadFromQueue.join()
