@@ -14,20 +14,22 @@ function SysRestart() {
 var net = new require('net');
 var netServer = net.Socket();
 
-function ModemReboot(callback){
+function ModemReboot(callback) {
     modemPin.set(0);
-    setTimeout(function(){
-        if (os.exists('/dev/ttyUSB2')){
-            callback();
-        }else{
-            ModemReboot(callback);
-        }
+    setTimeout(function () {
+        fs.exists(config.ModemDevicePath, function (exists) {
+            if (exists) {
+                callback();
+            } else {
+                ModemReboot(callback);
+            }
+        });
     }, 5000);
 }
 
 var addressIndex = 0;
 var isSakisReconnected = false;
-function SakisSpawn(){
+function SakisSpawn() {
     var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
     sakis.on('exit', function (code) {
         console.log('Sakis exitCode: ' + code);
@@ -63,7 +65,7 @@ netServer.on('connect', function () {
     netServer.write(config.ModemNumber + '|' + config.Version + '||' + (siements ? '0' : '1'));
 });
 
-function ControllerSpawn(){
+function ControllerSpawn() {
     siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
     siements.on('exit', function (code) {
         console.log('Siements exit with code ' + code);
@@ -71,7 +73,7 @@ function ControllerSpawn(){
     });
 }
 
-function GitPull(){
+function GitPull() {
     netServer.write('0');
     netServer.end();
     spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
@@ -109,15 +111,15 @@ netServer.on('data', function (data) {
             console.log('settings');
             if (siements) {
                 console.log('Siements kill');
-                siements.on('exit', function(){
-                    setTimeout(function(){
+                siements.on('exit', function () {
+                    setTimeout(function () {
                         ControllerSpawn();
                         console.log('Controller run');
                         SendToController(strData.substring(8));
                     }, 10000);
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
-            } else{
+            } else {
                 ControllerSpawn();
                 console.log('Controller run');
                 SendToController(strData.substring(8));
@@ -127,11 +129,11 @@ netServer.on('data', function (data) {
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
             }
             if (siements) {
-                siements.on('exit', function(){
+                siements.on('exit', function () {
                     GitPull();
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
-            } else{
+            } else {
                 GitPull();
             }
         } else {
@@ -210,9 +212,9 @@ var config = rootRequire('config.js')(function () {
             modemPin.set(1);
         }
     });
-    ModemReboot(function(){
+    ModemReboot(function () {
         var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect'], {stdio: 'inherit'});
-        sakis.on('exit', function(){
+        sakis.on('exit', function () {
             netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
         });
     });
