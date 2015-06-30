@@ -14,6 +14,17 @@ function SysRestart() {
 var net = new require('net');
 var netServer = net.Socket();
 
+function ModemReboot(callback){
+    modemPin.set(0);
+    setTimeout(function(){
+        if (os.exists('/dev/ttyUSB2')){
+            callback();
+        }else{
+            ModemReboot(callback);
+        }
+    }, 5000);
+}
+
 var addressIndex = 0;
 var isSakisReconnected = false;
 function SakisSpawn(){
@@ -34,11 +45,7 @@ netServer.on('error', function () {
         addressIndex = 0;
         if (isSakisReconnected) {
             isSakisReconnected = false;
-            modemPin.set(0);
-            setTimeout(function () {
-                modemPin.set(1);
-                SakisSpawn();
-            }, 1000);
+            ModemReboot(SakisSpawn);
         }
         else {
             isSakisReconnected = true;
@@ -203,10 +210,10 @@ var config = rootRequire('config.js')(function () {
             modemPin.set(1);
         }
     });
-    setTimeout(function(){
+    ModemReboot(function(){
         var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'connect'], {stdio: 'inherit'});
         sakis.on('exit', function(){
             netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
         });
-    }, 5000);
+    });
 });
