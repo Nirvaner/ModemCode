@@ -14,6 +14,7 @@ function SysRestart() {
 var net = new require('net');
 var netServer = net.Socket();
 
+var fs = require('fs');
 function ModemReboot(callback) {
     modemPin.set(0);
     setTimeout(function () {
