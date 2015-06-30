@@ -16,6 +16,14 @@ var netServer = net.Socket();
 
 var addressIndex = 0;
 var isSakisReconnected = false;
+function SakisSpawn(){
+    var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
+    sakis.on('exit', function (code) {
+        console.log('Sakis exitCode: ' + code);
+        netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
+    });
+}
+
 netServer.on('error', function () {
     console.log('Server not response: ' + config.Addresses[addressIndex]);
     if (addressIndex < config.Addresses.length - 1) {
@@ -29,30 +37,39 @@ netServer.on('error', function () {
             modemPin.set(0);
             setTimeout(function () {
                 modemPin.set(1);
-                var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
-                sakis.on('exit', function (code) {
-                    console.log('Sakis exitCode: ' + code);
-                    netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
-                });
+                SakisSpawn();
             }, 1000);
         }
         else {
             isSakisReconnected = true;
-            var sakis = spawn('sudo', ['-u', 'root', '-p', 'root', 'sakis3g', 'reconnect'], {stdio: 'inherit'});
-            sakis.on('exit', function (code) {
-                console.log('Sakis exitCode: ' + code);
-                netServer.connect(config.ServicePort, config.Addresses[addressIndex]);
-            });
+            SakisSpawn();
         }
     }
 });
+
 netServer.on('close', function () {
     console.log('ServerSocket is closed..')
 });
+
 netServer.on('connect', function () {
     console.log('Connected: ' + config.Addresses[addressIndex] + ':' + config.ServicePort);
     netServer.write(config.ModemNumber + '|' + config.Version + '||' + (siements ? '0' : '1'));
 });
+
+function ControllerSpawn(){
+    siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
+    siements.on('exit', function (code) {
+        console.log('Siements exit with code ' + code);
+        siements = null;
+    });
+}
+
+function GitPull(){
+    netServer.write('0');
+    netServer.end();
+    spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
+    process.exit(0);
+}
 
 var currentOperation = '';
 netServer.on('data', function (data) {
@@ -79,7 +96,7 @@ netServer.on('data', function (data) {
             SysRestart();
         } else if (strData.substring(0, 8) == 'datetime') {
             console.log('datetime');
-            spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)]);
+            spawn('sudo', ['-u', 'root', '-p', 'root', 'date', '-s', strData.substring(8)], {stdio: 'inherit'});
             netServer.write('0');
         } else if (strData.substring(0, 8) == 'settings') {
             console.log('settings');
@@ -87,22 +104,14 @@ netServer.on('data', function (data) {
                 console.log('Siements kill');
                 siements.on('exit', function(){
                     setTimeout(function(){
-                        siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
-                        siements.on('exit', function (code) {
-                            console.log('Siements exit with code ' + code);
-                            siements = null;
-                        });
+                        ControllerSpawn();
                         console.log('Controller run');
                         SendToController(strData.substring(8));
-                    }, 5000);
+                    }, 10000);
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             } else{
-                siements = spawn('sudo', ['-u', 'root', '-p', 'root', 'python', rootPath + 'manage/siements.py'], {stdio: 'inherit'});
-                siements.on('exit', function (code) {
-                    console.log('Siements exit with code ' + code);
-                    siements = null;
-                });
+                ControllerSpawn();
                 console.log('Controller run');
                 SendToController(strData.substring(8));
             }
@@ -112,17 +121,11 @@ netServer.on('data', function (data) {
             }
             if (siements) {
                 siements.on('exit', function(){
-                    netServer.write('0');
-                    netServer.end();
-                    spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
-                    process.exit(0);
+                    GitPull();
                 });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
             } else{
-                netServer.write('0');
-                netServer.end();
-                spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
-                process.exit(0);
+                GitPull();
             }
         } else {
             console.log('unresolved data: ' + strData);
