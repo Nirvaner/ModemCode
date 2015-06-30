@@ -27,8 +27,8 @@ function ModemReboot(callback) {
                     ModemReboot(callback);
                 }
             });
-        }, 5000);
-    });
+        }, 10000);
+    }, 1000);
 }
 
 var addressIndex = 0;
