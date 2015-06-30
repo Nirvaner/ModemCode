@@ -111,12 +111,19 @@ netServer.on('data', function (data) {
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', skd.pid], {stdio: 'inherit'});
             }
             if (siements) {
+                siements.on('exit', function(){
+                    netServer.write('0');
+                    netServer.end();
+                    spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
+                    process.exit(0);
+                });
                 spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
+            } else{
+                netServer.write('0');
+                netServer.end();
+                spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
+                process.exit(0);
             }
-            netServer.write('0');
-            netServer.end();
-            spawn('bash', [rootPath + '../gitpull.sh'], {stdio: 'inherit'});
-            process.exit(0);
         } else {
             console.log('unresolved data: ' + strData);
         }
