@@ -17,15 +17,18 @@ var netServer = net.Socket();
 var fs = require('fs');
 function ModemReboot(callback) {
     modemPin.set(0);
-    setTimeout(function () {
-        fs.exists(config.ModemDevicePath, function (exists) {
-            if (exists) {
-                callback();
-            } else {
-                ModemReboot(callback);
-            }
-        });
-    }, 5000);
+    setTimeout(function(){
+        modemPin.set(1);
+        setTimeout(function () {
+            fs.exists(config.ModemDevicePath, function (exists) {
+                if (exists) {
+                    callback();
+                } else {
+                    ModemReboot(callback);
+                }
+            });
+        }, 5000);
+    });
 }
 
 var addressIndex = 0;
