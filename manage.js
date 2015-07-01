@@ -82,6 +82,9 @@ function ConnectToServers() {
             console.log('socket end ' + index);
             socket.end();
             console.log(socket);
+            console.log('socket destroy ' + index);
+            socket.destroy();
+            console.log(socket);
         }, config.ServerTimeout);
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
