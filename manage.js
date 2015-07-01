@@ -72,11 +72,11 @@ function SocketConnect(index) {
 }
 
 function ConnectToServers() {
-    config.Servers.forEach(function (item) {
+    config.Servers.forEach(function (item, index) {
         var socket = net.connect({host: item, port: config.ServicePort});
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
-        socket.on('connect', SocketConnect);
+        socket.on('connect', SocketConnect(index));
         connections.push(socket);
     });
 }
