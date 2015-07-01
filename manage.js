@@ -71,7 +71,7 @@ function SocketConnect(obj) {
     return function () {
         clearTimeout(obj.timer);
         ServerSocket = obj.socket;
-        console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[index]);
+        console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[obj.index]);
     }
 }
 
