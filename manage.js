@@ -81,6 +81,7 @@ function ConnectToServers() {
         var timer = setTimeout(function(){
             console.log('socket end ' + index);
             socket.end();
+            console.log(socket);
         }, config.ServerTimeout);
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
