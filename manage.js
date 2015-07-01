@@ -10,6 +10,9 @@ var net = new require('net');
 var spawn = require('child_process').spawn;
 var gpio = require('gpio');
 
+var connections = [];
+var isError = false;
+
 modemPin = gpio.export(config.ModemPin, {
     direction: 'out',
     ready: function () {
@@ -17,44 +20,57 @@ modemPin = gpio.export(config.ModemPin, {
     }
 });
 
-function ModemReboot(callback) {
+function ModemReboot() {
     modemPin.set(0);
     setTimeout(function () {
         modemPin.set(1);
         setTimeout(function () {
             fs.exists(config.ModemDevicePath, function (exists) {
                 if (exists) {
-                    callback();
+                    SakisReconnect();
                 } else {
-                    ModemReboot(callback);
+                    ModemReboot();
                 }
             });
         }, 10000);
     }, 1000);
 }
 
-function SakisReconnect(callback){
-    spawn('sakis3g', ['reconnect'], {stdio: 'inherit'}).on('exit', function(code){
-        if (code == 0){
-            callback();
+function SakisReconnect() {
+    spawn('sakis3g', ['reconnect'], {stdio: 'inherit'}).on('exit', function (code) {
+        if (code == 0) {
+            ConnectToServers();
+        } else{
+            setTimeout(function(){
+                ConnectToServers();
+            }, 60000);
         }
     });
 }
 
-function SocketError(error){
+function ModemReconnect() {
+    if (isError) {
+        isError = false;
+        ModemReboot();
+    } else {
+        isError = true;
+        SakisReconnect();
+    }
+}
+
+function SocketError(error) {
     console.log('Error in socketToServer: ' + error);
 }
-function SocketClose(){
+function SocketClose() {
     console.log('Close in socketToServer');
 }
-function SocketConnect(){
+function SocketConnect() {
+    isError = false;
     console.log('Connect in socketToServer');
 }
 
-var connections = [];
-
-function ConnectToServers(){
-    config.Servers.forEach(function(item){
+function ConnectToServers() {
+    config.Servers.forEach(function (item) {
         var socket = net.connect({host: item, port: config.ServicePort});
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
@@ -68,7 +84,7 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
         console.log('Zander no started, config error: ' + error);
     } else {
         config = JSON.parse(data);
-        ModemReboot(SakisReconnect(ConnectToServers()));
+        ModemReconnect();
     }
 });
 
