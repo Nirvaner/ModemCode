@@ -79,6 +79,7 @@ function ConnectToServers() {
     config.Servers.forEach(function (item, index) {
         var socket = net.connect({host: item, port: config.ServicePort});
         var timer = setTimeout(function(){
+            console.log('socket end ' + index);
             socket.end();
         }, config.ServerTimeout);
         socket.on('error', SocketError);
