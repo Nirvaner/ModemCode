@@ -2,6 +2,7 @@ global.rootRequire = function (path) {
     return require(__dirname + '/' + path)
 };
 global.rootPath = __dirname + '/';
+global.config = {};
 
 var fs = require('fs');
 var _ = require('underscore')._;
@@ -66,7 +67,7 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     if (error) {
         console.log('Zander no started, config error: ' + error);
     } else {
-        global.config = JSON.parse(data);
+        config = JSON.parse(data);
         ModemReboot(SakisReconnect(ConnectToServers()));
     }
 });
