@@ -1,4 +1,3 @@
 .idea/
-set
 node_modules/
-config/
+config.json
