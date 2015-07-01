@@ -74,6 +74,7 @@ function SocketConnect(index) {
 function ConnectToServers() {
     config.Servers.forEach(function (item, index) {
         var socket = net.connect({host: item, port: config.ServicePort});
+        socket.setTimeout(5000);
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
         socket.on('connect', SocketConnect(index));
