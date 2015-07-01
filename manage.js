@@ -40,8 +40,8 @@ function SakisReconnect() {
     spawn('sakis3g', ['reconnect'], {stdio: 'inherit'}).on('exit', function (code) {
         if (code == 0) {
             ConnectToServers();
-        } else{
-            setTimeout(function(){
+        } else {
+            setTimeout(function () {
                 ConnectToServers();
             });//, 60000);
         }
@@ -64,9 +64,11 @@ function SocketError(error) {
 function SocketClose() {
     console.log('Close in socketToServer');
 }
-function SocketConnect() {
+function SocketConnect(index) {
     isError = false;
-    console.log('Connect in socketToServer');
+    return function () {
+        console.log('Connect in socketToServer ' + index + ' ' + config.Servers[index]);
+    }
 }
 
 function ConnectToServers() {
