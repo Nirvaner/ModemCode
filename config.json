@@ -6,6 +6,7 @@
         , "devir.kz"
         , "192.168.66.100"
     ]
+    , "ServerTimeout": 10000
     , "ServicePort": 10001
     , "PacketPort": 10002
     , "SkdPort": 10012

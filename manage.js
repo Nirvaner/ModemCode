@@ -13,6 +13,8 @@ var gpio = require('gpio');
 var connections = [];
 var isError = false;
 
+var ServerSocket = {};
+
 modemPin = gpio.export(config.ModemPin, {
     direction: 'out',
     ready: function () {
@@ -64,20 +66,28 @@ function SocketError(error) {
 function SocketClose() {
     console.log('Close in socketToServer');
 }
-function SocketConnect(index) {
+function SocketConnect(obj) {
     isError = false;
     return function () {
-        console.log('Connect in socketToServer ' + index + ' ' + config.Servers[index]);
+        clearTimeout(obj.timer);
+        ServerSocket = obj.socket;
+        console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[index]);
     }
 }
 
 function ConnectToServers() {
     config.Servers.forEach(function (item, index) {
         var socket = net.connect({host: item, port: config.ServicePort});
-        socket.setTimeout(5000);
+        var timer = setTimeout(function(){
+            socket.end();
+        }, config.ServerTimeout);
         socket.on('error', SocketError);
         socket.on('close', SocketClose);
-        socket.on('connect', SocketConnect(index));
+        socket.on('connect', SocketConnect({
+            index: index
+            , socket: socket
+            , timer: timer
+        }));
         connections.push(socket);
     });
 }
