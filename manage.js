@@ -11,6 +11,7 @@ var spawn = require('child_process').spawn;
 var gpio = require('gpio');
 
 var connections = [];
+var connectCount = 0;
 var isError = false;
 
 var ServerSocket = {};
@@ -63,34 +64,38 @@ function ModemReconnect() {
 function SocketError(error) {
     console.log('Error in socketToServer: ' + error);
 }
-function SocketClose() {
-    console.log('Close in socketToServer');
+function SocketClose(index) {
+    return function () {
+        connections.splice(index, 1);
+        connectCount++;
+        console.log('Close in socketToServer');
+        if (connectCount == config.Servers.length){
+            Run();
+        }
+    }
 }
 function SocketConnect(obj) {
     isError = false;
     return function () {
         clearTimeout(obj.timer);
-        ServerSocket = obj.socket;
+        connectCount++;
         console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[obj.index]);
+        if (connectCount == config.Servers.length){
+            Run();
+        }
     }
 }
 
 function ConnectToServers() {
     config.Servers.forEach(function (item, index) {
         var socket = net.connect({host: item, port: config.ServicePort});
-        var timer = setTimeout(function(){
-            console.log('socket end ' + index);
-            socket.end();
-            console.log(socket);
-            console.log('socket destroy ' + index);
+        var timer = setTimeout(function () {
             socket.destroy();
-            console.log(socket);
         }, config.ServerTimeout);
         socket.on('error', SocketError);
-        socket.on('close', SocketClose);
+        socket.on('close', SocketClose(index));
         socket.on('connect', SocketConnect({
             index: index
-            , socket: socket
             , timer: timer
         }));
         connections.push(socket);
@@ -105,6 +110,14 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
         ModemReconnect();
     }
 });
+
+function Run(){
+    ServerSocket = connections.shift();
+    if (connections.length > 0){
+        connections.shift().destroy();
+    }
+    console.log('Run');
+}
 
 //var siements = {};
 //var skd = {};
