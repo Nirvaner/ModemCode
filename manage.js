@@ -43,7 +43,7 @@ function SakisReconnect() {
         } else{
             setTimeout(function(){
                 ConnectToServers();
-            }, 60000);
+            });//, 60000);
         }
     });
 }
