@@ -163,6 +163,7 @@ function Run() {
                 if (siements) {
                     console.log('Siements kill');
                     siements.on('exit', function () {
+                        console.log('Siements exit for set settings');
                         setTimeout(function () {
                             ControllerSpawn();
                             console.log('Controller run');
