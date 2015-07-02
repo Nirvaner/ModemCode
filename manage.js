@@ -119,6 +119,9 @@ function Run() {
     if (connections.length > 0) {
         connections.shift().destroy();
     }
+    ServerSocket.on('close', function(){
+        ModemReconnect();
+    });
     console.log('Run');
     ServerSocket.write(config.ModemNumber + '|' + config.Version + '||' + (siements ? '0' : '1'));
     ServerSocket.on('data', function (data) {
