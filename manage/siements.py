@@ -23,7 +23,7 @@ def SetStrInFile(path,s):
         f.write(s)
         f.close()        
 
-modemNumber = int(GetStrFromFile(RootDir + "set").split('\n')[0])
+modemNumber = 0
 serverPort = 10002
 
 serverAddress = ""
@@ -63,19 +63,21 @@ def SetSettings(s):
         global skdDb
         global skdStartPos
         global skdBitPos
-        serverAddress = setArr[0]
-        ipAddress = setArr[1]
-        plcAddress = setArr[2]
-        db = int(setArr[3])
-        size = int(setArr[4])
-        lightRead = int(setArr[5]) * 1000
-        hardRead = float(setArr[6]) / 1000
-        checkArr = setArr[7].split(',')
+        global modemNumber
+        modemNumber = setArr[0]
+        serverAddress = setArr[1]
+        ipAddress = setArr[2]
+        plcAddress = setArr[3]
+        db = int(setArr[4])
+        size = int(setArr[5])
+        lightRead = int(setArr[6]) * 1000
+        hardRead = float(setArr[7]) / 1000
+        checkArr = setArr[8].split(',')
         while len(checkBytes) > 0:
                 checkBytes.pop()
         for it in checkArr:
                 checkBytes.add(int(it) + 2)
-        skdArr = setArr[8].split(',')
+        skdArr = setArr[9].split(',')
         skdDb = int(skdArr[0])
         skdStartPos = int(skdArr[1])
         skdBitPos = int(skdArr[2])
