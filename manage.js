@@ -166,14 +166,14 @@ function Run() {
                         setTimeout(function () {
                             ControllerSpawn();
                             console.log('Controller run');
-                            SendToController(config.Zander + '|0|' + strData.substring(9));
+                            SendToController('0' + config.Zander + '|' + strData.substring(8));
                         }, 10000);
                     });
                     spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
                 } else {
                     ControllerSpawn();
                     console.log('Controller run');
-                    SendToController(config.Zander + '|0|' + strData.substring(9));
+                    SendToController('0' + config.Zander + '|' + strData.substring(8));
                 }
             } else if (strData.substring(0, 7) == 'gitpull') {
                 if (skd) {
