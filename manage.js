@@ -131,7 +131,7 @@ function Run() {
         ModemReconnect();
     });
     console.log('Run');
-    ServerSocket.write(config.ModemNumber + '|' + config.Version + '||' + (siements ? '0' : '1'));
+    ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
     ServerSocket.on('data', function (data) {
         var strData = data.toString();
         if (currentOperation == '') {
