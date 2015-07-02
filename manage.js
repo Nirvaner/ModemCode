@@ -119,14 +119,14 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
 });
 
 function Run() {
-    ServerSocket = connections.shift();
-    if (connections.length > 0) {
-        var socket = connections.shift();
+    connections.forEach(function(socket){
         socket.on('close', function(){
-            console.log(connectCount);
             connectCount = 0;
         });
-        socket.destroy();
+    });
+    ServerSocket = connections.shift();
+    for(var i = 0; i < connections.length; i++){
+        connections.shift().destroy();
     }
     ServerSocket.on('close', function(){
         ModemReconnect();
