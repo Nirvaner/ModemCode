@@ -56,6 +56,7 @@ function SakisReconnect() {
 }
 
 function ModemReconnect() {
+    console.log('ModemReconnect with: ' + isError);
     if (isError) {
         isError = false;
         ModemReboot();
