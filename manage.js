@@ -105,6 +105,8 @@ function ConnectToServers() {
     });
 }
 
+console.log('Started');
+
 fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     if (error) {
         console.log('Zander no started, config error: ' + error);
@@ -122,6 +124,7 @@ function Run() {
     ServerSocket.on('close', function(){
         ModemReconnect();
     });
+    connectCount = 0;
     console.log('Run');
     ServerSocket.write(config.ModemNumber + '|' + config.Version + '||' + (siements ? '0' : '1'));
     ServerSocket.on('data', function (data) {
