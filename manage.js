@@ -16,8 +16,8 @@ var isError = false;
 var currentOperation = '';
 
 var ServerSocket = {};
-var siements = {};
-var skd = {};
+var siements = null;
+var skd = null;
 
 function ModemReboot() {
     console.log('ModemReboot');
