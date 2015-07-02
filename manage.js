@@ -166,7 +166,7 @@ function Run() {
                         setTimeout(function () {
                             ControllerSpawn();
                             console.log('Controller run');
-                            SendToController(strData.substring(8));
+                            SendToController(config.Zander + '|' + strData.substring(8));
                         }, 10000);
                     });
                     spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
