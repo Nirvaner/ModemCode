@@ -64,7 +64,7 @@ def SetSettings(s):
         global skdStartPos
         global skdBitPos
         global modemNumber
-        modemNumber = setArr[0]
+        modemNumber = int(setArr[0])
         serverAddress = setArr[1]
         ipAddress = setArr[2]
         plcAddress = setArr[3]
