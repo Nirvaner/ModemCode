@@ -71,6 +71,7 @@ function SocketClose(index) {
     return function () {
         connections.splice(index, 1);
         connectCount++;
+        console.log('connectCount: ' + connectCount);
         console.log('Close in socketToServer');
         if (connectCount == config.Servers.length) {
             Run();
@@ -82,6 +83,7 @@ function SocketConnect(obj) {
     return function () {
         clearTimeout(obj.timer);
         connectCount++;
+        console.log('connectCount: ' + connectCount);
         console.log('Connect in socketToServer ' + obj.index + ' ' + config.Servers[obj.index]);
         if (connectCount == config.Servers.length) {
             Run();
