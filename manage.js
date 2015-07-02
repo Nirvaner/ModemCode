@@ -19,13 +19,6 @@ var ServerSocket = {};
 var siements = {};
 var skd = {};
 
-modemPin = gpio.export(config.ModemPin, {
-    direction: 'out',
-    ready: function () {
-        modemPin.set(0);
-    }
-});
-
 function ModemReboot() {
     console.log('ModemReboot');
     modemPin.set(0);
@@ -114,7 +107,13 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
         console.log('Zander no started, config error: ' + error);
     } else {
         config = JSON.parse(data);
-        ModemReconnect();
+        modemPin = gpio.export(config.ModemPin, {
+            direction: 'out',
+            ready: function () {
+                modemPin.set(1);
+                setTimeout(ModemReconnect, 10000);
+            }
+        });
     }
 });
 
