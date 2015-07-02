@@ -163,11 +163,10 @@ function Run() {
                 if (siements) {
                     console.log('Siements kill');
                     siements.on('exit', function () {
-                        console.log('Siements exit for set settings');
                         setTimeout(function () {
                             ControllerSpawn();
                             console.log('Controller run');
-                            SendToController(config.Zander + '|' + strData.substring(8));
+                            SendToController(config.Zander + '|' + strData.substring(9));
                         }, 10000);
                     });
                     spawn('sudo', ['-u', 'root', '-p', 'root', 'kill', siements.pid], {stdio: 'inherit'});
@@ -250,8 +249,8 @@ function SendToSKD(data) {
 
 var isControllerError = false;
 function SendToController(data) {
-    console.log('Send to controller');
     var netController = net.connect({host: 'localhost', port: config.ControllerPort}, function () {
+        console.log('Send to controller');
         setTimeout(function () {
             netController.write(data, function () {
                 isControllerError = false;
@@ -261,6 +260,7 @@ function SendToController(data) {
         }, 0);
     });
     netController.on('error', function () {
+        console.log('Send to controller error');
         netController.end();
         netController.destroy();
         if (isControllerError) {
