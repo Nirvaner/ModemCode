@@ -173,7 +173,7 @@ function Run() {
                 } else {
                     ControllerSpawn();
                     console.log('Controller run');
-                    SendToController(strData.substring(8));
+                    SendToController(config.Zander + '|0|' + strData.substring(9));
                 }
             } else if (strData.substring(0, 7) == 'gitpull') {
                 if (skd) {
