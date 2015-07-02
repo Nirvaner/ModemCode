@@ -123,6 +123,7 @@ function Run() {
     if (connections.length > 0) {
         var socket = connections.shift();
         socket.on('close', function(){
+            console.log(connectCount);
             connectCount = 0;
         });
         socket.destroy();
