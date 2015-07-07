@@ -8,4 +8,7 @@ sudo -u root -p root hostapd -B /etc/hostapd/hostapd.conf
 # Run sander
 sudo -u root -p root bash /devir/ModemCode/start.sh
 
+# Costil skd ap
+sudo -u root -p root service networking restart
+
 exit 0
