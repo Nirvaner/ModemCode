@@ -15,6 +15,8 @@ var connectCount = 0;
 var isError = false;
 var currentOperation = '';
 
+var pingInterval = null;
+var isNoPing = false;
 var ServerSocket = {};
 var siements = null;
 var skd = null;
@@ -178,12 +180,23 @@ function Run() {
             connections.shift().destroy();
         }
         ServerSocket.on('close', function () {
+            clearInterval(pingInterval);
+            isNoPing = false;
             ModemReconnect();
         });
+        pingInterval = setInterval(function(){
+            if (isNoPing){
+                isNoPing = false;
+                ServerSocket.destroy();
+            }else{
+                isNoPing = true;
+            }
+        }, 30000);
         console.log('Run');
         ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
         ServerSocket.on('data', function (data) {
             try {
+                isNoPing = false;
                 var strData = data.toString();
                 if (currentOperation == '') {
                     if (strData[0] == '0') {
