@@ -22,10 +22,10 @@ var skd = null;
 console.log = function (data) {
     fs.exists(rootPath + 'log', function (exists) {
         if (exists) {
-            fs.appendFile(rootPath + 'log', data, function (error) {
+            fs.appendFile(rootPath + 'log', data + '\n', function (error) {
             });
         } else {
-            fs.writeFile(rootPath + 'log', data, function (error) {
+            fs.writeFile(rootPath + 'log', data + '\n', function (error) {
             });
         }
     });
