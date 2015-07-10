@@ -256,19 +256,17 @@ function Run() {
                     }
                 }
                 console.log('pingTimer is start');
-                pingTimer = setTimeout(function(){
-                    console.log('pingTimer ServerSocket is: ', ServerSocket.connected);
-                    if (ServerSocket.connected){
-                        ServerSocket.destroy();
-                    }
-                }, 60000);
+                pingTimer = setTimeout(function () {
+                    console.log('ServerSocket disconnect');
+                    ServerSocket.destroy();
+                }, 120000);
             } catch (error) {
                 console.log('ErrorManageEventDataServer: ' + error);
             }
         });
     } catch (error) {
         console.log('ErrorManageRun: ' + error);
-        if (!ServerSocket.connected){
+        if (!ServerSocket.connected) {
             ModemReconnect();
         }
     }
