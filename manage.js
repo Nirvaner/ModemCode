@@ -170,6 +170,11 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
 function Run() {
     try {
         ServerSocket = connections.shift();
+        console.log('pingTimer is start');
+        pingTimer = setTimeout(function () {
+            console.log('ServerSocket disconnect');
+            ServerSocket.destroy();
+        }, 60000);
         connections.forEach(function (socket) {
             socket.on('close', function () {
                 connectCount = 0;
