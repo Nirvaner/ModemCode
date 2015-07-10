@@ -185,7 +185,10 @@ function Run() {
         ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
         ServerSocket.on('data', function (data) {
             try {
-                clearTimeout(pingTimer);
+                if (pingTimer) {
+                    clearTimeout(pingTimer);
+                    pingTimer = null;
+                }
                 var strData = data.toString();
                 if (currentOperation == '') {
                     if (strData[0] == '0') {
