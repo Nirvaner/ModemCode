@@ -232,7 +232,7 @@ def ReadFromPLC(q,firstArrayFromPLC,secondArrayForCheck,checkBytes):
                 except Exception as error:
                         pass
                         sys.exc_clear()
-                        print "Siements>ReadFromPLC: " + str(error)
+                        #print "Siements>ReadFromPLC: " + str(error)
                         readPLCErrors=readPLCErrors+1
                         if readPLCErrors>20:
                                 #Suda nado chto nit' dopisat'

@@ -255,6 +255,7 @@ function Run() {
                         console.log('unresolved data: ' + strData);
                     }
                 }
+                console.log('pingTimer is start');
                 pingTimer = setTimeout(function(){
                     console.log('pingTimer ServerSocket is: ', ServerSocket.connected);
                     if (ServerSocket.connected){
