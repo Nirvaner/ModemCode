@@ -14,9 +14,8 @@ var connections = [];
 var connectCount = 0;
 var isError = false;
 var currentOperation = '';
+var pingTimer = null;
 
-var pingInterval = null;
-var isNoPing = false;
 var ServerSocket = {};
 var siements = null;
 var skd = null;
@@ -170,33 +169,23 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
 
 function Run() {
     try {
+        ServerSocket = connections.shift();
         connections.forEach(function (socket) {
             socket.on('close', function () {
                 connectCount = 0;
             });
         });
-        ServerSocket = connections.shift();
         for (var i = 0; i < connections.length; i++) {
             connections.shift().destroy();
         }
         ServerSocket.on('close', function () {
-            clearInterval(pingInterval);
-            isNoPing = false;
             ModemReconnect();
         });
-        pingInterval = setInterval(function(){
-            if (isNoPing){
-                isNoPing = false;
-                ServerSocket.destroy();
-            }else{
-                isNoPing = true;
-            }
-        }, 30000);
         console.log('Run');
         ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
         ServerSocket.on('data', function (data) {
             try {
-                isNoPing = false;
+                clearTimeout(pingTimer);
                 var strData = data.toString();
                 if (currentOperation == '') {
                     if (strData[0] == '0') {
@@ -262,12 +251,20 @@ function Run() {
                         console.log('unresolved data: ' + strData);
                     }
                 }
+                pingTimer = setTimeout(function(){
+                    if (ServerSocket.connected){
+                        ServerSocket.destroy();
+                    }
+                }, 60000);
             } catch (error) {
                 console.log('ErrorManageEventDataServer: ' + error);
             }
         });
     } catch (error) {
         console.log('ErrorManageRun: ' + error);
+        if (!ServerSocket.connected){
+            ModemReconnect();
+        }
     }
 }
 
