@@ -79,6 +79,11 @@ function SakisReconnect() {
 }
 
 function ModemReconnect() {
+    connectCount = 0;
+    try {
+        ServerSocket.destroy()
+    } catch (error) {
+    }
     try {
         console.log('ModemReconnect with: ' + isError);
         if (isError) {
@@ -169,24 +174,17 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
 
 function Run() {
     try {
-        ServerSocket = connections.shift();
-        console.log('pingTimer is start');
-        pingTimer = setTimeout(function () {
-            console.log('ServerSocket disconnect');
-            ServerSocket.destroy();
-        }, 90000);
         connections.forEach(function (socket) {
             socket.on('close', function () {
                 connectCount = 0;
             });
         });
+        ServerSocket = connections.shift();
         for (var i = 0; i < connections.length; i++) {
             connections.shift().destroy();
         }
-        ServerSocket.on('close', function () {
-            connectCount = 0;
-            ModemReconnect();
-        });
+        console.log('pingTimer is start');
+        pingTimer = setTimeout(ModemReconnect, 90000);
         console.log('Run');
         ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
         ServerSocket.on('data', function (data) {
@@ -194,7 +192,6 @@ function Run() {
                 if (pingTimer) {
                     console.log('pingTimer cleared');
                     clearTimeout(pingTimer);
-                    pingTimer = null;
                 }
                 var strData = data.toString();
                 if (currentOperation == '') {
@@ -262,10 +259,7 @@ function Run() {
                     }
                 }
                 console.log('pingTimer is start');
-                pingTimer = setTimeout(function () {
-                    console.log('ServerSocket disconnect');
-                    ServerSocket.destroy();
-                }, 120000);
+                pingTimer = setTimeout(ModemReconnect, 120000);
             } catch (error) {
                 console.log('ErrorManageEventDataServer: ' + error);
             }
