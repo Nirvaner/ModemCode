@@ -174,7 +174,7 @@ function Run() {
         pingTimer = setTimeout(function () {
             console.log('ServerSocket disconnect');
             ServerSocket.destroy();
-        }, 60000);
+        }, 90000);
         connections.forEach(function (socket) {
             socket.on('close', function () {
                 connectCount = 0;
