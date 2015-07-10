@@ -186,6 +186,7 @@ function Run() {
         ServerSocket.on('data', function (data) {
             try {
                 if (pingTimer) {
+                    console.log('pingTimer cleared');
                     clearTimeout(pingTimer);
                     pingTimer = null;
                 }
