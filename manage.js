@@ -266,9 +266,7 @@ function Run() {
         });
     } catch (error) {
         console.log('ErrorManageRun: ' + error);
-        if (!ServerSocket.connected) {
-            ModemReconnect();
-        }
+        ModemReconnect();
     }
 }
 
