@@ -252,6 +252,7 @@ function Run() {
                     }
                 }
                 pingTimer = setTimeout(function(){
+                    console.log('pingTimer');
                     if (ServerSocket.connected){
                         ServerSocket.destroy();
                     }
