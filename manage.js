@@ -174,6 +174,9 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
 
 function Run() {
     try {
+        if (connections.length == 0){
+            ModemReconnect();
+        }
         connections.forEach(function (socket) {
             socket.on('close', function () {
                 connectCount = 0;
