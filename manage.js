@@ -184,6 +184,7 @@ function Run() {
             connections.shift().destroy();
         }
         ServerSocket.on('close', function () {
+            connectCount = 0;
             ModemReconnect();
         });
         console.log('Run');
