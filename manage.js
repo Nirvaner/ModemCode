@@ -42,7 +42,7 @@ function ModemReboot() {
             return fs.statSync(usbPath + file).isDirectory();
         });
         dirs.forEach(function(dir, index){
-            if (fs.existsSync(dir + '/idVendor') && fs.readFileSync(dir + '/idVendor') == "12d1"){
+            if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1"){
                 fs.appendFileSync(usbPath + 'unbind', dir);
             }
         });
