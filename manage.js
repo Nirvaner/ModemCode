@@ -4,6 +4,8 @@ global.rootRequire = function (path) {
 global.rootPath = __dirname + '/';
 global.config = {};
 
+const usbPath = '/sys/bus/usb/drivers/usb/';
+
 var fs = require('fs');
 var _ = require('underscore')._;
 var net = new require('net');
@@ -36,26 +38,36 @@ console.log = function (data) {
 function ModemReboot() {
     try {
         console.log('ModemReboot');
-        modemPin.set(0);
-        setTimeout(function () {
-            try {
-                modemPin.set(1);
-                setTimeout(function () {
-                    try {
-                        fs.exists(config.ModemDevicePath, function (exists) {
-                            if (exists) {
-                                SakisReconnect();
-                            } else {
-                                ModemReboot();
-                            }
-                        });
-                    } catch (error) {
-                        console.log('ErrorManageModemRebootDeviceExists: ' + error);
-                    }
-                }, 10000);
-            } catch (error) {
-                console.log('ErrorManageModemRebootPinSet: ' + error);
+        var dirs = fs.readdirSync(usbPath).filter(function(file){
+            return fs.statSync(usbPath + file).isDirectory();
+        });
+        dirs.forEach(function(dir, index){
+            if (fs.existsSync(dir + '/idVendor') && fs.readFileSync(dir + '/idVendor') == "12d1"){
+                fs.appendFileSync(usbPath + 'unbind', dir);
             }
+        });
+        setTimeout(function() {
+            modemPin.set(0);
+            setTimeout(function () {
+                try {
+                    modemPin.set(1);
+                    setTimeout(function () {
+                        try {
+                            fs.exists(config.ModemDevicePath, function (exists) {
+                                if (exists) {
+                                    SakisReconnect();
+                                } else {
+                                    ModemReboot();
+                                }
+                            });
+                        } catch (error) {
+                            console.log('ErrorManageModemRebootDeviceExists: ' + error);
+                        }
+                    }, 10000);
+                } catch (error) {
+                    console.log('ErrorManageModemRebootPinSet: ' + error);
+                }
+            }, 1000);
         }, 1000);
     } catch (error) {
         console.log('ErrorManageModemReboot: ' + error);
