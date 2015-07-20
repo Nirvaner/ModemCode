@@ -15,5 +15,5 @@
     , "SoundPin": 22
     , "LightPin": 23
     , "DoorPin": 17
-    , "ModemDevicePath": "/dev/ttyUSB2"
+    , "ModemDevicePath": "/dev/ttyUSB0"
 }
