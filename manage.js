@@ -180,6 +180,15 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     } else {
         try {
             config = JSON.parse(data);
+            console.log('ModemReboot');
+            var dirs = fs.readdirSync(usbPath).filter(function (file) {
+                return fs.statSync(usbPath + file).isDirectory();
+            });
+            dirs.forEach(function (dir) {
+                if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
+                    fs.appendFileSync(usbPath + 'unbind', dir);
+                }
+            });
             modemPin = gpio.export(config.ModemPin, {
                 direction: 'out',
                 ready: function () {
