@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
-# Start DHCP server
-sudo -u root -p root service isc-dhcp-server start
 
-# Start Access Point 'skd'
-sudo -u root -p root hostapd -B /etc/hostapd/hostapd.conf
-
-# Run sander
+# Run Zander
 sudo -u root -p root bash /devir/ModemCode/start.sh
-
-# Costil skd ap
-sudo -u root -p root service networking restart
 
 exit 0
