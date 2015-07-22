@@ -43,7 +43,7 @@ function ModemReboot() {
             var dirs = fs.readdirSync(usbPath).filter(function (file) {
                 return fs.statSync(usbPath + file).isDirectory();
             });
-            dirs.forEach(function (dir, index) {
+            dirs.forEach(function (dir) {
                 if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
                     fs.appendFileSync(usbPath + 'unbind', dir);
                 }
@@ -172,7 +172,7 @@ function ConnectToServers() {
     });
 }
 
-console.log('Started');
+console.log('Devir Zander for ASA started');
 
 fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     if (error) {
