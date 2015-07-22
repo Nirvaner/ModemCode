@@ -42,7 +42,7 @@ function ModemUnbind(){
     });
     console.log(dirs);
     dirs.forEach(function (dir) {
-        if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
+        if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor').toString() == "12d1\n") {
             console.log('Modem3g unbind', dir);
             fs.appendFileSync(usbPath + 'unbind', dir);
         }
