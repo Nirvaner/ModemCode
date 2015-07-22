@@ -183,6 +183,7 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
             modemPin = gpio.export(config.ModemPin, {
                 direction: 'out',
                 ready: function () {
+                    modemPin.set(1);
                     setTimeout(ModemReconnect, 10000);
                 }
             });
