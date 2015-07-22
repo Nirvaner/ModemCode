@@ -186,6 +186,7 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
             });
             dirs.forEach(function (dir) {
                 if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
+                    console.log('Modem3g unbind', dir);
                     fs.appendFileSync(usbPath + 'unbind', dir);
                 }
             });
