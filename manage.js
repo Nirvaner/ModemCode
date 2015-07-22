@@ -36,18 +36,24 @@ console.log = function (data) {
     console.info(data);
 };
 
+function ModemUnbind(){
+    var dirs = fs.readdirSync(usbPath).filter(function (file) {
+        return fs.statSync(usbPath + file).isDirectory();
+    });
+    console.log(dirs);
+    dirs.forEach(function (dir) {
+        if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
+            console.log('Modem3g unbind', dir);
+            fs.appendFileSync(usbPath + 'unbind', dir);
+        }
+    });
+}
+
 function ModemReboot() {
     setTimeout(function() {
         try {
             console.log('ModemReboot');
-            var dirs = fs.readdirSync(usbPath).filter(function (file) {
-                return fs.statSync(usbPath + file).isDirectory();
-            });
-            dirs.forEach(function (dir) {
-                if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
-                    fs.appendFileSync(usbPath + 'unbind', dir);
-                }
-            });
+            ModemUnbind();
             setTimeout(function () {
                 modemPin.set(0);
                 setTimeout(function () {
@@ -180,16 +186,7 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     } else {
         try {
             config = JSON.parse(data);
-            console.log('ModemReboot');
-            var dirs = fs.readdirSync(usbPath).filter(function (file) {
-                return fs.statSync(usbPath + file).isDirectory();
-            });
-            dirs.forEach(function (dir) {
-                if (fs.existsSync(usbPath + dir + '/idVendor') && fs.readFileSync(usbPath + dir + '/idVendor') == "12d1") {
-                    console.log('Modem3g unbind', dir);
-                    fs.appendFileSync(usbPath + 'unbind', dir);
-                }
-            });
+            ModemUnbind();
             modemPin = gpio.export(config.ModemPin, {
                 direction: 'out',
                 ready: function () {
