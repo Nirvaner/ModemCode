@@ -1,3 +1,5 @@
+console.log('Manage started!!!');
+
 global.rootRequire = function (path) {
     return require(__dirname + '/' + path)
 };
