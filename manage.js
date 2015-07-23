@@ -53,7 +53,7 @@ function ModemReboot() {
     setTimeout(function() {
         try {
             console.log('ModemReboot');
-            ModemUnbind();
+            //ModemUnbind();
             setTimeout(function () {
                 modemPin.set(0);
                 setTimeout(function () {
@@ -186,9 +186,10 @@ fs.readFile(rootPath + 'config.json', 'utf8', function (error, data) {
     } else {
         try {
             config = JSON.parse(data);
-            ModemUnbind();
+            //ModemUnbind();
             modemPin = gpio.export(config.ModemPin, {
                 direction: 'out',
+                interval: 10000,
                 ready: function () {
                     modemPin.set(1);
                     setTimeout(ModemReconnect, 10000);
