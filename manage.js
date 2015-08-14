@@ -141,7 +141,6 @@ function SocketClose(index) {
     }
 }
 function SocketConnect(obj) {
-    isError = false;
     return function () {
         try {
             clearTimeout(obj.timer);
@@ -221,6 +220,7 @@ function Run() {
             pingTimer = setTimeout(ModemReconnect, 90000);
             console.log('Run');
             ServerSocket.write(config.Zander + '|' + config.Version + '||' + (siements ? '0' : '1'));
+            isError = false;
             ServerSocket.on('data', function (data) {
                 try {
                     if (pingTimer) {
