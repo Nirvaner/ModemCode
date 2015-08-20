@@ -13,7 +13,26 @@ var spawn = require('child_process').spawn;
 var gpio = require('gpio');
 
 var modemPin;
-var connections = [];
+var connections = {
+    get length() {
+        return Object.keys(this).length - 3;
+    },
+    forEach: function(callback){
+        var s = 0;
+        for(var i in this){
+            if (s > 2) {
+                callback(this[i], i, this);
+            }else{
+                s++;
+            }
+        }
+    },
+    shift: function(){
+        var res = this[Object.keys(this)[3]];
+        delete this[Object.keys(this)[3]];
+        return res;
+    }
+};
 var connectCount = 0;
 var isError = false;
 var currentOperation = '';
@@ -129,7 +148,7 @@ function SocketError(error) {
 function SocketClose(index) {
     return function () {
         try {
-            connections.splice(index, 1);
+            delete connections[config.Servers[index]];
             connectCount++;
             console.log('Close in socketToServer');
             if (connectCount == config.Servers.length) {
@@ -169,7 +188,7 @@ function ConnectToServers() {
                     index: index
                     , timer: timer
                 }));
-                connections.push(socket);
+                connections[item] = socket;
             });
         } catch (error) {
             console.log('ErrorManageConnectToServers: ' + error);
