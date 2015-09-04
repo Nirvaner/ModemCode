@@ -68,6 +68,8 @@ function ModemUnbind(){
     });
 }
 
+var isModemRebootFail = 0;
+
 function ModemReboot() {
     setTimeout(function() {
         try {
@@ -82,9 +84,19 @@ function ModemReboot() {
                             try {
                                 fs.exists(config.ModemDevicePath, function (exists) {
                                     if (exists) {
+                                        isModemRebootFail = 0;
                                         SakisReconnect();
                                     } else {
-                                        ModemReboot();
+                                        isModemRebootFail++;
+                                        if (isModemRebootFail > 5){
+                                            spawn('service', ['networking', 'restart'], {stdio: 'inherit'}).on('exit', function(code){
+                                                spawn('usb_modeswitch', ['-v', '0x12d1', '-p', '1446', '-V', '0x12d1', '-P', '1001'], {stdio: 'inherit'}).on('exit', function(code){
+                                                    ModemReboot();
+                                                });
+                                            });
+                                        }else{
+                                            ModemReboot();
+                                        }
                                     }
                                 });
                             } catch (error) {
